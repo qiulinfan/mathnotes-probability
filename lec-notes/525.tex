@@ -4,45 +4,487 @@
 \usepackage{amsmath}%
 \usepackage{amssymb}%
 \usepackage{graphicx}
+\setlength{\parskip}{0.5em}
 
-\title{Math 526: discrete state stochastic process}
+
+\title{Math 525}
 
 \begin{document}
 \frontmatter
 \tableofcontents
 \mainmatter
 
-\chapter{Introduction}
+\chapter{Probability space intro}
+我们这里跳过所有 measure theory 的内容, 见 notes on measure theory.\\
+\begin{definition}{prob space, prob measure}
+    一个 probability space 就是一个 measure space \( (\Omega, \mathcal{F}, \mathbb{P}) \), 其中 $\mathbb{P}(\Omega) = 1$.\\
+    对于这样的 measure $\mathbb{P}$, 我们称之为 probability measure.
+\end{definition}
 
 
 
-\begin{example}{two-stage Markov chain}
-We can always extend state space to make a process Markov.
-Suppose a basketball player makes a hit:
-$1/2$ if he missed last two;
-$2/3$ if he missed one of last two;
-$3/4$ if hit both.\\
-To model it into a Markov chain, set $S = \{  
-HH,HM,MH,MM \}$
 
+
+
+
+recall: 随机变量 $X: \Omega \rightarrow \mathbb{R}$ 就是一个从样本空间 \((\Omega, \mathcal{F},P)\) 到 $\mathbb{R}$ 的 measurable function.\\
+
+其 cdf $F_X: \mathbb{R} \rightarrow [0,1]$ 就是 $X$ 这个 real-valued measurable function 对于 $(-\infty,x]$ 的 preimage, 意义是 "随机变量的值小于等于 $x$ 的概率"  \[
+F_X (x) = P( X^{-1}(-\infty,x])
+\]
+discrete random variable 的 pmf, 表示每个离散点 $x$ 的 $P(X^{-1}(\{x\}))$.
+即 \[
+p(x) := P(X^{-1}(\{x\})) = P(X=x)
+\]
+continuous random variable 的 pdf, 表示在某个点上概率分布的密度有多大 \[
+f_X(x) :=  \frac{dF_X(x)}{dx}
+\]
+或者写作: \[
+f_X(x) :=  \frac{dF_X(x)}{dm}
+\]
+是这个 $F_X$ 对于 Lebesgue measure $m$ 的 Radon-Nikodym derivative.
+
+
+随机变量的 expectation 是它在这个 prob space 上的积分, 表示它的值的 prob-weighted average
+\[
+E (X):= \int_\Omega X  \;d P
+\]
+随机变量的 variance 是 $(X-E(X))^2$ 这个 induced 随机变量在这个 prob space 上的积分, 表示原随机变量值离它的值的 weighted average 的聚集程度. \[
+Var(X) = \int_\Omega (X-E(X))^2   \;dP
+\]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\chapter{continuous random variables}
+
+
+
+
+
+\section{normal random variables}
+(5.2 in book)
+\begin{definition}
+我们称 $X$ is \textbf{normally distributed with parameter $\mu$ and $\sigma$}, if the pdf of $X$ is given by: \[
+\rho(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2 \sigma ^2}}
+\]
+写作: \[
+X \sim \mathcal{N}(\mu, \sigma^2)
+\]
+\end{definition}
+特别地, 当 $\mu =0, \sigma = 1$ 时, \[
+X \sim \mathcal{N}(0, 1)
+\]被称为 \textbf{standard normal distribution.}
+
+
+容易验证: \(\int_{\mathbb{R}} \rho  = 1 \)
+
+\[
+I := \int_ 0^\infty e^{\frac{-y^2}{2}} \; dy
+\]
+\[
+I^2 = \Bigg(\int_ 0^\infty e^{\frac{-y^2}{2}} \; dy\Bigg)\Bigg(\int_ 0^\infty e^{\frac{-x^2}{2}} \; dx\Bigg) = \int
+\]
+
+
+
+
+
+
+rescaling to std normal distribution: 
+Suppose \[
+Y \sim \mathcal{N}(\mu, \sigma^2)
+\] we define \[
+X : = \frac{Y - \mu}{\sigma}
+\]
+Then we have: \[
+X \sim \mathcal{N}(0,1)
+\]
+这是容易验证的. 因为: \[
+X \in B \;\; \Longleftrightarrow  \;\; \frac{Y-\mu}{\sigma} \in B \;\; \Longleftrightarrow  \;\; Y \in \sigma B + \mu
+\]
+因而 \[
+P(X \in B ) = P(Y \in \sigma B + \mu)
+\]
+
+
+
+
+
+
+
+\subsection{expectation and variance of normal dist}
+Suppose $ X \sim \mathcal{N}(0,1)$. Then \[
+\mathbb{E}(X) =  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x   e^{-\frac{x^2}{2}}    \; dx   = 0
+\]
+since this is \textbf{odd function}.
+
+And  \begin{align}
+    \mathbb{E}(X^2) &=  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x^2   e^{-\frac{x^2}{2}}    \; dx   \\
+    &= \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x (x  e^{-\frac{x^2}{2}})    \; dx \\
+    &= \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x   ( e^{-\frac{x^2}{2}} )'   \; dx   \\
+    & = - \frac{1}{\sqrt{2\pi }}  x e^{-\frac{x^2}{2}} \bigg|^\infty_{-\infty}  +  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}}  e^{-\frac{x^2}{2}}    \; dx \\
+    &= 0 + 1 = 1
+\end{align}
+
+从而: \[
+Var(X) = 1
+\]
+
+
+
+
+
+For general normally distributed $Y$, 我们知道了 $X : = \frac{Y - \mu}{\sigma}$ 的 $\mathbb{E}(X)  = 0$, $Var(X) = 1$, 因而 \[
+\mathbb{E}(Y) = \mathbb{E}(\sigma X + \mu)   = \mu
+\]
+\[
+Var(Y)  = Var(\sigma X + \mu) =  \mathbb{E}[(\sigma X + \mu - \mu)^2] = \mathbb{E} (\sigma^2 X^2) = \sigma^2 \mathbb{E}[X^2] = \sigma^2 
+\]
+
+\begin{remark}
+    对于 normally distributed $X$, 
+    \[ \mathbb{E}(X^k) =  \frac{1}{\sqrt{2\pi}} \int_\mathbb{R} x^k  e^{-\frac{x^2}{2}}  \; dx  \]
+    For $k$ odd, it is $0$.\\
+    For $k$ even:
+  \begin{align}
+      \mathbb{E}(X^k) &=  \frac{1}{\sqrt{2\pi}} \int_\mathbb{R} x^{k-1} (x e^{-\frac{x^2}{2}})  \; dx  \\
+      & = -\frac{1}{\sqrt{2\pi}} \int_\mathbb{R} x^{k-1} ( e^{-\frac{x^2}{2}}) ' \; dx \\
+      &= 0 + \frac{1}{\sqrt{2\pi}} \int_\mathbb{R} (x^{k-1})' e^{-\frac{x^2}{2}} \;dx \\
+      & = \frac{k-1}{\sqrt{2\pi}} \int_\mathbb{R} x^{k-2} e^{-\frac{x^2}{2}} \;dx  \\
+      & = (k-1) \mathbb{E}(X^{k-2})
+   \end{align}  
+   从而: \[
+   \mathbb{E(X^k )} = \begin{cases}
+       0 ,\quad k = 2j-1 \\
+       (2j-1)(2j-3)\cdots 1 = \frac{(2j)!}{2^j j!},\quad k=2j
+   \end{cases}
+   \]
+\end{remark}
+
+
+
+
+
+\subsection{cdf of normal distribution}
+Let $X$ be the std normal distribution.\\
+Its cdf given by: \[
+\Phi(a) :=F_X(a)  = \int_{(-\infty,a]} \rho(x) \; dx = \frac{1}{\sqrt{2\pi}} \int_{(-\infty,a]}  e^{-\frac{x^2}{2}} \; dx
+\]
+Important numerical values:
+\[
+\Phi(-3) \approx 0.0013
+\] 
+\[
+\Phi(-2) \approx 0.023
+\]
+\[
+\Phi(-1) \approx 0.159
+\]
+
+
+Note 由于 $\rho$ (std) 是一个 even function, 有 \(P(X < -1) = P(X>1)\)
+因而 \[
+P(X \text{ is one std dev from mean}) = 2(P(X < -1)) = 2 \Phi(-1) \approx0.32 = 32\%
+\]
+Similarly, \[
+P(X \text{ is two std dev from mean}) \approx 0.046 = 4.6\%
+\]\[
+P(X \text{ is three std dev from mean}) \approx 0.0026 = 0.26\%
+\]
+
+为什么 normal random variables 非常重要: comes from a "universality property" called \textbf{central limit theorem.} (will be covered later). Now we state a special case: 
+
+
+
+
+Let $S_n$ be 投掷 $n$ 次 $p$-coin 中得到的 $\#$heads. 即 \[
+P(H) := p
+\]
+我们已经知道, $S_n$ 是一个 binomial discrete random variable. 且有 \[
+\mathbb{E}(S_n) = np, \quad  Var(S_n) = npq, \quad \sigma(S_n) = \sqrt{npq}
+\]
+
+ 
+\begin{theorem}{DeHavre's Central limit theorem}
+    \[
+    \lim_{n\to \infty} P\Bigg( \frac{S_n - \mathbb{E}(S_n)}{\sigma(S_n)} \in (a,b)\Bigg) = \Phi(b) - \Phi(a) = \frac{1}{\sqrt{2\pi}} \int_{(a,b)} e^{-\frac{x^2}{2}} \; dx
+    \]
+\end{theorem}
+
+
+
+
+
+Write $S_n$ into $n$ 个 i.i.d. random variables
+\[
+S_n = \sum_{i=1}^n X_i
+\]
+each $X_i$ 都是一个 trial of tossing the $p$-coin.\\
+
+
+
+\begin{example}
+    Toss a million times 一个 fair coin. Approximate the prob that we get more than $501000$ heads: 
+    \[
+    \mathbb{E}(S_{1000000}) = np = 500000
+    \]
+    \[
+    \sigma(S_{1000000}) = \sqrt{npq} = 500
+    \] 因而: \[
+    P(S_{1000000} > 501000) = P(S_{1000000} - \mathbb{E}(S_{1000000}) > 1000) = P(\frac{S_{1000000} - \mathbb{E}(S_{1000000})}{\sigma(S_{1000000})} > \frac{1000}{500}) = 1-\Phi(2) = \Phi(-2)  \approx 0.159  
+    \]
+\end{example}
+
+
+
+
+\section{other ctn random variables}
+
+(5.3 in book.)
+\subsection{exponential random variables}
+
+我们称 $X$ 为一个 exponential random variable with parameter $\lambda$, 如果它的 pdf is given by: \[
+f(x) = \begin{cases}
+    \lambda e^{-\lambda x}, \quad x > 0\\
+    0, \quad x \leq 0
+\end{cases}
+\]
+
+
+Distribution function given by: \[
+F_X(x) = \begin{cases}
+    \int _{-\infty}^x f(t) \; dt = \lambda \int_0 ^x e^{-\lambda t} \; dt = 1 - e^{-\lambda x}, \quad x> 0\\
+    0,\quad x<0
+\end{cases}
+\]
+容易验证, $F_X(x) =0$ when $x \to -\infty$, 以及 $F_X(x) \to 1$ when $x \to \infty$
+
+\begin{align}
+P(X> 0)& = 1 - P(X<0)      \\
+&= 1- F_X(a) \\
+&= e^{-\lambda a}
+\end{align}
+
+
+Expectation and moments: 
+We compute the moment $\mathbb{E}[X^n], \quad n\geq 0$
+
+$\mathbb{E}[X^0] = \mathbb{E}[1] = 1$
+
+\begin{align}
+\mathbb{E}[X^n] &= \lambda \int_0^\infty x^n e^{-\lambda x } \; dx  \\
+&= - \int_0 ^\infty  x^n(e^{-\lambda x})' \; dx \\
+&=  0 + \int_0 ^\infty n x^{n-1} e^{-\lambda x} \; dx \\
+&= \frac{n}{\lambda} \mathbb{E}(X^{n-1})
+\end{align}
+
+因而 recursively get: \[
+\mathbb{E}[X^n] = \frac{n!}{\lambda^n}
+\]
+
+\(\mathbb{E}[X] = \frac{1}{\lambda}, \mathbb{E}[X^2] = \frac{2}{\lambda^2}, \cdots  \)
+
+
+从而: \[
+Var[X] = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
+\]
+
+
+Recall the Gamma function: \[
+n!  = \int_0^\infty x^n e^{-x} \; dx  = \Gamma(n+1) \]
+
+
+Interpretation: \textbf{exponential r.v. 是 geometric r.v. 的 continuous analogue.}
+
+
+First time to get heads in a seq of Bernoulli coins:
+\begin{align}
+    p(k) &= (1-p)^{k-1} p  \\
+    &= (1-p)^k \frac{p}{1-p}
+\end{align}
+如果我们令 $e^{-\lambda} := 1-p$
+就得到: \[
+p(k) = e^{-\lambda k} \frac{p}{1-p} 
+\]
+和 discrete 的 geometric distribution 相似, exponential distribution 是用来 \textbf{model the first time an event occurs}.
+
+
+\begin{example}
+    Suppose 一个 storage battery 的 lifetime 是 exponentially distributed 的, 并且 average 为 10 hours. Suppose 我们想要 use this battery for 5 hours for.
+计算: probability of finishing the task, if:\\ 
+(a) 使用一个 new battery\\
+(b) 使用一个已经用过 2 hours 的 battery\\
+\begin{solution}
+    \[
+    \mathbb{E}[X] = 10 = \frac{1}{\lambda} \implies \lambda = \frac{1}{10}
+    \]
+如果我们使用一个 new battery, 则 want: $P(X>5) = 1 - P(X<5) = 1- F_X(5) = e^{-\frac{1}{2}}$
+如果我们使用一个用过 2 hours 的 battery, 则 want: \[
+P(X> 5+2 \mid X > 2) = \frac{e^{-(5+2)\lambda}}{e^{-2\lambda }} = e^{-5\lambda} = = e^{-\frac{1}{2}}
+\]
+\end{solution}
+
+Notice: 我们发现 \[
+P(X>5) = P(X> 5+2 \mid X > 2)
+\]
+\end{example}
+
+\begin{theorem}
+一 ctn r.v. 有: \[
+    P(X > b+ t \mid X > b) = P(X>t)
+    \]
+\textbf{当且仅当它是一个 exponential random variable.}
+\end{theorem}
+\begin{remark}
+    "如果 $X$ 表示某个 event 发生的时间, 在已经过去时间 $b$ 而没发生的情况下, 再过时间 $t$ 发生这个时间的条件概率, 等于从时间 $0$ 开始, 过时间 $t$ 发生这个事件的初始概率."\\
+    并且 notice 这是一个 iff statement
+\end{remark}
+
+\begin{proof}
+\begin{align}
+     &   P(X > b+ t \mid X > b) = P(X>t) \\
+   \Longleftrightarrow  & P(X > b+t) = P(X > t) P(X>b) \\
+    \Longleftrightarrow  & X \text{ exponential (check) }
+\end{align}
+\end{proof}
+
+
+
+
+
+
+\subsection{Gamma distribution}
+
+\begin{definition}{$\Gamma$-distribution}
+Recall $\Gamma$ function: \[
+    \Gamma(\alpha) = \int_0^\infty x^{\alpha - 1} e^{-x}\; dx
+    \]
+一个 ctn r.v. 被称为 have Gamma distribution with parameter $\alpha, \lambda$, 写作 $X \sim \Gamma(\alpha, \lambda)$, (其中 $\alpha > 0, \lambda > 0$), 如果它的 pdf 为 \[
+f(x) = \begin{cases}
+    \frac{\lambda e^{-\lambda x} (\lambda x)^{\alpha -1} }{\Gamma (\alpha)}, \quad x>0 \\
+    0, \quad x \leq 0
+\end{cases}
+\]
+\end{definition}
+\begin{remark}
+我们已经知道, $\Gamma$ 函数是对 define 在自然数上的 factorial 函数, 推广到 defined 在 $[0,\infty)$ 上.
+我们有:  \[
+\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)
+\]\[
+n! = \Gamma(n+1)
+\]
+\end{remark}
+
+
+Interpretation: $\Gamma$ distribution 的 random variable 是 binomial random variable 的 ctn version.
+
+考虑 $\alpha : = n$ 为一个正整数, 那么它可以用来 model the first time an event occurs in a Poission process.
+
+Expectation:  \begin{align}
+    \mathbb{E}[X] &= \frac{1}{\Gamma(\alpha)} \int_0^\infty (\lambda x )^{\alpha -1} \lambda  e^{-\lambda x} \; dx\\
+    &=  \frac{1}{\lambda \Gamma(\alpha)}  \int_0^\infty x^\alpha e^{-x} \; dx \\
+    &= \frac{\Gamma(\alpha + 1)}{\lambda \Gamma(\alpha)} = \frac{\alpha}{\lambda}
+\end{align}
+(since $\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$.)
+
+我们可以计算得: \[
+\mathbb{E}[X^2] = \frac{\alpha}{\lambda^2}
+\]
+
+\subsection{Cauchy distribution}
+\begin{definition}
+    一个 random variable 被称为 have Cauchy distribution with parameter $\theta \in \mathbb{R}$, 如果它的 pdf 是: \[
+    f(x)   =\frac{1}{\pi} \frac{1}{1+(x-\theta)^2} , \quad x\in \mathbb{R}
+    \]
+    当 $\theta = 0$ 时, 被称为 standard Cauchy distribution.
+\end{definition}
+
+
+CDF: \begin{align}
+    F_X(a) = \int_{-\infty}^a f(x) \; dx &= \frac{1}{\pi} \int_0^\infty \frac{1}{1+ (x-\theta)^2} \; dx \\ 
+    &= \frac{1}{\pi} \int_0^\infty  \frac{1}{1+ y^2} \; dy \\
+    &= \frac{1}{\pi} \arctan y \Big|_{\infty}^{a - \theta} \\
+    &=  \frac{1}{\pi} (\arctan (a - \theta) + \frac{\pi}{2}) \\
+    &= \frac{1}{\pi} \arctan (a - \theta) + \frac{1}{2}
+\end{align}
+
+\begin{example}
+A macro-beam flashlight is spin around tis center located at $(0,1)$.\\
+假设 the angle of the flashlight is uniform in $(-\frac{\pi}{2}, \frac{\pi}{2})$, 并令 $X$ 为 the point on $x$-axis where the beam hits.\\
+The distribution function of $X$ is: \[
+F_X(a) = P(X < a) = P(\tan \alpha < a) = P(\alpha < \arctan a)
+\]
+因而 $X$ 为一个 std Cauchy r.v.  
+\end{example}
+
+Interpretation: Brownian motion models (among many other things) the motion of small particles, 比如气体和液体分子.\\
+
+FACT: 如果 start the Brownian motion at $(0,1)$, 并令 $X $ 表示 the first point that the motion hits the $x$-axis, 那么 $X$ 为一个 std Cauchy r.v.  
+
+
+
+
+\begin{remark}
+Distribution of a function of a random variable: \\
+令 $F_X$ 为一个 r.v. $X$ 的 cdf.\\
+考虑 $Y := X^3$.\\
+那么 $Y$ 的 distribution 是什么? \[
+F_Y(a) = P(X^3 < a ) = P(X < a^3) = F_X(a^{1/3})
+\]
+更加 generally, 如果 \[
+Y: = g(X)
+\]
+where $g$ 是一个 $\mathbb{R}\to \mathbb{R}$ 的 measurable function. \\
+那么: \[
+F_Y(a) = P(g(x) < a) = F_X(g^{-1} (a) )
+\]
+并且 pdf of $Y$: 
+\begin{align}
+\rho_y(x)  = \frac{d}{ dx} F_y(x) &= \frac{d}{dx} F_X(g^{-1}(a)) \\
+&= F_X(g^{-1}(x)) \frac{d}{dx} g^{-1}(x) \\
+&= f_x(g^{-1}(x)) \frac{d}{dx} g^{-1}(x)
+\end{align}
+
+\end{remark}
+
+
+
+
+
+
+
+
+
+\chapter{joint probability}
+
+
+\begin{example}
+    Suppose $X,Y$ 是 independent normal r.v., with mean 0 and 
 \end{example}
 
 
 
 
 
-\begin{theorem}
-    The $m^\text{th}$ stop transition probability $P(X_{m+n=y}\mid X_n = x)$ is $p^m(x,y)$.
-\end{theorem}
-\begin{proof}
-    By induction, it holds for $m-1$.\\
-    $$
-    P(X_{m+n=y}\mid X_n = x) = \sum_{i \in S} \mathbb{P}(X_{n+m=i} \mid X_{n+m-1=k}, X_n = x) \mathbb{P}(X_{n+m=k}\mid X_n = x) 
-    $$
-    $$
-    = \sum_{i \in S} \bP(X) 
-    $$
-\end{proof}
+
+
+
+
 
 
 
