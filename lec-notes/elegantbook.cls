@@ -209,7 +209,9 @@
     \RequirePackage[UTF8,scheme=plain]{ctex}}{\relax}
   
   \AfterEndPreamble{
-    \setlength\parindent{2\ccwd}}
+    \setlength\parindent{0\ccwd}
+    \setlength{\parskip}{0.5em}
+    }
 }{\relax}
 
 \ifcsname heiti\endcsname
