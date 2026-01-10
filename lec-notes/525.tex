@@ -14,11 +14,32 @@
 \tableofcontents
 \mainmatter
 
-\chapter{Probability space intro}
-我们这里跳过所有 measure theory 的内容, 见 notes on measure theory.\\
-\begin{definition}{prob space, prob measure}
-    一个 probability space 就是一个 measure space \( (\Omega, \mathcal{F}, \mathbb{P}) \), 其中 $\mathbb{P}(\Omega) = 1$.\\
-    对于这样的 measure $\mathbb{P}$, 我们称之为 probability measure.
+
+\chapter{basic combinatorics}
+\begin{definition}{permutations}
+一个 permutation 就是对一组 objects 的一个 \textbf{rearrangement} (这些 objects 中可以有 same 的也可以有 distinct 的).\\
+    对于 $n$ 个 \textbf{distinct objects}, 一共存在 \(n! = n(n-1)(n-2)\cdots \) 个 permutations.
+\end{definition}
+
+\begin{example}
+    \# distinct permutations of "STATISTICS"?\\
+    这里一共有 10 个 objects. 但问题是: 其中有 3 个 \(S\), 3 个 \(T\), 2 个 \(I\) 是相同的.\\
+    于是: 我们首先假设它们都是 distinct 的, 则存在 \(10!\) 个 permutations. 而, 每个 permutation 都包含了对 3 个 $S$ 的一个子 permutation. 而对 3 个 $S$ 的任意 permutation 都是相同的! 同样的道理 apply to 3 个 $T$ 和 2 个 $I$.\\
+    所以这个结果是真实结果的 \(3!3!2!\) 倍.\\
+    同样地, 由于
+    因而, 正确结果是: \[
+    \frac{10!}{3!3!2!1!1!}
+    \]
+\end{example}
+\begin{remark}
+    
+\end{remark}
+
+\begin{definition}{combinations}
+从 $n$ 个 objects 中选取 $k$ 个的 ways 为: \[
+\binom{n}{k} = \frac{n!}{k!(n-k)!}
+\]
+    
 \end{definition}
 
 
@@ -26,8 +47,31 @@
 
 
 
+\chapter{Probability space intro}
+我们这里跳过所有 measure theory 的内容, 见 notes on measure theory.\\
+\begin{definition}{prob space, prob measure, sample space, event space}
+    一个 probability space 就是一个 measure space \( (\Omega, \mathcal{F}, \mathbb{P}) \), 其中 $\mathbb{P}(\Omega) = 1$.\\
+    对于这样的 measure $\mathbb{P}$, 我们称之为 \textbf{probability measure (概率测度, 即概率)}.\\
+    这样的 \(\Omega\), 我们称之为 \textbf{sample space (样本空间)}. \\
+    这样的 Simga Algebra \(\mathcal{F}\), 我们称之为 \textbf{event space (事件空间)}. 任意的 $A\in\mathcal{F}$ 我们都称之为一个 \textbf{event (事件)}.
+\end{definition}
+\begin{remark}
+    一个 event 就是这个 prob space 中的一个 measurable set.
+    对于 discrete 的 prob space 而言, 我们通常选取 $\mathcal{F} = 2^{\Omega}$, 即 $\Omega$ 的任意子集都是一个 event.
+\end{remark}
 
-recall: 随机变量 $X: \Omega \rightarrow \mathbb{R}$ 就是一个从样本空间 \((\Omega, \mathcal{F},P)\) 到 $\mathbb{R}$ 的 measurable function.\\
+
+
+
+
+
+
+
+
+
+\chapter{random variables}
+
+随机变量 $X: \Omega \rightarrow \mathbb{R}$ 就是一个从样本空间 \((\Omega, \mathcal{F},P)\) 到 $\mathbb{R}$ 的 measurable function.\\
 
 其 cdf $F_X: \mathbb{R} \rightarrow [0,1]$ 就是 $X$ 这个 real-valued measurable function 对于 $(-\infty,x]$ 的 preimage, 意义是 "随机变量的值小于等于 $x$ 的概率"  \[
 F_X (x) = P( X^{-1}(-\infty,x])
