@@ -1,77 +1,4 @@
-\documentclass[lang=cn,11pt]{elegantbook}
-\usepackage[utf8]{inputenc}
-\usepackage[UTF8]{ctex}
-\usepackage{amsmath}%
-\usepackage{amssymb}%
-\usepackage{graphicx}
-\setlength{\parskip}{0.5em}
-
-
-\title{Math 525}
-
-\begin{document}
-\frontmatter
-\tableofcontents
-\mainmatter
-
-\chapter{Probability space intro}
-我们这里跳过所有 measure theory 的内容, 见 notes on measure theory.\\
-\begin{definition}{prob space, prob measure}
-    一个 probability space 就是一个 measure space \( (\Omega, \mathcal{F}, \mathbb{P}) \), 其中 $\mathbb{P}(\Omega) = 1$.\\
-    对于这样的 measure $\mathbb{P}$, 我们称之为 probability measure.
-\end{definition}
-
-
-
-
-
-
-
-recall: 随机变量 $X: \Omega \rightarrow \mathbb{R}$ 就是一个从样本空间 \((\Omega, \mathcal{F},P)\) 到 $\mathbb{R}$ 的 measurable function.\\
-
-其 cdf $F_X: \mathbb{R} \rightarrow [0,1]$ 就是 $X$ 这个 real-valued measurable function 对于 $(-\infty,x]$ 的 preimage, 意义是 "随机变量的值小于等于 $x$ 的概率"  \[
-F_X (x) = P( X^{-1}(-\infty,x])
-\]
-discrete random variable 的 pmf, 表示每个离散点 $x$ 的 $P(X^{-1}(\{x\}))$.
-即 \[
-p(x) := P(X^{-1}(\{x\})) = P(X=x)
-\]
-continuous random variable 的 pdf, 表示在某个点上概率分布的密度有多大 \[
-f_X(x) :=  \frac{dF_X(x)}{dx}
-\]
-或者写作: \[
-f_X(x) :=  \frac{dF_X(x)}{dm}
-\]
-是这个 $F_X$ 对于 Lebesgue measure $m$ 的 Radon-Nikodym derivative.
-
-
-随机变量的 expectation 是它在这个 prob space 上的积分, 表示它的值的 prob-weighted average
-\[
-E (X):= \int_\Omega X  \;d P
-\]
-随机变量的 variance 是 $(X-E(X))^2$ 这个 induced 随机变量在这个 prob space 上的积分, 表示原随机变量值离它的值的 weighted average 的聚集程度. \[
-Var(X) = \int_\Omega (X-E(X))^2   \;dP
-\]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \chapter{continuous random variables}
-
 
 
 
@@ -126,7 +53,6 @@ P(X \in B ) = P(Y \in \sigma B + \mu)
 
 
 
-
 \subsection{expectation and variance of normal dist}
 Suppose $ X \sim \mathcal{N}(0,1)$. Then \[
 \mathbb{E}(X) =  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x   e^{-\frac{x^2}{2}}    \; dx   = 0
@@ -144,7 +70,6 @@ And  \begin{align}
 从而: \[
 Var(X) = 1
 \]
-
 
 
 
@@ -175,7 +100,6 @@ Var(Y)  = Var(\sigma X + \mu) =  \mathbb{E}[(\sigma X + \mu - \mu)^2] = \mathbb{
    \end{cases}
    \]
 \end{remark}
-
 
 
 
@@ -225,7 +149,6 @@ P(H) := p
     \lim_{n\to \infty} P\Bigg( \frac{S_n - \mathbb{E}(S_n)}{\sigma(S_n)} \in (a,b)\Bigg) = \Phi(b) - \Phi(a) = \frac{1}{\sqrt{2\pi}} \int_{(a,b)} e^{-\frac{x^2}{2}} \; dx
     \]
 \end{theorem}
-
 
 
 
@@ -367,7 +290,6 @@ P(X>5) = P(X> 5+2 \mid X > 2)
 
 
 
-
 \subsection{Gamma distribution}
 
 \begin{definition}{$\Gamma$-distribution}
@@ -468,36 +390,3 @@ F_Y(a) = P(g(x) < a) = F_X(g^{-1} (a) )
 
 
 
-
-
-\chapter{joint probability}
-
-
-\begin{example}
-    Suppose $X,Y$ 是 independent normal r.v., with mean 0 and 
-\end{example}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\end{document}

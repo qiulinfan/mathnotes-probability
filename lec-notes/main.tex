@@ -1,0 +1,28 @@
+\documentclass[lang=cn,11pt,chinesefont=nofont]{elegantbook}
+
+% 字体配置:
+% macOS:   fontset=macnew  或 fontset=mac
+% Windows: fontset=windowsnew 或 fontset=windows
+% Linux:   fontset=ubuntu 或 fontset=fandol
+% 如果注释掉 fontset，ctex 会尝试自动检测系统字体
+%\usepackage[UTF8,scheme=plain,fontset=macnew]{ctex}
+\usepackage[UTF8,scheme=plain]{ctex}
+
+
+
+\title{Math 525}
+
+\begin{document}
+\frontmatter
+\tableofcontents
+\mainmatter
+
+% 包含各个章节
+\input{chapters/ch01-basic-combinatorics}
+\input{chapters/ch02-probability-space-intro}
+\input{chapters/ch03-random-variables}
+\input{chapters/ch04-continuous-random-variables}
+\input{chapters/ch05-joint-probability}
+
+\end{document}
+

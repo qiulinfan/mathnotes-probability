@@ -1,0 +1,31 @@
+\chapter{basic combinatorics}
+\begin{definition}{permutations}
+一个 permutation 就是对一组 objects 的一个 \textbf{rearrangement} (这些 objects 中可以有 same 的也可以有 distinct 的).\\
+    对于 $n$ 个 \textbf{distinct objects}, 一共存在 \(n! = n(n-1)(n-2)\cdots \) 个 permutations.
+\end{definition}
+
+\begin{example}
+    \# distinct permutations of "STATISTICS"?\\
+    这里一共有 10 个 objects. 但问题是: 其中有 3 个 \(S\), 3 个 \(T\), 2 个 \(I\) 是相同的.\\
+    于是: 我们首先假设它们都是 distinct 的, 则存在 \(10!\) 个 permutations. 而, 每个 permutation 都包含了对 3 个 $S$ 的一个子 permutation. 而对 3 个 $S$ 的任意 permutation 都是相同的! 同样的道理 apply to 3 个 $T$ 和 2 个 $I$.\\
+    所以这个结果是真实结果的 \(3!3!2!\) 倍.\\
+    同样地, 由于
+    因而, 正确结果是: \[
+    \frac{10!}{3!3!2!1!1!}
+    \]
+\end{example}
+\begin{remark}
+    这个地方解释一下为什么是 $3!3!2!1!1!$ 而不是 $3!3!2!1!1!1!$
+    
+\end{remark}
+
+\begin{definition}{combinations}
+从 $n$ 个 objects 中选取 $k$ 个的 ways 为: \[
+\binom{n}{k} = \frac{n!}{k!(n-k)!}
+\]
+
+\end{definition}
+
+
+
+
