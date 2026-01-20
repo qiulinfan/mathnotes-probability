@@ -210,7 +210,7 @@
   
   \AfterEndPreamble{
     \setlength\parindent{0\ccwd}
-    \setlength{\parskip}{0.5em}
+    %\setlength{\parskip}{0.5em}
     }
 }{\relax}
 
@@ -569,6 +569,7 @@
           \textcolor{second}{$\heartsuit$}};}},
     propstyle/.style={
       common,
+      fontupper=\normalfont,
       colframe=third,  
       colback=third!5,
       colbacktitle=third, 
@@ -679,9 +680,9 @@
   % declare a new theorem style
   \newtheoremstyle{defstyle}{3pt}{3pt}{\normalfont}{-3pt}{
     \bfseries\color{main}}{}{0.5em}{\thmname{#1} \thmnumber{#2} \thmnote{(#3)}}
-  \newtheoremstyle{thmstyle}{3pt}{3pt}{\citshape}{-3pt}{
+  \newtheoremstyle{thmstyle}{3pt}{3pt}{\normalfont}{-3pt}{
     \bfseries\color{second}}{}{0.5em}{\thmname{#1} \thmnumber{#2} \thmnote{(#3)}}
-  \newtheoremstyle{prostyle}{3pt}{3pt}{\citshape}{-3pt}{
+  \newtheoremstyle{prostyle}{3pt}{3pt}{\normalfont}{-3pt}{
     \bfseries\color{third}}{}{0.5em}{\thmname{#1} \thmnumber{#2} \thmnote{(#3)}}
 
 
@@ -743,7 +744,7 @@
   % \hfill$\Box$\quad
   \par}
 
-\newenvironment{solution}{\par\noindent\textbf{\color{main}\solutionname} \citshape}{\par}
+\newenvironment{solution}{\par\noindent\textbf{\color{main}\solutionname} \cfs}{\par}
 \newenvironment{remark}{\noindent\textbf{\color{second}\remarkname}}{\par}
 \newenvironment{assumption}{\par\noindent\textbf{\color{third}\assumptionname} \citshape}{\par}
 \newenvironment{conclusion}{\par\noindent\textbf{\color{third}\conclusionname} \citshape}{\par}

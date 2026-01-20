@@ -24,5 +24,14 @@
   "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
   "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.autoClean.run": "onFailed",
-  "latex-workshop.view.pdf.refresh.viewer": "auto"
+  "latex-workshop.view.pdf.refresh.viewer": "auto",
+  "[latex]": {
+    "editor.wordBasedSuggestions": false,
+    "editor.wordBasedSuggestionsMode": "off",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": false
+    }
+  }
 }
