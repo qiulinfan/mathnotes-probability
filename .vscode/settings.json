@@ -26,7 +26,7 @@
   "latex-workshop.latex.autoClean.run": "onFailed",
   "latex-workshop.view.pdf.refresh.viewer": "auto",
   "[latex]": {
-    "editor.wordBasedSuggestions": false,
+    "editor.wordBasedSuggestions": "off",
     "editor.wordBasedSuggestionsMode": "off",
     "editor.quickSuggestions": {
       "other": true,
