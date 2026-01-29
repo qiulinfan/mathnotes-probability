@@ -5,7 +5,8 @@
 \end{definition}
 
 \begin{remark}
-    这里的 measurable function 是 Borel measurable function, 即对于任意 Borel set $B \subset \mathbb{R}$, 有 $X^{-1}(B) \in \mathcal{F}$.\\例如: \(X(\omega) = \omega^2\) 是一个 measurable function, 因为对于任意 Borel set $B \subset \mathbb{R}$, 有 $X^{-1}(B) = \{\omega \in \Omega | \omega^2 \in B\} \in \mathcal{F}$.
+    这里的 measurable function 是 Borel measurable function, 即对于任意 Borel set $B \subset \mathbb{R}$, 有 $X^{-1}(B) \in \mathcal{F}$.
+    例如: \(X(\omega) = \omega^2\) 是一个 measurable function, 因为对于任意 Borel set $B \subset \mathbb{R}$, 有 $X^{-1}(B) = \{\omega \in \Omega | \omega^2 \in B\} \in \mathcal{F}$.
 \end{remark}
 
 
@@ -15,7 +16,7 @@
 
 其 cdf $F_X: \mathbb{R} \rightarrow [0,1]$ 就是 $X$ 这个 real-valued measurable function 对于 $(-\infty,x]$ 的 preimage, 意义是 "随机变量的值小于等于 $x$ 的概率"  
 \[
-F_X (x) = P( X^{-1}(-\infty,x])
+F_X (x) = P( X^{-1}(-\infty,x))
 \]
 discrete random variable 的 pmf, 表示每个离散点 $x$ 的 $P(X^{-1}(\{x\}))$.
 即 \[
@@ -37,7 +38,6 @@ E (X):= \int_\Omega X  \;d P
 随机变量的 variance 是 $(X-E(X))^2$ 这个 induced 随机变量在这个 prob space 上的积分, 表示原随机变量值离它的值的 weighted average 的聚集程度. \[
 Var(X) = \int_\Omega (X-E(X))^2   \;dP
 \]
-
 
 
 

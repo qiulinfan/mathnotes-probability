@@ -561,6 +561,7 @@
           \textcolor{main}{$\clubsuit$}};}},
     thmstyle/.style={
       common,
+      fontupper=\normalfont,
       colframe=second,  
       colback=second!5,
       colbacktitle=second, 
