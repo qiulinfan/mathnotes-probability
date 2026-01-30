@@ -355,6 +355,51 @@ Solving the system, we find $\mathbb{P}\left(W_A\right)=0.6$.
 \end{proof}
 
 
-\begin{example}
-    
+\begin{example}{(Pairwise Independence vs. Mutual Independence)}
+
+一组事件 $A_1, A_2, \ldots \in \mathcal{F}$ 如果是 mutually independent 的, 则它们两两 independent. \textbf{但是反过来不成立}.\\
+即: \textbf{即便对于任意 $i \neq j$, 有 $\mathbb{P}(A_i \cap A_j) = \mathbb{P}(A_i) \mathbb{P}(A_j)$, 也并不意味着这些事件是 mutually independent 的}.\\
+下面为一个 counterexample: 考虑掷两个骰子. 令事件
+$$
+A:=\{\text{first roll is } 4\}, \quad B:=\{\text{second roll is } 3\},\quad C:=\{\text{the sum of the two outcomes is } 7\}
+$$
+我们发现: $\mathbb{P}(A \cap B \cap C)=\frac{1}{36} \neq \mathbb{P}(A) \mathbb{P}(B) \mathbb{P}(C)=\frac{1}{6^3}$, 因而 $A, B, C$ 并不 mutually independent. 然而, However, $\mathbb{P}(A \cap B)=\frac{1}{36}=\mathbb{P}(A) \mathbb{P}(B), \mathbb{P}(A \cap C)=\frac{1}{36}=\mathbb{P}(A) \mathbb{P}(C)$ and $\mathbb{P}(B \cap C)=\frac{1}{36}=\mathbb{P}(B) \mathbb{P}(C)$, 
+因而它们两两 pairwise independent.
+\end{example}
+\begin{remark}
+这个反例能够成功的理由是: 事件 $C$ (总和) 和 事件 $A$ (第一个骰子) 以及事件 $B$ (第二个骰子) 分别都是独立的, 因为知道了其中一个并不会影响另一个的概率. 但是, 一旦我们知道了 $A$ 和 $B$ 的值, 那么 $C$ 的值就被完全确定了 (因为总和就是两个骰子的和). 因而, 三个事件并不 mutually independent. \\
+(注意: 如果 \(C\) 事件不是和为 7 而是一个小于 7 的数, 那就不是了, 因为如果我们知道第一次是 6, 那么和就不可能是 6, 那么就也失去了 pairwise independence).\\
+这个例子说明了, mutual independence 是一个比较强的条件.
+我们可以把这三个事件看作是对结果空间的约束:
+\begin{itemize}
+    \item 两个骰子的结果空间有 36 个点.
+    \item $A$ 是一条线 (6个点), $B$ 是另一条线 (6个点), $C$ 是一条对角线 (6个点)。
+    \item 两两独立: 意味着任意两条线相交的点数, 恰好符合概率乘积.
+    \item 相互独立: 要求这三条线交于一点的概率也符合乘积. 
+\end{itemize}
+这个例子提醒我们: 独立性不是一种可以由低维向高维简单“归纳”的性质. 一个系统可以局部解耦（两两独立, 但在全局尺度上却存在强耦合. 总之 mutual independence 是一个很强的条件.
+\end{remark}
+
+
+
+\begin{example}{(coin tossing)}
+
+假设我们有一枚不均匀的硬币, 掷出正面的概率是 $p \in[0,1]$, 反面的概率是 $1-p$. 我们不断地掷这枚硬币, 直到第一次掷出正面为止, 并记录所需的掷币次数. 求: 掷币次数为奇数的概率是多少?
+\begin{solution}
+对于任意 $i \in \mathbb{N}$, 考虑事件 $A_i=\{$ 掷币次数为 $i\}$.
+$$
+\mathbb{P}\left(\cup_{n=1}^{\infty} A_{2 n-1}\right)=\sum_{n=1}^{\infty} \mathbb{P}\left(A_{2 n-1}\right)=\sum_{n=1}^{\infty}(1-p)^{2 n-2} p=p \sum_{n=1}^{\infty}\left((1-p)^2\right)^{n-1}=p \cdot \frac{1}{1-(1-p)^2}=\frac{1}{2-p}
+$$
+\end{solution}
+\begin{remark}
+这个问题还可以通过 law of total probability 来解决.\\
+令 $E=$ 掷币次数为奇数. 那么
+$$
+\begin{aligned}
+\mathbb{P}(E) & =\mathbb{P}(\text{head}) \cdot \mathbb{P}(E \mid \text{head})+\mathbb{P}(\text{tail}) \cdot \mathbb{P}(E \mid \text{tail}) \\
+& =p \cdot 1+(1-p) \cdot(1-\mathbb{P}(E))
+\end{aligned}
+$$
+Solve 这个 equation 得到同样结果.
+\end{remark}    
 \end{example}
