@@ -1,18 +1,37 @@
 \chapter{random variables}
 
 \begin{definition}{random variable}
-    对于 probability space \((\Omega, \mathcal{F}, \mathbb{P})\), 一个 random variable 是一个 \textbf{measurable function} $X: \Omega \rightarrow \mathbb{R}$.
+    对于 probability space \((\Omega, \mathcal{F}, \mathbb{P})\), 一个 random variable 是一个 \textbf{Borel measurable function} $X: \Omega \rightarrow \mathbb{R}$.
 \end{definition}
 
 \begin{remark}
-    这里的 measurable function 是 Borel measurable function, 即对于任意 Borel set $B \subset \mathbb{R}$, 有 $X^{-1}(B) \in \mathcal{F}$.
+    回顾 measurable function 的定义: 即对于任意 Borel set $B \subset \mathbb{R}$, 有 $X^{-1}(B) \in \mathcal{F}$.
     例如: \(X(\omega) = \omega^2\) 是一个 measurable function, 因为对于任意 Borel set $B \subset \mathbb{R}$, 有 $X^{-1}(B) = \{\omega \in \Omega | \omega^2 \in B\} \in \mathcal{F}$.
 \end{remark}
 
 
 
 
-随机变量 $X: \Omega \rightarrow \mathbb{R}$ 就是一个从样本空间 \((\Omega, \mathcal{F},P)\) 到 $\mathbb{R}$ 的 measurable function.\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 其 cdf $F_X: \mathbb{R} \rightarrow [0,1]$ 就是 $X$ 这个 real-valued measurable function 对于 $(-\infty,x]$ 的 preimage, 意义是 "随机变量的值小于等于 $x$ 的概率"  
 \[
