@@ -930,6 +930,146 @@
   % backgroundcolor=\color{lightgrey}
 }
 
+% Python language style definition
+\lstdefinestyle{pythonstyle}{
+  language=Python,
+  basicstyle=\ttfamily\small\color{white},
+  keywordstyle=\color{cyan}\bfseries,
+  commentstyle=\color{green!70}\itshape,
+  stringstyle=\color{yellow!80},
+  numberstyle=\tiny\color{gray!60},
+  numbers=left,
+  numbersep=5pt,
+  frame=single,
+  framerule=0.2pt,
+  rulecolor=\color{structurecolor},
+  backgroundcolor=\color{black!85},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4,
+  captionpos=b,
+  columns=flexible,
+  showstringspaces=false,
+  emphstyle=\color{magenta!80}\bfseries,
+  emph={self,cls,True,False,None},
+  lineskip=0pt,
+  aboveskip=6pt,
+  belowskip=6pt,
+}
+
+% Define Python code environment
+\lstnewenvironment{python}[1][]{
+  \lstset{style=pythonstyle,#1}
+}{}
+
+% Define inline Python command
+\newcommand{\pythoninline}[1]{\lstinline[style=pythonstyle]!#1!}
+
+% C++ language style definition
+\lstdefinestyle{cppstyle}{
+  language=C++,
+  basicstyle=\ttfamily\small\color{white},
+  keywordstyle=\color{cyan}\bfseries,
+  commentstyle=\color{green!70}\itshape,
+  stringstyle=\color{yellow!80},
+  numberstyle=\tiny\color{gray!60},
+  numbers=left,
+  numbersep=5pt,
+  frame=single,
+  framerule=0.2pt,
+  rulecolor=\color{structurecolor},
+  backgroundcolor=\color{black!85},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4,
+  captionpos=b,
+  columns=flexible,
+  showstringspaces=false,
+  emphstyle=\color{magenta!80}\bfseries,
+  emph={nullptr,override,final,constexpr,noexcept},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  lineskip=0pt,
+  aboveskip=6pt,
+  belowskip=6pt,
+}
+
+% Define C++ code environment
+\lstnewenvironment{cpp}[1][]{
+  \lstset{style=cppstyle,#1}
+}{}
+
+% Define inline C++ command
+\newcommand{\cppinline}[1]{\lstinline[style=cppstyle]!#1!}
+
+% Define plain text environment
+\lstdefinestyle{txtstyle}{
+  language=,
+  basicstyle=\ttfamily\small,
+  commentstyle=,
+  keywordstyle=,
+  stringstyle=,
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  numbersep=5pt,
+  frame=single,
+  framerule=0.2pt,
+  rulecolor=\color{structurecolor},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4,
+  captionpos=b,
+  columns=flexible,
+  showstringspaces=false,
+  xleftmargin=0pt,
+  xrightmargin=0pt,
+  lineskip=0pt,
+  aboveskip=6pt,
+  belowskip=6pt,
+}
+
+\lstnewenvironment{txt}[1][]{
+  \lstset{style=txtstyle,#1}
+}{}
+
+% Define terminal/command line environment
+\lstdefinestyle{terminalstyle}{
+  language=,
+  basicstyle=\ttfamily\small\color{white},
+  commentstyle=,
+  keywordstyle=,
+  stringstyle=,
+  numberstyle=\tiny\color{gray!60},
+  numbers=none,
+  numbersep=5pt,
+  frame=single,
+  framerule=0.2pt,
+  rulecolor=\color{structurecolor},
+  backgroundcolor=\color{black!85},
+  breaklines=true,
+  breakatwhitespace=false,
+  tabsize=4,
+  captionpos=b,
+  columns=flexible,
+  showstringspaces=false,
+  xleftmargin=0pt,
+  xrightmargin=0pt,
+  lineskip=0pt,
+  aboveskip=8pt,
+  belowskip=8pt,
+}
+
+\lstnewenvironment{terminal}[1][]{
+  \lstset{style=terminalstyle,#1}
+}{}
+
+% Alias for terminal environment
+\lstnewenvironment{cmd}[1][]{
+  \lstset{style=terminalstyle,#1}
+}{}
+
 \newcommand\bmmax{0}
 \RequirePackage{bm}
 

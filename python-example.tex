@@ -1,0 +1,271 @@
+\documentclass{elegantbook}
+
+\title{代码渲染示例}
+\subtitle{ElegantBook中的Python和文本代码渲染}
+\author{示例作者}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{代码渲染示例}
+
+\section{Python代码环境（黑色背景）}
+
+下面是一个完整的Python代码示例，现在采用黑色背景：
+
+\begin{python}[caption={蒙蒂霍尔问题模拟}, label=code:montyhall]
+import random
+
+def monty_hall_sim(trials=10000):
+    stay_wins = 0
+    switch_wins = 0
+
+    for _ in range(trials):
+        # 初始化门
+        doors = [0, 0, 0]
+        car_position = random.randint(0, 2)
+        doors[car_position] = 1
+        
+        # 玩家选择
+        player_choice = random.randint(0, 2)
+        
+        # 主持人打开门
+        possible_host_doors = [
+            i for i in range(3) 
+            if i != player_choice and doors[i] == 0
+        ]
+        host_opens = random.choice(possible_host_doors)
+        
+        # 计算结果
+        if doors[player_choice] == 1:
+            stay_wins += 1
+            
+        remaining_door = [
+            i for i in range(3) 
+            if i != player_choice and i != host_opens
+        ][0]
+        
+        if doors[remaining_door] == 1:
+            switch_wins += 1
+
+    print(f"坚持不换胜率: {stay_wins/trials:.2%}")
+    print(f"换门胜率: {switch_wins/trials:.2%}")
+
+if __name__ == "__main__":
+    monty_hall_sim()
+\end{python}
+
+\section{C++代码环境}
+
+下面展示C++代码环境，同样采用黑色背景：
+
+\begin{cpp}[caption={蒙蒂霍尔问题C++实现}, label=code:montyhall-cpp]
+#include <iostream>
+#include <vector>
+#include <random>
+#include <algorithm>
+
+class MontyHallSimulator {
+private:
+    std::random_device rd;
+    std::mt19937 gen;
+    std::uniform_int_distribution<int> door_dist;
+    
+public:
+    MontyHallSimulator() : gen(rd()), door_dist(0, 2) {}
+    
+    void simulate(int trials = 10000) {
+        int stay_wins = 0;
+        int switch_wins = 0;
+        
+        for (int i = 0; i < trials; ++i) {
+            // 初始化门：0代表羊，1代表车
+            std::vector<int> doors{0, 0, 0};
+            int car_position = door_dist(gen);
+            doors[car_position] = 1;
+            
+            // 玩家最初的选择
+            int player_choice = door_dist(gen);
+            
+            // 主持人打开一扇有山羊的门
+            std::vector<int> possible_doors;
+            for (int j = 0; j < 3; ++j) {
+                if (j != player_choice && doors[j] == 0) {
+                    possible_doors.push_back(j);
+                }
+            }
+            
+            std::uniform_int_distribution<int> host_dist(0, possible_doors.size() - 1);
+            int host_opens = possible_doors[host_dist(gen)];
+            
+            // 计算结果
+            if (doors[player_choice] == 1) {
+                stay_wins++;
+            }
+            
+            // 换门后的选择
+            int remaining_door = -1;
+            for (int j = 0; j < 3; ++j) {
+                if (j != player_choice && j != host_opens) {
+                    remaining_door = j;
+                    break;
+                }
+            }
+            
+            if (doors[remaining_door] == 1) {
+                switch_wins++;
+            }
+        }
+        
+        std::cout << "总实验次数: " << trials << std::endl;
+        std::cout << "坚持不换胜率: " << (double)stay_wins / trials * 100 << "%" << std::endl;
+        std::cout << "换门胜率: " << (double)switch_wins / trials * 100 << "%" << std::endl;
+    }
+};
+
+int main() {
+    MontyHallSimulator simulator;
+    simulator.simulate();
+    return 0;
+}
+\end{cpp}
+
+\section{纯文本环境}
+
+下面展示txt环境，用于显示普通文本、配置文件、数据等：
+
+\begin{txt}[caption={程序运行输出}, label=output:montyhall]
+总实验次数: 10000
+坚持不换中奖次数: 3331 (概率: 33.31%)
+换门后中奖次数: 6669 (概率: 66.69%)
+\end{txt}
+
+\section{配置文件示例}
+
+txt环境也可以用来展示配置文件：
+
+\begin{txt}[caption={示例配置文件}, numbers=none]
+# 配置文件示例
+server.host = localhost
+server.port = 8080
+database.url = jdbc:mysql://localhost:3306/mydb
+database.username = user
+database.password = password
+
+# 日志配置
+log.level = INFO
+log.file = /var/log/app.log
+\end{txt}
+
+\section{数据文件示例}
+
+还可以用来展示数据文件内容：
+
+\begin{txt}[caption={CSV数据示例}]
+姓名,年龄,城市,分数
+张三,25,北京,85.5
+李四,30,上海,92.3
+王五,28,广州,78.9
+赵六,32,深圳,88.7
+\end{txt}
+
+\section{命令行/终端环境}
+
+terminal环境用于展示命令行操作，具有黑色背景和白色文字：
+
+\begin{terminal}[caption={运行Python程序}]
+$ python montyhall.py
+总实验次数: 10000
+坚持不换中奖次数: 3331 (概率: 33.31%)
+换门后中奖次数: 6669 (概率: 66.69%)
+
+$ python -c "import random; print(random.randint(1,6))"
+4
+\end{terminal}
+
+也可以使用cmd环境（terminal的别名）：
+
+\begin{cmd}[caption={Windows命令提示符}]
+C:\Users\qiulin> dir *.py
+ 驱动器 C 中的卷是 Windows
+ 卷的序列号是 1234-5678
+
+ C:\Users\qiulin 的目录
+
+2026/01/29  10:30             1,432 montyhall.py
+               1 个文件          1,432 字节
+               0 个目录              0 可用字节
+
+C:\Users\qiulin> python montyhall.py
+总实验次数: 10000
+坚持不换中奖次数: 3347 (概率: 33.47%)
+换门后中奖次数: 6653 (概率: 66.53%)
+\end{cmd}
+
+\section{Unix/Linux命令示例}
+
+\begin{terminal}
+$ ls -la
+total 24
+drwxr-xr-x  3 user user 4096 Jan 29 10:30 .
+drwxr-xr-x 15 user user 4096 Jan 29 10:00 ..
+-rw-r--r--  1 user user 1432 Jan 29 10:30 montyhall.py
+-rw-r--r--  1 user user  256 Jan 29 10:25 requirements.txt
+
+$ cat requirements.txt
+numpy>=1.21.0
+scipy>=1.7.0
+matplotlib>=3.4.0
+
+$ pip install -r requirements.txt
+Collecting numpy>=1.21.0
+  Using cached numpy-1.24.3-py3-none-any.whl
+Installing collected packages: numpy, scipy, matplotlib
+Successfully installed matplotlib-3.7.1 numpy-1.24.3 scipy-1.10.1
+\end{terminal}
+
+\section{行内代码}
+
+在正文中可以使用行内代码：
+- Python代码：\pythoninline{import numpy as np}
+- C++代码：\cppinline{std::vector<int> vec{1,2,3};}
+
+\section{简单代码示例}
+
+Python简单示例：
+\begin{python}[numbers=none]
+# 简单示例  
+import numpy as np
+data = np.random.normal(0, 1, 1000)
+print(f"均值: {np.mean(data):.3f}")
+\end{python}
+
+C++简单示例：
+\begin{cpp}[numbers=none]
+// 简单示例
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> numbers{1, 2, 3, 4, 5};
+    
+    for (const auto& num : numbers) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+    
+    return 0;
+}
+\end{cpp}
+
+\begin{txt}[numbers=none]
+这是一个没有行号的文本块
+可以用来展示简单的输出
+或者其他不需要行号的内容
+\end{txt}
+
+\end{document}

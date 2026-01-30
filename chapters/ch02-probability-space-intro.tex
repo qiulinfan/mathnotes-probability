@@ -108,9 +108,9 @@
 
 
 
-\section{conditional probability and independence}
+\section{conditional probability}
 \begin{definition}{conditional probability}
-    对于 probability space \((\Omega, \mathcal{F}, \mathbb{P})\), 给定一个 event $B \in \mathcal{F}$, 我们定义 conditional probability of an event $A \in \mathcal{F}$ given $B$ 为:
+    对于 probability space \((\Omega, \mathcal{F}, \mathbb{P})\), 给定一个 event $B \in \mathcal{F}$, 如果 \(\mathbb{P}(B) > 0\), 我们定义 conditional probability of an event $A \in \mathcal{F}$ given $B$ 为:
     \[
     \mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}
     \]
@@ -126,6 +126,7 @@ Naturally follows from the def.
 \end{proof}
 
 
+\subsection{Law of total probability and Bayes' Theorem}
 \begin{theorem}{law of total probability}
     令 $\left(A_i\right)_{i \in \mathbb{N}}$ 为一个 seq of \textbf{pairwise disjoint} events, 如果 $\sqcup_{i=1}^{\infty} A_i=\Omega$, 那么对于任意 event $E \subseteq \Omega$:
     \[
@@ -171,7 +172,8 @@ Naturally follows from the def.
 \end{example}
 
 \begin{example}{(Monty Hall problem)}
-假设你参加一个游戏节目, 面前有三扇门: 一扇门后面有一辆车; 其他两扇门后面是山羊. 你选择了一扇门, 比如说是 1 号门, 然后主持人 (他知道每扇门后面是什么) 打开了另一扇门, 比如说是 3 号门, 里面有一只山羊. 然后他说 "你想换成 2 号门吗?". 换门对你有利吗?
+
+假设你参加一个游戏节目, 面前有三扇门: 一扇门后面有一辆车; 其他两扇门后面是山羊. 你选择了一扇门, 比如说是 1 号门, 然后主持人打开了另一扇门, 比如说是 3 号门, 里面有一只山羊. 然后他说 "你想换成 2 号门吗?". 换门对你有利吗?
 \begin{solution}
 令 \(A_i\) 表示: car 在 \(i\) 号门后面; \(B\) 事件表示: 主持人打开 3 号门. 我们要求的概率是在事件 \(B\) 发生的情况下, \(A_2\) 的个概率, 即 \(\mathbb{P}(A_2 \mid B)\). 它的大小是:
 \begin{align*}
@@ -181,4 +183,178 @@ Naturally follows from the def.
 \end{align*}
 因而, 换门是有利的.
 \end{solution}
+\begin{remark}
+这是一个非常反直觉的例子. 我们直觉肯定会觉得: 一共 1 辆车和 2 个山羊, 主持人帮忙排除掉了一个山羊, 
+那么剩下来的两个里面我们二选一, 肯定是 $1/2$ 概率, 而这个 "更换与否" 就是二选一的抉择. 但其实不是这样的. \\
+在第一次选择和第二次选择之间, 主持人带来了额外的信息. 
+\begin{itemize}
+    \item 不换门: win iff 在一开始就选择对了车, 这个概率是 $1/3$.
+    \item 换门: win iff 在一开始选择的是山羊, 这个概率是 $2/3$.
+\end{itemize}
+从条件概率的视角来看: 
+\begin{itemize}
+    \item 如果车在 2 号门: 主持人在这个环节里只能选择 3 号门.
+    \item 如果车在 1 号门: 主持人在这个环节里可以随机在 2 号和 3 号门里面选择一扇门.
+\end{itemize}
+也就是说, 主持人打开 3 号门的这个动作, 把 3 号门原本含有的 "中奖潜力" 全部转移给了 2 号门.
+这很反直觉. 但是可以用一段 python 程序验证:
+
+\begin{python}[caption={Monty Hall problem simulation}, label=code:montyhall-sim]
+import random
+
+def monty_hall_sim(trials=10000):
+    stay_wins = 0
+    switch_wins = 0
+
+    for _ in range(trials):
+        # 1. 初始化门: 0代表羊, 1代表车
+        doors = [0, 0, 0]
+        car_position = random.randint(0, 2)
+        doors[car_position] = 1
+        
+        # 2. 玩家最初的选择
+        player_choice = random.randint(0, 2)
+        
+        # 3. 主持人打开一扇有山羊的门
+        # 主持人不能开玩家选的门，也不能开有车的门
+        possible_host_doors = [
+            i for i in range(3) 
+            if i != player_choice and doors[i] == 0
+        ]
+        host_opens = random.choice(possible_host_doors)
+        
+        # 4. 如果"坚持不换"赢了
+        if doors[player_choice] == 1:
+            stay_wins += 1
+            
+        # 5. 如果"换门"赢了
+        # 换门后的选择是：既不是原选，也不是主持人开的那扇
+        remaining_door = [
+            i for i in range(3) 
+            if i != player_choice and i != host_opens
+        ][0]
+        
+        if doors[remaining_door] == 1:
+            switch_wins += 1
+
+    print(f"总实验次数: {trials}")
+    print(f"坚持不换中奖次数: {stay_wins} (概率: {stay_wins/trials:.2%})")
+    print(f"换门后中奖次数: {switch_wins} (概率: {switch_wins/trials:.2%})")
+
+if __name__ == "__main__":
+    monty_hall_sim()
+\end{python}
+运行结果:
+
+\begin{terminal}[caption={Monty Hall problem simulation result}]
+总实验次数: 10000  
+坚持不换中奖次数: 3312 (概率: 33.12%)
+换门后中奖次数: 6688 (概率: 66.88%) 
+\end{terminal}
+\end{remark}
+\end{example}
+
+
+
+\begin{example}{(Wizards)}
+
+两个巫师 \(A\) 和 \(B\) 进行决斗, 他们轮流射击对方. 巫师 \(A\) 每次射击命中 \(B\) 的概率是 \(\mathbb{P}(A)=\frac{1}{2}\), 而巫师 \(B\) 每次射击命中 \(A\) 的概率是 \(\mathbb{P}(B)=\frac{2}{3}\). 巫师 \(A\) 先开枪. 求: 巫师 \(A\) 获胜的概率是多少? \\
+\begin{solution}
+任意一轮射击 (假设前一轮没有结束, 于是游戏回到初始状态. 因而任意一轮都是独立的) 中,
+令 \(W_A\) 为事件: \(A\) 获胜; \(W_B\) 为事件: \(B\) 获胜, 假设他们从各自开始射击. 根据全概率公式, 我们有
+$$
+\begin{aligned}
+& \mathbb{P}\left(W_A\right)=\mathbb{P}(\mathrm{hit}) \mathbb{P}\left(W_A \mid \mathrm{hit}\right)+\mathbb{P}(\mathrm{miss}) \mathbb{P}\left(W_A \mid \mathrm{miss}\right)=\frac{1}{2}+\frac{1}{2} \mathbb{P}\left(W_B^c\right) \\
+& \mathbb{P}\left(W_B\right)=\mathbb{P}(\mathrm{hit}) \mathbb{P}\left(W_B \mid \mathrm{hit}\right)+\mathbb{P}(\mathrm{miss}) \mathbb{P}\left(W_B \mid \mathrm{miss}\right)=\frac{2}{3}+\frac{1}{3} \mathbb{P}\left(W_A^c\right)
+\end{aligned}
+$$
+Solving the system, we find $\mathbb{P}\left(W_A\right)=0.6$.
+\end{solution}
+\begin{remark}
+这个例子表明了先手优势有多大. 相比上一个例子, 这是很直观的.\\
+另外, 这个例子有趣的是, 我们把无限的回合转化为了一个循环结构, 利用游戏状态的自相似, 只需要考虑任意一轮即可.
+\end{remark}    
+\end{example}
+
+\subsection{Kolmogorov definition of conditional probability}
+我们通过 \(\mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}\) 定义出来的 conditional probability 有一个限制, 就是 enforce \(\mathbb{P}(B) > 0\). \\
+但是, 难道 \(\mathbb{P}(B) = 0\) 就不能定义条件概率了吗? 我们考虑一个连续情况: 在 \(\mathbb{R}^3\) 中任意选择一个点, 求: 该点位于单位球面上的概率. 显然, 这个概率是 0. 但是, 如果我们知道该点位于单位球内, 那么该点距离原点的距离为 \(1\) 的概率应当为 \(1\). 也就是说,  即使在 \(\mathbb{P}(B) = 0\) 的情况下, 我们也希望定义 \(\mathbb{P}(A \mid B)\).\\
+在考虑这个定义之前, 首先我们发现: 基于我们先前定义的 conditional probability, 我们可以获得一个新的 probability space:
+\begin{definition}{conditional probability space and trace $\sigma$-algebra}
+    对于给定的 prob space \((\Omega, \mathcal{F}, \mathbb{P})\), 给定一个 event \(B \in \mathcal{F}\) 且 \(\mathbb{P}(B) > 0\), 我们定义 conditional probability space as the triplet \((B, \mathcal{F}_B, \mathbb{P}(\cdot \mid B))\), 其中:
+    \[
+    F_B := \{A\cap B \mid  A \in \mathcal{F} \}
+    \]
+    被称为 \textbf{trace \(\sigma\)-algebra on \(B\)}.\\
+    容易验证, 这个 triplet 是一个 prob space.
+\end{definition}
+\begin{remark}
+    当我们把整个 prob space 限制在 event \(B\) 上时, 本质上是在做一个 Radon-Nikodym derivative 的操作.\\
+    定义 \(f:= \frac{\mathbb{I}_B}{\mathbb{P}(B)}\), 那么对于任意 event \(A \in \mathcal{F_B}\), 有:
+    \[
+    \mathbb{P}(A \mid B) = \int_{A} f \, d\mathbb{P}
+    \] 
+    因而和我们的直觉一样, 条件概率是通过一个 density function 来重新加权原本的概率测度. 
+\end{remark}
+既然这样, 我们能否直接从一个新的 prob space \((B, \mathcal{F}_B, \mathbb{P}(\cdot \mid B))\) 出发, 来定义条件概率呢? 这就是 Kolmogorov 的定义:
+\begin{definition}{Kolmogorov definition of conditional probability}
+    对于给定的 prob space \((\Omega, \mathcal{F}, \mathbb{P})\), 
+    设 \(\mathcal{G} \subseteq \mathcal{F}\) 是一个 sub-\(\sigma\)-algebra. 对于 event \(A \in \mathcal{F}\), 条件概率 \(\mathbb{P}(A \mid \mathcal{G})\) 是一个 \(\mathcal{G}\)-measurable 的随机变量, 其满足对于任意 \(G \in \mathcal{G}\), 有:
+    \[
+    \int_G \mathbb{P} (A \mid \mathcal{G}) \, d\mathbb{P} = \mathbb{P}(A \cap G)
+    \]
+    显然, 当 \(\mathbb{P}(B) > 0\) 时, 这个定义和我们之前的定义是等价的.\\
+    这个 random variable \(\mathbb{P}(A \mid \mathcal{G})\) 在 \(\mathbb{P}\)-a.s. 意义下是唯一的.
+\end{definition}
+\begin{remark}
+    条件概率 \(\mathbb{P}(A \mid \mathcal{G})\) 这个测度是 \(\mathbb{P}(A \cap \cdot)\) 这个测度相对于背景测度 \(\mathbb{P}\) 在子信息流 \(\mathcal{G}\) 下的 Radon-Nikodym derivative, 也就是一个密度函数. \\
+    这个定义里没有指明, 给定一个 event \(B \in \mathcal{F}\), 如何去确定 \(\mathcal{G}\) 以及 \(\mathbb{P}(A \mid \mathcal{G})\). 虽然这是一个抽象的存在性 \(\&\) 唯一性定义, 但是标准的做法是:
+    \begin{itemize}
+        \item  看向产生 \(B\) 的 random variable \(X\), 即 \(B = \{X = x\}\), 令 \(\mathcal{G} = \sigma(X)\), 即由 random variable \(X\) 生成的 \(\sigma\)-algebra. 这个 \(\sigma\)-algebra 包含了所有关于 \(X\) 可能取值的信息.
+        \item 既然 $\mathbb{P}(A \mid \sigma(X))$ 是关于 $\sigma(X)$ 可测的, 那么它一定可以写成 $h(X)$ 的形式. 通过对 $X$ 的所有可能取值进行积分, 我们确定了函数 $h(\cdot)$ 的整体形态, 这时我们定义 $P(A \mid X=x)$ 为函数 $h$ 在点 $x$ 处的值.
+        \item \(\mathbb{P}(A \mid \mathcal{G})\) 实际就是条件期望 \(\mathbb{E}[\mathbb{I}_A \mid \mathcal{G}]\). 当 \(\mathbb{P}(B) > 0\) 时, 它就退化回经典定义 \( \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}\).
+    \end{itemize}
+\end{remark}
+\begin{remark}
+    Further issue: \textbf{Borel-Kolmogorov paradox}.\\
+    即便是这个定义, 也会出现问题. \\
+    给定一个事件 $B$, 如果 $\mathbb{P}(B)=0$, 则 $\mathbb{P}(A \mid B)$ 的取值取决于我们将 $B$ 嵌入到哪一个随机变量 $X$ 中.
+不同的随机变量 $X, Y$ 即使都能产生相同的事件 $\{X=x\} = \{Y=y\} = B$, 它们生成的子 $\sigma$-代数 $\sigma(X)$ 和 $\sigma(Y)$ 却不同, 导致最终确定的条件概率 $h_X(x) \neq h_Y(y)$. \\
+为了解决这个问题, 可以引入更精细的结构, 比如说 regular conditional probability, 以及 disintegration theorem. 不过此处不展开了.
+\end{remark}
+
+\section{independence}
+\begin{definition}{independence of events}
+    对于 prob space \((\Omega, \mathcal{F}, \mathbb{P})\), 两个 events \(A, B \in \mathcal{F}\) 如果有
+    \[
+    \mathbb{P}(A \cap B) = \mathbb{P}(A) \cdot \mathbb{P}(B)
+    \]
+    则称 \(A\) 和 \(B\) 是 independent 的.\\
+    更加 generally, 对于任意 collection of events \(\{A_i\}_{i \in I}\), 如果对于任意有限子集 \(J \subseteq I\), 有 
+    \[
+    \mathbb{P}\left(\bigcap_{j \in J} A_j\right) = \prod_{j \in J} \mathbb{P}(A_j)
+    \]
+    则称 \(\{A_i\}_{i \in I}\) 是 mutually independent 的.
+\end{definition}
+\begin{remark}
+    根据条件概率的定义, 容易得出: 两个 events \(A, B\) independent 的定义\textbf{等价于 \(\mathbb{P}(A \mid B) = \mathbb{P}(A)\)}, 即事件 \(B\) 的发生与否不影响事件 \(A\) 发生的概率.\\
+    将它推广到多个事件: 即\textbf{任意一个事件的发生与否都不影响其他事件发生的概率}.
+\end{remark}
+
+\begin{proposition}
+    如果 events \(A\) 和 \(B\) independent, 则 \(A\) 和 \(B^c\) 也是 independent 的.
+\end{proposition}
+\begin{proof}
+\[
+\begin{aligned}
+\mathbb{P}\left(A^c \cap B^c\right) & =\mathbb{P}\left((A \cup B)^c\right)=1-\mathbb{P}(A \cup B)=1-\mathbb{P}(A)-\mathbb{P}(B)+\mathbb{P}(A \cap B) \\
+& =1-\mathbb{P}(A)-\mathbb{P}(B)+\mathbb{P}(A) \cdot \mathbb{P}(B) = (1-\mathbb{P}(A))(1-\mathbb{P}(B)) \\
+& =\mathbb{P}\left(A^c\right) \cdot \mathbb{P}\left(B^c\right)
+\end{aligned}
+\]
+\end{proof}
+
+
+\begin{example}
+    
 \end{example}
