@@ -7,9 +7,27 @@ $$
 Show that $X$ has CDF equal to $F$.
 This exercise shows us how to construct a random variable with given distribution, assuming that we have a uniform random variable.
 \begin{proof}
-    
+Since $F$ is strictly increasing and continuous, it has an inverse function $F^{-1}$ on its range, and $F^{-1}$ is also strictly increasing.
 
+For any $x \in \mathbb{R}$, we have
+\[
+\{X \le x\}=\{F^{-1}(U)\le x\}.
+\]
+Since $F^{-1}$ is strictly increasing, the above is equivalent to
+\[
+\{U \le F(x)\}.
+\]
+Therefore
+\[
+\mathbb{P}(X \le x)=\mathbb{P}(U \le F(x)).
+\]
+Since $U \sim \mathrm{Unif}(0,1)$ and for a CDF we have $F(x)\in[0,1]$, we get
+\[
+\mathbb{P}(U \le F(x)) = F(x).
+\]
+Thus for all $x$, the CDF of $X$ satisfies $\mathbb{P}(X \le x)=F(x)$, i.e., the CDF of $X$ equals $F$.
 \end{proof}
+
 
 \section*{Problem 2}
 A gas station fills its tank completely once a week. 
@@ -20,9 +38,41 @@ $$
 Find the constant $a$. What should be the tank capacity 
 so that the probability of running out of fuel during a given week is $1 / 100$ ?
 \begin{solution}
-    
+(1) Since the density integrates to 1,
+\[
+1=\int_{-\infty}^{\infty} f(x)\,dx=\int_0^1 a(1-x)^4\,dx
+= a \int_0^1 (1-x)^4\,dx.
+\]
+Let $u=1-x$, then $\int_0^1 (1-x)^4 dx=\int_0^1 u^4 du=\frac{1}{5}$, so $a\cdot \frac{1}{5}=1$, which gives
+\[
+a=5.
+\]
 
+(2) Let the tank capacity be $c$ (in thousands of liters). Running out of fuel in a week occurs when sales exceed $c$, i.e., the event $\{X>c\}$. We need
+\[
+\mathbb{P}(X>c)=\frac{1}{100}.
+\]
+Since $a=5$,
+\[
+\mathbb{P}(X>c)=\int_c^1 5(1-x)^4\,dx.
+\]
+Again let $u=1-x$, then when $x=c$ we have $u=1-c$, when $x=1$ we have $u=0$, so
+\[
+\int_c^1 5(1-x)^4 dx = 5\int_{1-c}^{0} u^4(-du)=5\int_0^{1-c} u^4 du
+=5\cdot \frac{(1-c)^5}{5}=(1-c)^5.
+\]
+Therefore
+\[
+(1-c)^5=\frac{1}{100} \quad \Longrightarrow \quad 1-c=\left(\frac{1}{100}\right)^{1/5}=100^{-1/5}=10^{-2/5},
+\]
+thus
+\[
+c=1-10^{-2/5}.
+\]
+So the tank capacity should be $\bigl(1-10^{-2/5}\bigr)$ thousand liters, i.e., $1000\bigl(1-10^{-2/5}\bigr)$ liters.
 \end{solution}
+
+
 
 
 
@@ -34,9 +84,49 @@ $$
 Find the probability density function of $Y:=X^2$ and 
 compute the probability $\mathbb{P}(2 Y+3 \leq 10)$.
 \begin{solution}
+Since $Y=X^2$, we have $Y\ge 1$. For $y\ge 1$, the transformation $y=x^2$ has two preimages $x=\sqrt{y}$ and $x=-\sqrt{y}$, and
+\[
+\left|\frac{dx}{dy}\right|=\frac{1}{2\sqrt{y}}.
+\]
+Therefore
+\[
+f_Y(y)= f_X(\sqrt{y})\frac{1}{2\sqrt{y}} + f_X(-\sqrt{y})\frac{1}{2\sqrt{y}}, \quad y\ge 1.
+\]
+Since $f_X(\pm \sqrt{y})=\frac{1}{2(\sqrt{y})^2}=\frac{1}{2y}$, we get
+\[
+f_Y(y)=\frac{1}{2y}\cdot\frac{1}{2\sqrt{y}}+\frac{1}{2y}\cdot\frac{1}{2\sqrt{y}}
+= \frac{1}{2y^{3/2}}, \quad y\ge 1,
+\]
+and $f_Y(y)=0$ when $y<1$. That is,
+\[
+f_Y(y)=
+\begin{cases}
+\dfrac{1}{2y^{3/2}}, & y\ge 1,\\[6pt]
+0, & y<1.
+\end{cases}
+\]
 
-
+Next,
+\[
+\mathbb{P}(2Y+3\le 10)=\mathbb{P}\!\left(Y\le \frac{7}{2}\right)
+= \int_{1}^{7/2} \frac{1}{2y^{3/2}}\,dy.
+\]
+Evaluating the integral:
+\[
+\int \frac{1}{2}y^{-3/2}dy=\frac{1}{2}\cdot\left(-2y^{-1/2}\right)=-y^{-1/2},
+\]
+therefore
+\[
+\mathbb{P}\!\left(Y\le \frac{7}{2}\right)
+=\left[-y^{-1/2}\right]_{1}^{7/2}
+=1-\frac{1}{\sqrt{7/2}}
+=1-\sqrt{\frac{2}{7}}.
+\]
 \end{solution}
+
+
+
+
 
 
 \section*{Problem 4}
@@ -47,9 +137,45 @@ Show that $\mathbb{P}(X \leq \mu)=\mathbb{P}(X \geq \mu)$.
 If in addition $\mathbb{E}|X|<\infty$, show that $\mathbb{E}(X)=\mu$.
  Can you use this observation if $X \sim N(0,1)$ ?
 \begin{proof}
-    
+(1) Since $X$ has density $f$, we have $\mathbb{P}(X=\mu)=0$, and
+\[
+\mathbb{P}(X\le \mu)=\int_{-\infty}^{\mu} f(x)\,dx,\qquad
+\mathbb{P}(X\ge \mu)=\int_{\mu}^{\infty} f(x)\,dx.
+\]
+For the first integral, substitute $x=\mu-t$, then $dx=-dt$. When $x\to -\infty$ we have $t\to \infty$, when $x=\mu$ we have $t=0$, so
+\[
+\int_{-\infty}^{\mu} f(x)\,dx
+=\int_{\infty}^{0} f(\mu-t)(-dt)
+=\int_{0}^{\infty} f(\mu-t)\,dt.
+\]
+By symmetry $f(\mu-t)=f(\mu+t)$, so
+\[
+\int_{0}^{\infty} f(\mu-t)\,dt=\int_{0}^{\infty} f(\mu+t)\,dt
+=\int_{\mu}^{\infty} f(x)\,dx.
+\]
+Therefore $\mathbb{P}(X\le \mu)=\mathbb{P}(X\ge \mu)$.
 
+(2) If $\mathbb{E}|X|<\infty$, then $\mathbb{E}|X-\mu|<\infty$, and
+\[
+\mathbb{E}(X-\mu)=\int_{-\infty}^{\infty} (x-\mu)f(x)\,dx.
+\]
+Let $t=x-\mu$, then
+\[
+\mathbb{E}(X-\mu)=\int_{-\infty}^{\infty} t\, f(\mu+t)\,dt.
+\]
+By symmetry $f(\mu+t)=f(\mu-t)$, the function $g(t):=t f(\mu+t)$ is odd, since
+\[
+g(-t)=(-t)f(\mu-t)=(-t)f(\mu+t)=-g(t).
+\]
+Under the condition that the expectation exists (absolutely integrable), the integral of an odd function over a symmetric interval is 0, so
+\[
+\mathbb{E}(X-\mu)=0 \quad \Longrightarrow \quad \mathbb{E}(X)=\mu.
+\]
+
+(3) If $X\sim N(0,1)$, its density is symmetric about $\mu=0$ and $\mathbb{E}|X|<\infty$, so we can apply the above result to get $\mathbb{E}(X)=0$.
 \end{proof}
+
+
 
 
 
@@ -59,10 +185,18 @@ What is the probability that the airline will not be able to accommodate a ticke
 the event $A_i$ that passenger $i$ shows up is independent of all others,
 for $1 \leq i \leq 203$.
 \begin{solution}
+Let the random variable $S$ denote the number of passengers who actually show up among the 203 ticket holders. Then $S\sim \mathrm{Bin}(n=203,p=0.95)$.
 
-
+The airline cannot accommodate ticketed passengers if and only if the number of passengers who show up exceeds the 200 seats, i.e., the event $\{S\ge 201\}$. Therefore the required probability is
+\[
+\mathbb{P}(S\ge 201)=\sum_{k=201}^{203} \binom{203}{k}(0.95)^k(0.05)^{203-k}.
+\]
+Numerically,
+\[
+\mathbb{P}(S\ge 201)\approx 0.002058,
+\]
+which is approximately $0.2058\%$.
 \end{solution}
-
 
 
 \section*{Problem 6}
@@ -73,3 +207,37 @@ $$
 $$
 and we then stop. Let $X$ be the number of tosses required (in this example, $X=10$ ).
 What is the expected value of the random variable $X$ ?
+\begin{solution}
+We use states to characterize the appearance of $\{3,4\}$:
+
+Let $E_0$ be the expected number of tosses needed from the initial state (neither 3 nor 4 has appeared) to the end.
+Let $E_1$ be the expected number of tosses needed from the state where one of them has appeared (only 3 or only 4 has appeared) to the end.
+
+First, find $E_1$. In state 1, each toss has probability $1/6$ of getting the missing number and thus ending, and probability $5/6$ of remaining in state 1. Therefore
+\[
+E_1 = 1 + \frac{5}{6}E_1 + \frac{1}{6}\cdot 0
+\quad \Longrightarrow \quad
+E_1 = 6.
+\]
+
+Next, find $E_0$. In state 0, each toss:
+has probability $2/6$ of getting 3 or 4 and thus entering state 1,
+has probability $4/6$ of getting other numbers and thus remaining in state 0. So
+\[
+E_0 = 1 + \frac{4}{6}E_0 + \frac{2}{6}E_1.
+\]
+Substituting $E_1=6$:
+\[
+E_0 = 1 + \frac{4}{6}E_0 + \frac{2}{6}\cdot 6
+= 1 + \frac{4}{6}E_0 + 2.
+\]
+Rearranging gives
+\[
+\left(1-\frac{4}{6}\right)E_0 = 3
+\quad \Longrightarrow \quad
+\frac{2}{6}E_0 = 3
+\quad \Longrightarrow \quad
+E_0 = 9.
+\]
+Therefore $\mathbb{E}[X]=9$.
+\end{solution}
