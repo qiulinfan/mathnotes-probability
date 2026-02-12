@@ -56,7 +56,11 @@ def compute_chapter_numbers(all_inputs, project_root):
     chapter_numbers = {}
 
     for chapter_path, _is_commented in all_inputs:
-        tex_file = project_root / (chapter_path + '.tex')
+        # Handle both with and without .tex extension
+        if not chapter_path.endswith('.tex'):
+            tex_file = project_root / (chapter_path + '.tex')
+        else:
+            tex_file = project_root / chapter_path
         if not tex_file.exists():
             continue
 
@@ -172,8 +176,13 @@ def main():
 
     print(f"找到 {len(active_chapters)} 个章节:")
     for ch_path, _ in active_chapters:
-        ch_name = Path(ch_path).stem
-        tex_file = project_root / (ch_path + '.tex')
+        # Handle both with and without .tex extension
+        if not ch_path.endswith('.tex'):
+            tex_file = project_root / (ch_path + '.tex')
+            ch_name = Path(ch_path).stem
+        else:
+            tex_file = project_root / ch_path
+            ch_name = Path(ch_path).stem
         ch_type = detect_chapter_type(tex_file) if tex_file.exists() else '?'
         counter = chapter_numbers.get(ch_path, 0)
         if ch_type == 'numbered':
@@ -185,6 +194,14 @@ def main():
 
     generated_pdfs = []
     for chapter_path, _ in active_chapters:
+        # Normalize path for lookup (ensure it has .tex)
+        if not chapter_path.endswith('.tex'):
+            normalized_path = chapter_path
+            chapter_path_with_tex = chapter_path + '.tex'
+        else:
+            normalized_path = chapter_path[:-4]  # Remove .tex for stem
+            chapter_path_with_tex = chapter_path
+        
         chapter_name = Path(chapter_path).stem
         counter = chapter_numbers.get(chapter_path, 0)
 
