@@ -155,7 +155,9 @@ def main():
     project_root = Path(__file__).parent
     main_tex = project_root / 'main.tex'
     build_dir = project_root / 'build'
+    docs_dir = project_root / 'docs'
     build_dir.mkdir(exist_ok=True)
+    docs_dir.mkdir(exist_ok=True)
 
     # 提取所有 input 命令（包括注释掉的）
     all_inputs = extract_all_inputs(main_tex)
@@ -211,7 +213,7 @@ def main():
 
             pdf_file = compile_tex(temp_main, build_dir, project_root)
             if pdf_file:
-                final_pdf = project_root / f'{chapter_name}.pdf'
+                final_pdf = docs_dir / f'{chapter_name}.pdf'
                 if pdf_file != final_pdf:
                     pdf_file.rename(final_pdf)
                 generated_pdfs.append(final_pdf)
