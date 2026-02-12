@@ -1,4 +1,5 @@
 # LaTeX 编译产生的文件
+build
 build/
 *.aux
 *.log
