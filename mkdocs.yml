@@ -1,11 +1,11 @@
-site_name: localLatexenv
+site_name: mathnotes-probability
 site_author: qiulinfan
-site_url: https://github.com/qiulinfan/localLatexenv
+site_url: https://qiulinfan.github.io/mathnotes-probability/
 use_directory_urls: false
 remote_branch: gh-deploy
 
-repo_name: localLatexenv
-repo_url: https://github.com/qiulinfan/localLatexenv
+repo_name: mathnotes-probability
+repo_url: https://github.com/qiulinfan/mathnotes-probability
 
 theme:
   name: material
@@ -23,3 +23,7 @@ extra_css:
 
 nav:
   - Home: index.md
+  - Chapters:
+    - 01-basic-combinatorics: 01-basic-combinatorics.md
+    - 02-probability-space-intro: 02-probability-space-intro.md
+    - 03-random-variables: 03-random-variables.md

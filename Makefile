@@ -24,6 +24,7 @@ chapters:
 docs:
 	@$(PYTHON) scripts/generate_docs_pages.py
 	@$(PYTHON) scripts/generate_mkdocs_config.py
+	@mkdocs build
 
 deploy:
 	@mkdocs build

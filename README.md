@@ -110,6 +110,47 @@ make clean-all
 python3 build_chapters.py
 ```
 
+## MkDocs build + GitHub Pages deploy
+
+这个项目使用 [mkdocs](https://www.mkdocs.org/) 构建静态网页，并通过 `gh-deploy` 分支发布到 GitHub Pages。
+
+### 使用步骤
+
+```bash
+# 先生成 docs/*.pdf (来自 chapters/*.tex)
+make # or make chapters
+
+# 再根据 docs/*.pdf 自动生成 docs/*.md + mkdocs.yml，并自动 mkdocs build
+make docs
+
+# 部署到 gh-deploy 分支
+make deploy
+# 或者为了命令一致性：
+make depoly
+```
+
+### 自动化脚本做了什么
+
+- `make docs` 会根据 `docs/*.pdf` 自动生成用于网页展示的 `docs/index.md` 和各章节 markdown（主要用于嵌入 PDF）。
+- 同时会根据当前仓库远程地址自动生成根目录 `mkdocs.yml`。
+- 最后自动执行 `mkdocs build`，输出 `site/`。
+- `make depoly` 是 `make deploy` 的别名，底层执行 `mkdocs gh-deploy --remote-branch gh-deploy`。
+
+### GitHub Pages 设置（首次部署后）
+
+在仓库页面中设置：
+
+- `Settings -> Pages -> Build and deployment`
+- Source 选择 `Deploy from a branch`
+- Branch 选择 `gh-deploy`
+- Folder 选择 `/(root)`
+
+### 备注
+
+- `site/` 是 mkdocs 构建产物，已加入忽略；执行 `mkdocs gh-deploy` 时会使用临时目录构建并推送，不受 `.gitignore` 影响。
+- Windows 下终端偶发找不到 `make` 时，重开终端即可。
+- `make docs` 后可先运行 `mkdocs serve` 本地预览，再执行部署。
+
 ## 文件组织
 
 - **PDF 文件**：生成在项目根目录（如 `main.pdf`, `hw02.pdf`）

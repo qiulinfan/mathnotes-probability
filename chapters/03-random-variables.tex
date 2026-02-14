@@ -10,58 +10,58 @@
 \end{remark}
 
 
+% 其 cdf $F_X: \mathbb{R} \rightarrow [0,1]$ 就是 $X$ 这个 real-valued measurable function 对于 $(-\infty,x]$ 的 preimage, 意义是 "随机变量的值小于等于 $x$ 的概率"  
+% \[
+% F_X (x) = P( X^{-1}(-\infty,x))
+% \]
+% discrete random variable 的 pmf, 表示每个离散点 $x$ 的 $P(X^{-1}(\{x\}))$.
+% 即 \[
+% p(x) := P(X^{-1}(\{x\})) = P(X=x)
+% \]
+% continuous random variable 的 pdf, 表示在某个点上概率分布的密度有多大 \[
+% f_X(x) :=  \frac{dF_X(x)}{dx}
+% \]
+% 或者写作: \[
+% f_X(x) :=  \frac{dF_X(x)}{dm}
+% \]
+% 是这个 $F_X$ 对于 Lebesgue measure $m$ 的 Radon-Nikodym derivative.
+
+
+% 随机变量的 expectation 是它在这个 prob space 上的积分, 表示它的值的 prob-weighted average
+% \[
+% E (X):= \int_\Omega X  \;d P
+% \]
+% 随机变量的 variance 是 $(X-E(X))^2$ 这个 induced 随机变量在这个 prob space 上的积分, 表示原随机变量值离它的值的 weighted average 的聚集程度. \[
+% Var(X) = \int_\Omega (X-E(X))^2   \;dP
+% \]
 
 
 
+\begin{proposition}
+    Prob space \((\Omega, \mathcal{F}, \mathbb{P})\) 上的 
+    random variables \(X_1, X_2, \ldots, X_k: \Omega \rightarrow \mathbb{R}\),
+    任取 Borel measurable function \(g: \mathbb{R}^k \rightarrow \mathbb{R}\), 
+    \begin{align*}
+        X: \Omega &\rightarrow \mathbb{R} \\
+        \omega &\mapsto g(X_1(\omega), X_2(\omega), \ldots, X_k(\omega))
+    \end{align*}
+    也是一个 random variable.
+\end{proposition}
+\begin{proof}
+    我们在 measure theory 中证明过: 对于任意的 finite seq of Borel measureable functions 
+    \( (  {f_i}: \Omega \to \mathbb{R} )_{i=1}^k\), 其各作为一个维度组成的函数
+    \(f = (f_1,\cdots, f_k)\) 也是一个 Borel measurable function (from \(\Omega\) 到 \(\mathbb{R}^k\)).\\
+    而这里的 \(X\) 就是 \(g \circ f\), 是两个 Borel measurable function 的 composition, 因而也是一个 Borel measurable function (即 random variable).
+\end{proof}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-其 cdf $F_X: \mathbb{R} \rightarrow [0,1]$ 就是 $X$ 这个 real-valued measurable function 对于 $(-\infty,x]$ 的 preimage, 意义是 "随机变量的值小于等于 $x$ 的概率"  
-\[
-F_X (x) = P( X^{-1}(-\infty,x))
-\]
-discrete random variable 的 pmf, 表示每个离散点 $x$ 的 $P(X^{-1}(\{x\}))$.
-即 \[
-p(x) := P(X^{-1}(\{x\})) = P(X=x)
-\]
-continuous random variable 的 pdf, 表示在某个点上概率分布的密度有多大 \[
-f_X(x) :=  \frac{dF_X(x)}{dx}
-\]
-或者写作: \[
-f_X(x) :=  \frac{dF_X(x)}{dm}
-\]
-是这个 $F_X$ 对于 Lebesgue measure $m$ 的 Radon-Nikodym derivative.
-
-
-随机变量的 expectation 是它在这个 prob space 上的积分, 表示它的值的 prob-weighted average
-\[
-E (X):= \int_\Omega X  \;d P
-\]
-随机变量的 variance 是 $(X-E(X))^2$ 这个 induced 随机变量在这个 prob space 上的积分, 表示原随机变量值离它的值的 weighted average 的聚集程度. \[
-Var(X) = \int_\Omega (X-E(X))^2   \;dP
-\]
-
-
-
-
-
-
-
-
+\section{distributions}
+\begin{definition}{probability distribution}
+    对于 random variable \(X: \Omega \to \mathbb{R}\), 
+    其 probability distribution 是 \(X\) 这个 measurable function 对于 probability measure \(\mathbb{P}\) 的 pushforward measure, 记作 \(P_X\). 即对于任意 Borel set \(B \subset \mathbb{R}\), 有
+    \[
+    P_X(B) = P(X^{-1}(B))
+    \]q
+    
+\end{definition}

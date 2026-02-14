@@ -38,6 +38,16 @@ def parse_owner_repo(remote_url: str) -> tuple[str, str, str]:
     return owner, repo, repo_url
 
 
+def build_site_url(owner: str, repo: str, repo_url: str) -> str:
+    if owner == "unknown" or not repo:
+        return repo_url
+
+    if repo.lower() == f"{owner.lower()}.github.io":
+        return f"https://{owner}.github.io/"
+
+    return f"https://{owner}.github.io/{repo}/"
+
+
 def page_title_from_md(md_path: Path) -> str:
     try:
         for line in md_path.read_text(encoding="utf-8").splitlines():
@@ -62,6 +72,7 @@ def generate_nav_items(docs_dir: Path) -> list[tuple[str, str]]:
 def build_mkdocs_yaml(
     site_name: str,
     site_author: str,
+    site_url: str,
     repo_name: str,
     repo_url: str,
     nav_items: list[tuple[str, str]],
@@ -70,7 +81,7 @@ def build_mkdocs_yaml(
     lines: list[str] = [
         f"site_name: {site_name}",
         f"site_author: {site_author}",
-        f"site_url: {repo_url}",
+        f"site_url: {site_url}",
         "use_directory_urls: false",
         "remote_branch: gh-deploy",
         "",
@@ -111,6 +122,7 @@ def main() -> None:
 
     remote_url = get_origin_remote(project_root)
     owner, repo, repo_url = parse_owner_repo(remote_url)
+    site_url = build_site_url(owner, repo, repo_url)
 
     nav_items = generate_nav_items(docs_dir)
     include_extra_css = (docs_dir / "stylesheets" / "extra.css").exists()
@@ -118,6 +130,7 @@ def main() -> None:
     mkdocs_content = build_mkdocs_yaml(
         site_name=repo,
         site_author=owner,
+        site_url=site_url,
         repo_name=repo,
         repo_url=repo_url,
         nav_items=nav_items,

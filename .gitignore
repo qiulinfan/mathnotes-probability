@@ -14,7 +14,7 @@ build/
 *.blg
 *.bcf
 *.run.xml
-
+site
 # 但是保留主目录的 PDF（如果需要的话）
 # !main.pdf
 
