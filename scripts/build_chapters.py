@@ -131,28 +131,44 @@ def compile_tex(tex_file, output_dir, project_root):
         else:
             rel_tex_file = tex_file
 
+        rel_tex_file_str = rel_tex_file.as_posix()
+
+        pdf_name = tex_file.with_suffix('.pdf').name
+        candidate_paths = [
+            output_dir / pdf_name,
+            project_root / pdf_name,
+            tex_file.parent / pdf_name,
+        ]
+
+        for candidate in candidate_paths:
+            try:
+                if candidate.exists():
+                    candidate.unlink()
+            except OSError:
+                pass
+
         cmd = ['lualatex', '-interaction=batchmode',
-               f'-output-directory={output_dir}', str(rel_tex_file)]
+               f'-output-directory={output_dir}', rel_tex_file_str]
 
         # 编译两次（处理交叉引用）
         result = subprocess.run(cmd, capture_output=True, text=True)
         subprocess.run(cmd, capture_output=True, text=True)
 
-        # 检查 PDF 是否生成
-        pdf_file = output_dir / tex_file.with_suffix('.pdf').name
-        if pdf_file.exists():
-            return pdf_file
-        else:
-            if result.returncode != 0 and result.stderr:
-                print(f"错误: {result.stderr[:200]}")
-            return None
+        # 检查 PDF 是否生成（不同平台/发行版输出位置可能不同）
+        for pdf_file in candidate_paths:
+            if pdf_file.exists():
+                return pdf_file
+
+        if result.returncode != 0 and result.stderr:
+            print(f"错误: {result.stderr[:200]}")
+        return None
 
     finally:
         os.chdir(original_dir)
 
 
 def main():
-    project_root = Path(__file__).parent
+    project_root = Path(__file__).resolve().parent.parent
     main_tex = project_root / 'main.tex'
     build_dir = project_root / 'build'
     docs_dir = project_root / 'docs'
@@ -196,14 +212,6 @@ def main():
 
     generated_pdfs = []
     for chapter_path, _ in active_chapters:
-        # Normalize path for lookup (ensure it has .tex)
-        if not chapter_path.endswith('.tex'):
-            normalized_path = chapter_path
-            chapter_path_with_tex = chapter_path + '.tex'
-        else:
-            normalized_path = chapter_path[:-4]  # Remove .tex for stem
-            chapter_path_with_tex = chapter_path
-        
         chapter_name = Path(chapter_path).stem
         counter = chapter_numbers.get(chapter_path, 0)
 
@@ -215,7 +223,7 @@ def main():
             if pdf_file:
                 final_pdf = docs_dir / f'{chapter_name}.pdf'
                 if pdf_file != final_pdf:
-                    pdf_file.rename(final_pdf)
+                    pdf_file.replace(final_pdf)
                 generated_pdfs.append(final_pdf)
                 print(f"  ✓ 生成: {final_pdf.name}")
             else:

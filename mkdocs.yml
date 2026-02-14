@@ -1,0 +1,25 @@
+site_name: localLatexenv
+site_author: qiulinfan
+site_url: https://github.com/qiulinfan/localLatexenv
+use_directory_urls: false
+remote_branch: gh-deploy
+
+repo_name: localLatexenv
+repo_url: https://github.com/qiulinfan/localLatexenv
+
+theme:
+  name: material
+
+plugins:
+  - search
+
+markdown_extensions:
+  - tables
+  - attr_list
+  - md_in_html
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
