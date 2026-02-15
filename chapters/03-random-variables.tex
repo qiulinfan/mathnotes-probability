@@ -200,7 +200,11 @@ F_X(x) = \bP(X \leq x) = \frac{m([0,x]\times [0,b])}{m([0,a]\times [0,b])} =
         p_X(x) := \bP(X = x), \quad \forall x \in \mathbb{R}
         \]
     \end{definition}
-    这个 pmf 就是 \(F_X\) 的 jump size function. 值得一提的是, 
+这个 pmf 就是 \(F_X\) 的 jump size function.\\
+当然, 根据定义明显可得: \[
+\sum_{x} p_X(x) = 1
+\]
+ 值得一提的是, 
     这个 pmf 其实就是 \(X\) 的 distribution \(P^X\) 对于
      counting measure 的 Radon-Nikodym derivative:
      \[
@@ -311,12 +315,24 @@ T_r \sim \text{NB}(r,p)
 \[
 X \sim \text{Poi}(\lambda), \quad \lambda > 0
 \]
-它 model 的是: 在固定时间/空间窗口内, 某类随机事件出现的次数.\\
 以 \(\lambda=3\) 为例画出 pmf 示意图:
 \begin{center}
 \begin{tikzpicture}[x=0.65cm,y=14cm]
     \draw[->] (-0.5,0) -- (10.8,0) node[right] {$k$};
     \draw[->] (0,0) -- (0,0.26) node[above] {$\bP(X=k)$};
+    
+    % y轴刻度标注
+    \foreach \y in {0, 0.05, 0.10, 0.15, 0.20, 0.25} {
+        \draw (-0.1,\y) -- (0.1,\y);
+        \node[left] at (-0.1,\y) {\y};
+    }
+    
+    % x轴刻度标注
+    \foreach \x in {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10} {
+        \draw (\x,-0.005) -- (\x,0.005);
+        \node[below] at (\x,-0.01) {\x};
+    }
+    
     % \lambda=3 时, k=0..10 的 pmf 数值（避免 pgfmath 阶乘/幂运算溢出）
     \foreach \kv/\pv in {
         0/0.04979,
@@ -336,7 +352,57 @@ X \sim \text{Poi}(\lambda), \quad \lambda > 0
     \node[above right] at (5,0.21) {$\lambda=3$};
 \end{tikzpicture}
 \end{center}
-它等 
+\begin{remark}
+当 \(n\to\infty\) 时, 
+\(\text{Bin}(n, \lambda/n)\) 的 distribution 
+趋近于 \(\text{Poi}(\lambda)\).\\
+考虑 $X \sim B\left(n, \frac{\lambda}{n}\right)$, 对于固定的 $k$:
+$$
+\bP(X=k)=\binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1-\frac{\lambda}{n}\right)^{n-k}
+$$
+展开组合数 $\binom{n}{k}$:
+$$
+\bP(X=k)=\frac{n(n-1) \ldots(n-k+1)}{k!} \cdot \frac{\lambda^k}{n^k} \cdot\left(1-\frac{\lambda}{n}\right)^n \cdot\left(1-\frac{\lambda}{n}\right)^{-k}
+$$
+重组项:
+$$
+\bP(X=k)=\frac{\lambda^k}{k!} \cdot \underbrace{\frac{n(n-1) \ldots(n-k+1)}{n^k}}_{(1)} \cdot \underbrace{\left(1-\frac{\lambda}{n}\right)^n}_{(2)} \cdot \underbrace{\left(1-\frac{\lambda}{n}\right)^{-k}}_{(3)}
+$$
+其中, (1) 的 limit 是 1, 
+(2) 的 limit 是 $e^{-\lambda}$, (3) 的 limit 是 1, 因而 
+\[
+\lim_{n\to\infty} \mathbb{P}(X=k)= e^{-\lambda} \frac{\lambda^k}{k!}
+\]
+这个极限行为的意义是:
+\begin{itemize}
+    \item \(\lambda \) 表示: 在一个固定时间/空间窗口内, 一个事件出现的平均次数的观测.
+    \item 我们把这段时间间分成 \(n\) 个小窗口, 将这个观测作为先验知识用来 model 这类事件实现的平均概率, 那么
+     每个小窗口内事件出现的概率是 \(p = \lambda/n\).  
+    \item 每个 \(\text{Bin}(n,\lambda / n)\) 都表示: 在时间细分成
+     \(n\) 个小窗口的情况下, 这个事件出现的次数的分布. (注意不是在时间上的分布, 而是在次数上的分布)
+    \item 当 \(n\to\infty\) 时, 其意义: 基于连续时间的估计, 
+    这个事件在原固定事件窗口内出现的次数的分布. 这就是 
+    \(\text{Poi}(\lambda)\) 的意义.
+\end{itemize}
+因而 Poisson distribution 的意义本质上是: 
+\textbf{
+给定对一个事件在固定窗口下出现的平均次数的观测(估计), 
+那么这个事件在这个窗口内出现 \(n\) 次 
+(\(n = 0,1,2,\cdots  \))的概率是多少?}\\
+所以 Poisson 分布, 即是\textbf{根据一个事件在给定 windows 内发生次数的 expectation, 来估计这个事件在该 windows 内发生次数的分布的标准方法.}  \\
+\end{remark}
+
+\begin{remark}
+Further remark: Poisson distribution 的用途.
+\begin{itemize}
+    \item 它是 model "大量级的小概率事件" 的通用模型.\\ 
+    即一段时间内, 一件事情的发生的概率非常小 (\(p \ll 1\)), 
+    但是有很多机会发生 (\(n \gg 1\)). 比如放射性衰变.
+    \item 现实世界中, 对于一些事情, 我们想要 model 其在一段时间内发生的总次数 (\(n\)) 和单次成功率 (\(p\)) 
+    是很困难的. 比如统计今天路过百货大楼的总人数 (\(n\)), 以及每个人路过百货大楼时走进去的概率 (\(p\)). 但是我们
+    很容易可以知道: \(\lambda = np\) 的观测. 即: 每天平均有多少人走进百货大楼. 那么我们就可以用 Poisson distribution 来 model 这件事情在一天内发生的次数的分布.\\
+\end{itemize}
+\end{remark}
 \end{example}
 
 
