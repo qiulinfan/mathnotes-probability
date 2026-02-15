@@ -7,6 +7,10 @@
 % 如果注释掉 fontset，ctex 会尝试自动检测系统字体
 %\usepackage[UTF8,scheme=plain,fontset=macnew]{ctex}
 \usepackage[UTF8,scheme=plain]{ctex}
+% 显式设置中文字体，确保 \textbf 对中文可见（Linux 友好）
+\setCJKmainfont{FandolSong-Regular}[BoldFont=FandolSong-Bold,AutoFakeBold=2]
+\setCJKsansfont{FandolHei-Regular}[AutoFakeBold=2]
+\setCJKmonofont{FandolFang-Regular}[AutoFakeBold=2]
 
 
 
