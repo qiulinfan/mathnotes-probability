@@ -27,15 +27,6 @@
 % 是这个 $F_X$ 对于 Lebesgue measure $m$ 的 Radon-Nikodym derivative.
 
 
-% 随机变量的 expectation 是它在这个 prob space 上的积分, 表示它的值的 prob-weighted average
-% \[
-% E (X):= \int_\Omega X  \;d P
-% \]
-% 随机变量的 variance 是 $(X-E(X))^2$ 这个 induced 随机变量在这个 prob space 上的积分, 表示原随机变量值离它的值的 weighted average 的聚集程度. \[
-% Var(X) = \int_\Omega (X-E(X))^2   \;dP
-% \]
-
-
 
 \begin{proposition}
     Prob space \((\Omega, \mathcal{F}, \mathbb{P})\) 上的 
@@ -414,6 +405,47 @@ Further remark: Poisson distribution 的用途.
 
 
 \section{expectation and variance of random variables}
+
+随机变量的 expectation 是它在这个 prob space 上, w.r.t. 它的 prob measure \(\bP\) 的积分, 
+表示它的值的 prob-weighted average
+\[
+\bE (X):= \int_\Omega X  \;d \bP
+\]
+
+随机变量的 variance 是 $(X-E(X))^2$ 这个 induced 随机变量在这个 prob space 上的积分, 
+表示原随机变量值离它的值的 weighted average 的聚集程度. 
+\begin{definition}{expectation and variance of random variable}
+    对于 random variable \(X: \Omega \to \mathbb{R}\), 
+    其 expectation 定义为
+    \[
+    \bE(X) := \int_\Omega X \;d\bP
+    \]
+    其 variance 定义为
+    \[
+    \text{Var}(X) := \bE((X-\bE(X))^2) = \int_\Omega (X-\bE(X))^2   \;d\bP
+    \]
+    
+\end{definition}
+
+我们学 distribution theory 的最后, 知道: \(f\) 对于 \(m\) 的积分等于
+\(x\) 对于 \(f\) 的 distribution 的 induced measure 的积分.
+因而, 我们也可以把 \(E(X)\) 看作是 \(X\) 的 distribution \(P^X\) 上
+对于 lebesgue measure 的积分:
+\begin{proposition}
+    \[
+    \bE(X) = \int_\mathbb{R} x \;d \bP^X
+    \]
+\end{proposition}
+
+
+以及 standard deviation 是 variance 的 square root, 表示原随机变量值离它的值的 weighted average 的聚集程度的一个更直观的度量. 
+\[
+\text{SD}(X) = \sqrt{\text{Var}(X)}
+\]
+
+
+
+
 
 
 
