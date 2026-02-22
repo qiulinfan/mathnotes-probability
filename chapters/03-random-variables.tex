@@ -331,7 +331,7 @@ F_X(x) = \bP(X \leq x) = \frac{m([0,x]\times [0,b])}{m([0,a]\times [0,b])} =
     
 \end{proposition}
 
-\subsection{singular continuous random variable 与 LDT 的应用}
+\subsection{singular continuous random variable 与 Lebesgue Decomposition Theorem}
 对于 continuous random variable 的定义, 有些地方会简化定义为: continuous random variable 就是指其 cdf 是一个 continuous function.
 
 但是我们现在知道, 这个定义是错的. 
@@ -345,18 +345,118 @@ F_X(x) = \bP(X \leq x) = \frac{m([0,x]\times [0,b])}{m([0,a]\times [0,b])} =
 
 我们这里给出一个 counterexample: Cantor distribution. 它的 cdf 是 continuous 的, 但是它并没有能够满足 FTC of Lebesgue integral (返回原函数) 的 a.e. derivative,
 因而没有 pdf.
+\begin{example}{(\textbf{Cantor distribution})}
 
 令 $X_n$ be 独立同分布 (i.i.d.) 的随机变量 $P(X_n=0) = P(X_n=2) = 1/2$. 然后定义:
     \[
     X := \sum_{n=1}^{\infty} \frac{X_n}{3^n}
     \]
-它刻画的是: 对于 $[0,1]$ 上的每一个点, 以 $1/2$ 的概率向左走 (即 $X_n=0$), 以 $1/2$ 的概率向右走 (即 $X_n=2/3^n$), 不停重复这个过程. 最后, 会收敛于 Cantor set 上的一个点. 
-因而 \(X\) 的 range 就是整个 Cantor set.
-从而, \(X\) 的 range 是 Cantor set, 这是一个 measure zero 的 uncountable set:
-\[
-C = \{   \}
-\]
+它刻画的是:
+\begin{itemize}
+    \item 把 \([0,1]\) 三等分, 去掉中间的部分, 然后在剩下的两部分中, 以 \(1/2\) 的概率选择左边的区间, 以 \(1/2\) 的概率选择右边的区间;
+    \item 在选定的区间中, 再把它三等分, infinitely 重复这一过程.
+    \item 最后, 这一行为会收敛于 Cantor set 上的一个点. 
+\end{itemize}
+具体而言: 
+\begin{itemize}
+    \item 第 1 步 ($n=1$) 我们查看 $\frac{X_1}{3^1}$, 
+ 如果 $X_1=0$, 你选择了左边的区间 $[0, 1/3]$;
+ 如果 $X_1=2$, 你选择了右边的区间 $[2/3, 1]$.
+ \item 第 2 步 ($n=2$): 在第 1 步选定的区间内，查看 $\frac{X_2}{3^2} = \frac{X_2}{9}$
+ 如果 $X_2=0$, 你在当前小区间内选择了左侧的 1/3; 如果 $X_2=2$, 你在当前小区间内选择了右侧的 1/3.
+ \item \(\cdots\)
+\end{itemize}
 
+从而, \(X\) 的 range 是 Cantor set, recall: 
+这是一个 measure zero 的 uncountable set, 其 cardinality 是 continuum (与 \(\bR\) 等势).
+$$C = \{ x \in [0, 1] \mid x = (0.a_1 a_2 a_3 \dots)_3, \text{ where } a_i \in \{0, 2\} \}$$
+它也表示了: 三进制小数中, 所有完全不包含数字 1 的小数的集合.
+
+由于其 uncountability, 对于任意单点 \(x\) 都有 \(\bP(X = x) = 0\), \textbf{因而 \(F_X\) 在 \(\bR\) 上处处连续};
+并且容易证明:\textbf{ \(F_X\) 在 \(x\) 处的导数 \(F'_X(x) = 0\)}. (因为对于 \(C^c\) 中的任意被挖掉的区间,
+ \(F_X\) 在这个区间上是 constant 的).
+
+然而, \(F'_X = 0\) 却\textbf{不满足 FTC of Lebesgue integral}. 比如反例: \(F_X(1) = 1\), 
+但是 \[\int_{-\infty}^1 F'_X(t) \;dt = 0\]
+因而 \(X\) 没有 pdf, 也就不是 continuous random variable.  
+\end{example}
+
+
+对于 Cantor distribution 这个例子, 我们称这样的 random variable 是一个 \textbf{singular continuous random variable}:
+\begin{definition}{singular continuous random variable}
+    对于 random variable \(X: \Omega \to \mathbb{R}\), 
+    如果 \(X\) 的 cdf \(F_X\) 是一个 continuous function, 
+    并且 \(\bP^X \bot m\) (即存在一个 measure zero 的 Borel set \(N\) 使得 \(\bP^X(N) = 1\), 也等价于
+     \(F_X\) 的导数 \(F'_X = 0\) a.e.), 那么我们称 \(X\) 是一个 singular continuous random variable.
+\end{definition}
+\begin{remark}
+    singular continuous random variable 的意思是, 在 \(\bR\) 上, \(X\) 的值 a.s. 
+    落在一个 measure zero 的 set 上, 也就是说它的 cdf 大部分是平的, 
+    只有在 measure zero 的 set 上才有 jump.
+\end{remark}
+% \begin{figure}[h]
+%     \centering
+%     \begin{minipage}{0.48\textwidth}
+%         \centering
+%         \begin{tikzpicture}[x=8cm,y=1cm]
+%             % Level 0
+%             \draw[line width=1pt] (0,0) -- (1,0);
+%             \node[anchor=east] at (-0.02,0) {\scriptsize level 0};
+%             % Level 1
+%             \draw[line width=1pt] (0,-0.35) -- (1/3,-0.35);
+%             \draw[line width=1pt] (2/3,-0.35) -- (1,-0.35);
+%             \node[anchor=east] at (-0.02,-0.35) {\scriptsize level 1};
+%             % Level 2
+%             \draw[line width=1pt] (0,-0.7) -- (1/9,-0.7);
+%             \draw[line width=1pt] (2/9,-0.7) -- (1/3,-0.7);
+%             \draw[line width=1pt] (2/3,-0.7) -- (7/9,-0.7);
+%             \draw[line width=1pt] (8/9,-0.7) -- (1,-0.7);
+%             \node[anchor=east] at (-0.02,-0.7) {\scriptsize level 2};
+%             \draw[->] (-0.02,0.18) -- (1.03,0.18);
+%             \node[anchor=west] at (1.03,0.18) {\scriptsize support in \([0,1]\)};
+%         \end{tikzpicture}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}{0.48\textwidth}
+%         \centering
+%         \begin{tikzpicture}[x=5cm,y=2.6cm]
+%             \draw[->] (0,0) -- (1.05,0) node[below] {\scriptsize \(x\)};
+%             \draw[->] (0,0) -- (0,1.05) node[left] {\scriptsize \(F_X(x)\)};
+%             % A level-2 style sketch of the Cantor cdf
+%             \draw[line width=0.95pt]
+%                 (0,0) -- (1/9,1/4) -- (2/9,1/4) -- (1/3,1/2) -- (2/3,1/2) -- (7/9,3/4) -- (8/9,3/4) -- (1,1);
+%             \draw[densely dashed] (1/3,0) -- (1/3,1/2);
+%             \draw[densely dashed] (2/3,0) -- (2/3,1/2);
+%             \node[below] at (1/3,0) {\scriptsize \(\frac13\)};
+%             \node[below] at (2/3,0) {\scriptsize \(\frac23\)};
+%             \node[left] at (0,1/2) {\scriptsize \(\frac12\)};
+%         \end{tikzpicture}
+%     \end{minipage}
+%     \caption{Cantor distribution 的示意图: 左图是 Cantor set 的前几层构造; 右图是对应 cdf 的阶梯极限形状（连续但几乎处处导数为 \(0\)）.}
+%     \label{fig:cantor-singular-continuous}
+% \end{figure}
+
+这个例子向我们说明了: 除了 discrete random variable 和 continuous random variable 以外, 
+还有其他的奇异的 random variables. 而下面这一定理刻画了任意的 random variable 的结构:
+
+\begin{theorem}{Lebesgue Decomposition Theorem}
+    对于任意 random variable \(X: \Omega \to \mathbb{R}\), 
+    其 distribution \(\bP^X\) 可以唯一分解为三个 mutually singular 的 measure 的和:
+    \[
+    \bP^X = \bP^X_{ac} + \bP^X_{sc} + \bP^X_{d}
+    \]
+    其中 \(\bP^X_{ac} \ll m\) 是 absolutely continuous measure, 
+    \(\bP^X_{sc} \perp m\) 是一个 singular continuous measure, 
+    \(\bP^X_d \perp m\) 是 discrete measure.
+\end{theorem}
+\begin{proof}
+    TODO.
+\end{proof}
+\begin{remark}
+    我们也可以这样展开:
+    $$ F_X(x) = \int_{-\infty}^x f_{ac}(t) \, dt + \sum_{x_i \le x} p_{d}(x_i) + F_{sc}(x) $$
+其中 \(f_{ac}\) 是 \(X_{ac}\) 的 pdf, \(p_d\) 是 \(X_d\) 的 pmf, 而 \(F_{sc}\) 由于其奇异性是无法分解的.
+\end{remark}
 
 
 \section{expectation and variance}
@@ -385,29 +485,12 @@ C = \{   \}
      其中权重就是每个 sample point 在这个原 prob space 上的概率.
 \end{remark}
 
-
-
-% 我们学 distribution theory 的最后, 知道: \(f\) 对于 \(m\) 的积分等于
-% \(x\) 对于 \(f\) 的 distribution 的 induced measure 的积分.
-% 因而, 我们也可以把 \(E(X)\) 看作是 \(X\) 的 distribution \(P^X\) 上
-% 对于 lebesgue measure 的积分:
-% \begin{proposition}
-%     \[
-%     \bE(X) = \int_\mathbb{R} x \;d \bP^X
-%     \]
-% \end{proposition}
-
-我们做一个 change of variable 来看看 \(E(X)\) 的另一个表达式:
-已知:
-\[
-\bP(x) = \int_{\Omega} 
-\]
-
-以及 standard deviation 是 variance 的 square root, 表示原随机变量值离它的值的 weighted average 的聚集程度的一个更直观的度量. 
-\[
-\text{SD}(X) = \sqrt{\text{Var}(X)}
-\]
-
+\begin{proposition}{discrete random variable 的 expectation 和 variance}
+    对于 discrete random variable \(X\) with pmf \(p_X\), 
+    \[
+    \bE(X) = \sum_{x} x p_X(x), \quad \text{Var}(X) = \sum_{x} (x-\bE(X))^2 p_X(x)
+    \]
+\end{proposition}
 
 
 
