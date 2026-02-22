@@ -14,7 +14,10 @@
   "latex-workshop.latex.recipes": [
     {
       "name": "lualatex",
-      "tools": ["lualatex", "lualatex"]
+      "tools": [
+        "lualatex",
+        "lualatex"
+      ]
     }
   ],
   "latex-workshop.latex.recipe.default": "lualatex",
@@ -24,6 +27,8 @@
   "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
   "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.autoClean.run": "onFailed",
+  "latex-workshop.message.error.show": false,
+  "latex-workshop.message.warning.show": false,
   "latex-workshop.view.pdf.refresh.viewer": "auto",
   "[latex]": {
     "editor.wordBasedSuggestions": "off",

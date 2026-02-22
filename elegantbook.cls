@@ -43,16 +43,9 @@
 \DeclareVoidOption{founder}{\ekv{chinesefont=founder}}
 \DeclareVoidOption{nofont}{\ekv{chinesefont=nofont}}
 
+% Language shortcuts (CN/EN only)
 \DeclareVoidOption{en}{\ekv{lang=en}}
 \DeclareVoidOption{cn}{\ekv{lang=cn}}
-\DeclareVoidOption{it}{\ekv{lang=it}}
-\DeclareVoidOption{fr}{\ekv{lang=fr}}
-\DeclareVoidOption{nl}{\ekv{lang=nl}}
-\DeclareVoidOption{hu}{\ekv{lang=hu}}
-\DeclareVoidOption{de}{\ekv{lang=de}}
-\DeclareVoidOption{mn}{\ekv{lang=mn}}
-\DeclareVoidOption{pt}{\ekv{lang=pt}}
-\DeclareVoidOption{jp}{\ekv{lang=jp}}
 
 \DeclareVoidOption{fancy}{\ekv{mode=fancy}}
 \DeclareVoidOption{simple}{\ekv{mode=simple}}
@@ -99,6 +92,14 @@
 
 \ProcessKeyvalOptions*\relax
 % \ProcessOptions*\relax
+
+\ifdefstring{\ELEGANT@lang}{cn}{}{%
+  \ifdefstring{\ELEGANT@lang}{en}{}{%
+    \ClassWarningNoLine{elegantbook}{Unsupported lang `\ELEGANT@lang'. Only `cn' and `en' are supported. Falling back to `en'}
+    \def\ELEGANT@lang{en}%
+  }%
+}
+
 \LoadClass[a4paper,oneside]{book}
 
 \RequirePackage{setspace}
@@ -158,7 +159,8 @@
   \RequirePackage[lite]{mtpro2}
 }{\relax}
 
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{2}
+% \hypersetup{bookmarksdepth=subsection}
 \renewcommand{\baselinestretch}{1.2}
 
 \PassOptionsToPackage{no-math}{fontspec}
@@ -432,7 +434,7 @@
   \newcommand\bioinfo[2]{\gdef\@bioinfo{{\citshape #1}：#2}}
   \newcommand{\updatename}{Update: }
   \newcommand{\historyname}{History}
-  \newcommand{\beforechap}{lec}
+  \newcommand{\beforechap}{module}
   \newcommand{\afterchap}{:}
 }{\relax}
 
@@ -441,7 +443,7 @@
   \setlength\parindent{2em}
   \newcommand\figref[1]{\textbf{Figure}~\ref{#1}}
   \newcommand\tabref[1]{\textbf{Table}~\ref{#1}}
-  \renewcommand{\chaptername}{Lec}
+  \renewcommand{\chaptername}{Module}
   \renewcommand{\partname}{\color{structurecolor} Part}
   \newcommand{\authorname}{\textbf{Author: }}
   \newcommand{\institutename}{\textbf{Institute: }}
@@ -499,8 +501,8 @@
 
 \ifdefstring{\ELEGANT@lang}{cn}{
   \ifdefstring{\ELEGANT@scheme}{chinese}{
-    \newcommand{\xchaptertitle}{Lec \zhnumber{\arabic{chapter}}} }{
-    \newcommand{\xchaptertitle}{Lec \thechapter{}}} }{
+    \newcommand{\xchaptertitle}{Module \zhnumber{\arabic{chapter}}} }{
+    \newcommand{\xchaptertitle}{Module \thechapter{}}} }{
   \newcommand{\xchaptertitle}{\chaptername~\thechapter~}}
 
 \setcounter{secnumdepth}{5}
@@ -1134,8 +1136,8 @@
 \usepackage[titles]{tocloft}
 \ifdefstring{\ELEGANT@lang}{cn}{
   \renewcommand{\cftchappresnum}{\beforechap\space}
-  \renewcommand{\cftchapaftersnum}{\space\afterchap}
-  \setlength{\cftchapnumwidth}{\widthof{\textbf{附录~999}}}
+  \renewcommand{\cftchapaftersnum}{\space\afterchap\space}
+  \setlength{\cftchapnumwidth}{\widthof{\textbf{\beforechap\space 999\space\afterchap\space}}}
   \g@addto@macro\appendix{%
     \addtocontents{toc}{%
       \protect\renewcommand{\protect\cftchappresnum}{\appendixname\space}%
@@ -1160,14 +1162,14 @@
 
 
 
+%%%%%%%%%%%%%%%%%%%
+% NEW COMMANDS
+%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\red}{\color{black}}
 \newcommand{\blue}{\color{blue}}
 \newcommand{\black}{\color{black}}
 
-%%%%%%%%%%%%%%%%%%%
-% NEW COMMANDS
-%%%%%%%%%%%%%%%%%%%
 \newcommand{\nc}{\newcommand}
 \newcommand{\rnc}{\renewcommand}
 % other
@@ -1299,17 +1301,17 @@
 
 \newcommand{\quadform}[3]
 {
-	\frac{#2 \pm \sqrt{#2^2 - 4\left(#1\right)\left(#3\right)} }{2\left(#1\right)}
+  \frac{#2 \pm \sqrt{#2^2 - 4\left(#1\right)\left(#3\right)} }{2\left(#1\right)}
 }
 
 \newcommand{\quadformp}[3]
 {
-	\frac{#2 + \sqrt{#2^2 - 4\left(#1\right)\left(#3\right)} }{2\left(#1\right)}
+  \frac{#2 + \sqrt{#2^2 - 4\left(#1\right)\left(#3\right)} }{2\left(#1\right)}
 }
 
 \newcommand{\quadformm}[3]
 {
-	\frac{#2 - \sqrt{#2^2 - 4\left(#1\right)\left(#3\right)} }{2\left(#1\right)}
+  \frac{#2 - \sqrt{#2^2 - 4\left(#1\right)\left(#3\right)} }{2\left(#1\right)}
 }
 
 \newcommand{\homo}{homomorphism\xspace}
@@ -1333,10 +1335,6 @@
 \DeclareMathOperator{\supp}{supp}
 \DeclareMathOperator{\Arg}{Arg}
 \DeclareMathOperator{\Log}{Log}
-\newcommand{\tri}{\overset{\triangle}{\leq}}
-\newcommand{\unif}{\xrightarrow{unif.}}
-\newcommand{\ptwise}{\xrightarrow{ptwise.}}
-\newcommand{\ball}[2]{\mathcal{B}_{#1}\left(#2\right)}
 \DeclareMathOperator{\osc}{osc}
 
 \DeclareMathOperator{\Ob}{Ob}
@@ -1347,6 +1345,16 @@
 \DeclareMathOperator{\op}{op}
 \DeclareMathOperator{\Map}{Map}
 \DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\card}{card}
+
+\newcommand{\tri}{\overset{\triangle}{\leq}}
+\newcommand{\unif}{\xrightarrow{unif.}}
+\newcommand{\ptwise}{\xrightarrow{ptwise.}}
+\newcommand{\ball}[2]{\mathcal{B}_{#1}\left(#2\right)}
 
 \newcommand{\sub}{\subseteq}
 \newcommand{\ul}{\underline}
@@ -1360,10 +1368,9 @@
 \newcommand{\bigunion}{\displaystyle\bigcup}
 \newcommand{\bigintsec}{\displaystyle\bigcap}
 \newcommand{\BR}{\mathbb{R}}
-
-
-\DeclareMathOperator{\Res}{Res}
-\DeclareMathOperator{\ord}{ord}
+\newcommand{\borel}{\mathcal{B}}
+\newcommand{\extR}{\overline{\mathbb{R}}}
+\newcommand{\ds}{\displaystyle}
 
 
 \newcommand{\insertpic}[4][width=\textwidth]{
@@ -1382,4 +1389,19 @@
     \end{center}
 }
 
-\newcommand{\ds}{\displaystyle}
+\usepackage{amsmath}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+\usepackage{xcolor}
+\newcommand*{\avint}{\mathop{\ooalign{$\int$\cr$-$}}}
+\setCJKmainfont{FandolSong-Regular}[BoldFont=FandolHei-Regular,ItalicFont=FandolKai-Regular]
+\setCJKsansfont{FandolHei-Regular}
+\setCJKmonofont{FandolFang-Regular}
+\setCJKfamilyfont{zhsong}{FandolSong-Regular}
+\setCJKfamilyfont{zhhei}{FandolHei-Regular}
+\setCJKfamilyfont{zhfs}{FandolFang-Regular}
+\setCJKfamilyfont{zhkai}{FandolKai-Regular}
+\newcommand*{\songti}{\CJKfamily{zhsong}}
+\newcommand*{\heiti}{\CJKfamily{zhhei}}
+\newcommand*{\fangsong}{\CJKfamily{zhfs}}
+\newcommand*{\kaishu}{\CJKfamily{zhkai}}
