@@ -1,1 +1,162 @@
 \chapter{conditional distribution and conditional expectation}
+\section{random vector and joint distributions}
+\subsection{random vector}
+\begin{definition}{random vector}
+对于 prob space $(\Omega, \mathcal{F}, P)$, 
+一个 function $\mathbf{X}: \Omega \to \mathbb{R}^n$ 如果是一个
+$(\mathcal{F}, \mathcal{B}(\mathbb{R}^n))$-measurable function, 则
+称它为一个 $n$-dimensional random variable, 或者 $n$-dimensional random vector.
+
+通常我们将 random vector 写成分量形式
+$$\mathbf{X}(\omega) = (X_1(\omega), X_2(\omega), \dots, X_n(\omega))^T$$
+\end{definition}
+random vector 相当于在一个 prob space 上, 考虑多个重新分配 mass 的方法, 并把它们并列起来.
+\begin{proposition}{由 \(n\) 个 random variable 构成的 vector 是一个 random vector}
+    令 \(X_1, X_2, \cdots, X_n\) 
+    是定义在\textbf{同一个 prob space} \((\Omega, \mathcal{F}, \bP)\) 
+    上的 \(n\) 个 random variables. 则函数 \(\mathbf{X}: \Omega \to \bR^n\) defined by 
+    \[
+    \omega \mapsto (X_1(\omega), X_2(\omega), \cdots, X_n(\omega))^T
+    \]
+    是一个 random vector.
+\end{proposition}
+\begin{proof}
+    我们在 measure theory 中证明过: 对于任意的 finite seq of Borel measureable functions 
+    \( (  {f_i}: \Omega \to \mathbb{R} )_{i=1}^k\), 其各作为一个维度组成的函数
+    \(f = (f_1,\cdots, f_k)\) 也是一个 Borel measurable function (from \(\Omega\) 到 \(\mathbb{R}^k\)).
+\end{proof}
+\begin{proposition}{一个 random vector 的每个分量都是一个 random variable}
+    令 \(\mathbf{X} = (X_1, X_2, \cdots, X_n)^T\) 是一个 random vector. 
+    则对于任意 \(i\), \(X_i\) 都是一个 random variable.
+\end{proposition}
+\begin{proof}
+    对于 $\mathbf{X}: \Omega \to \mathbb{R}^n$ 是 $(\mathcal{F}, \mathcal{B}(\mathbb{R}^n))$-measurable,
+    我们可以将第 $i$ 个分量 $X_i$ 看作是 composition of two maps: 
+    $$X_i = \pi_i \circ \mathbf{X}$$
+    其中 $\pi_i: \mathbb{R}^n \to \mathbb{R}$ projection map  $\pi_i(x_1, \dots, x_n) = x_i$.\\
+    由于 projection map $\pi_i$ 是一个 Borel measurable function, 我们可以得出: \(X_i = \pi_i(\mathbf{X})\) 也是
+一个 Borel measurable function, 也就是一个 random variable.
+\end{proof}
+
+\begin{remark}
+上两条 propositions 说明了一个事情: random vectors 和其分量 random variables 完全相互决定.
+\begin{itemize}
+    \item\textbf{ random variables 组合起来一定是一个 random vector.}
+    \item \textbf{random vector 拆开每个分量一定是 random variable.}
+\end{itemize}
+因而, 研究一个 random vector 也就相当于研究分量 random variables 之间的关系. 
+
+这一章节我们会从 random vector 的性质 
+(比如 \textbf{joint distribution 和 marginal distribution, conditional distribution}) 
+出发, 研究分量 random variables 之间的关系.
+
+(但是注意: 前提是这些 random variables 必须定义在同一个 prob space 上. 也就是, 它们的 base 
+probability measure 一定相同. 如果我们考虑不同 prob space 上的 random variables 的话, 
+那它们没有一个公共的 base probability measure, 很难说它们之间有什么关系. 
+这种情况下, 我们需要 coupling: 构造一个新的 prob space (说白了就是 product space),
+让这两个 random variables 都有一个新 version. 这一问题我们之后再讨论.)
+\end{remark}
+
+\subsection{joint distribution}
+\begin{definition}{joint distribution and joint cdf}
+    令 \(X_1,\cdots, X_n\) 为 RV from the same prob space. 
+    即 \(\mathbf{X}:= (X_1,\cdots, X_n)\) 
+    是一个 random vector.
+
+    我们称 \(\bP^{\mathbf{X}}: \bR^n \to \bR\) defined by 
+    $$\bP^{\mathbf{X}}(B) = \bP(\mathbf{X}^{-1}(B)), \quad \forall B \in \mathcal{B}(\mathbb{R}^n)$$
+    为 \(X_1, \cdots, X_n\) 的 \textbf{joint distribution}.
+    
+    而我们称 \(F_{\mathbf{X}} = F_{X_1,
+    \cdots, X_n}: 
+    \bR^n \to \bR\) defined by   
+     \[
+    F_{\mathbf{X}}(x_1,\cdots,x_n) = \bP(X_1 \leq x_1, \cdots, X_n \leq x_n)
+    \]
+     (即 \(\bP^{\mathbf{X}}\) restricted to the set of rectangles
+     \(\{(-\infty, x_1] \times \cdots \times (-\infty, x_n]: (x_1,\cdots,x_n) \in \bR^n\}\))
+    为它们的 \textbf{joint distribution function (或称 joint cdf)}.
+\end{definition}
+
+
+
+我们以 \(\bR^2\) 为例. 得出的结论可以推广到 \(\bR^n\). 
+
+recall:
+ 一个随机变量 \(X\) 被称为一个 continuous random variable, 如果它的
+cdf 是 absolutely continuous 的. 这个条件也等价于, 存在一个函数 \(f_X: \bR \to [0,\infty)\) 
+使得 \[
+F_X(x) = \int_{-\infty}^x f_X(t) \, dt
+\]
+
+这个定义可以 generalize 到 random vector 上.
+\begin{definition}{continuous random vector 和 continuous joint cdf}
+    对于 random vector  \(\mathbf{X} = (X_1,\cdots, X_n)^T\) 
+    如果 \(\bP^{\mathbf{X}} \ll \lambda^n\),
+    即存在一个函数 \(f_{\mathbf{X}}: \bR^n \to [0,\infty)\) 使得对于任意 Borel set \(B \subseteq \bR^n\), 有
+\[\bP^{\mathbf{X}}(B) = \int_B f_{\mathbf{X}}(x_1, \cdots, x_n) \, d\lambda^n(x_1, \cdots, x_n)\]
+    则称 \(\mathbf{X}\) 是一个 \textbf{continuous random vector}.
+
+    注意: 由于是在 \(\bR^n\) 上, 这等价于存在一个函数 \(f_{\mathbf{X}}: \bR^n \to [0,\infty)\) 使得对于任意 \(x_1, \cdots, x_n\), 有
+     \[F_{\mathbf{X}}(x_1, \cdots, x_n) = \int_{-\infty}^{x_1} \cdots \int_{-\infty}^{x_n} f_{\mathbf{X}}(t_1, \cdots, t_n) \, dt_n \cdots dt_1\]
+\end{definition}
+\begin{remark}
+    这个函数 \(f_{\mathbf{X}}\) 
+    就是 continuous random vector \(\mathbf{X}\) 
+    的 \textbf{joint probability density function (joint pdf).}
+    它是 joint distribution measure \(\bP^{\mathbf{X}}\) 
+    对于 Lebesgue measure \(\lambda^n\) 的 Radon-Nikodym derivative: \[\frac{d\bP^{\mathbf{X}}}{d\lambda^n} = f_{\mathbf{X}}\]
+\end{remark}
+
+
+\begin{proposition}{joint pdf 和 joint cdf 的性质}
+    \begin{itemize}
+        \item \(f_{\mathbf{X}}\geq 0\) a.e. 并且 \(\int_{\bR^n} f_{\mathbf{X}} \, d\lambda^n = 1\).
+\item 对于任意 \(x_1, \cdots, x_n\), 有 
+\(\bP(X_1 = x_1
+, \cdots,X_n = x_n) = 0\)
+\end{itemize}
+\end{proposition}
+\begin{proof}
+    由于 \(f_{\mathbf{X}}\) 是 \(\bP^{\mathbf{X}}\) 对于 \(\lambda^n\) 的 Radon-Nikodym derivative, 
+    因为任何 Borel 集 $B$ 都有 $P^{\mathbf{X}}(B) \ge 0$,
+     假设存在一个集合 $A \in \mathcal{B}(\mathbb{R}^n)$ 
+     使得在其上 $f_{\mathbf{X}} < 0$ 且 $\lambda^n(A) > 0$, 
+    那么根据积分定义$$\bP^{\mathbf{X}}(A) = \int_A f_{\mathbf{X}} \, d\lambda^n < 0$$
+    因而反证得 \(f_{\mathbf{X}} \geq 0\) a.e. 
+
+    并且 \[\int_{\bR^n} f_{\mathbf{X}} \, d\lambda^n = \bP^{\mathbf{X}}(\bR^n) = 1\]
+\end{proof}
+
+\begin{remark}
+    我们已经知道, 只要存在导数 \(f_{\mathbf{X}}\) 可以对于任意 \(\mathbf{x}\in \bR^n\) 
+    还原出 joint cdf \(F_{\mathbf{X}}\) 的值, 那么 \(f_{\mathbf{X}}\) 就是 joint pdf, 
+    这个 random vector 就是一个 continuous random vector.
+
+    那么这个还原积分的计算可以任意换序吗? 
+
+    显然是可以的. 因为 recall \textbf{Fubini's theorem}: 只要 \(f\) 绝对可积, 即 
+    \(\int_{\bR^n} |f| \, d\lambda^n < \infty\), 
+    那么对于任意的 permutation \(\sigma\) of \(\{1,2,\cdots,n\}\), 我们都可以将积分的顺序换成
+     \[\int_{-\infty}^{x_{\sigma(1)}} \cdots \int_{-\infty}^{x_{\sigma(n)}} 
+     f(t_1, \cdots, t_n) \, dt_{\sigma(n)} \cdots dt_{\sigma(1)}\]
+    而我们知道, \(f\) 一定是非负的, 而且积分一定是 1, 因而可以任意换序积分. 
+    
+    这就很舒服. 这也给出了 margin distribution 的计算方法: 
+    只要对 joint pdf \(f_{\mathbf{X}}\) 在其他维度上积分掉就行了.
+\end{remark}
+
+\begin{definition}{marginal distribution}
+    令 \(\mathbf{X} = (X_1, \cdots, X_n)^T\) 是一个 random vector. 
+    则对于任意 \(i\), \(X_i\) 的 distribution \(\bP^{X_i}\) 
+    被称为 \(\mathbf{X}\) 的第 \(i\) 个分量的 \textbf{marginal distribution}.
+\end{definition}
+
+\begin{proposition}{计算 marginal distribution 的方法}
+如果 \(\mathbf{X}\) 是 continuous 的, 那么任意 \(X_i\) 也是 continuous random variable 
+(即其 cdf 是 absolutely continuous 的), 
+并且: \[
+f_{X_i}(x) = \int_{\bR^{n-1}} f_{\mathbf{X}}(t_1, \cdots, t_{i-1}, x, t_{i+1}, \cdots, t_n) \, dt_1 \cdots dt_{i-1} dt_{i+1} \cdots dt_n
+\]
+    
+\end{proposition}

@@ -161,8 +161,8 @@ F_X(x) = \bP(X \leq x) = \frac{m([0,x]\times [0,b])}{m([0,a]\times [0,b])} =
      对于任意 \(E \in \bB(\bR)\).
 
      因而:
-     \begin{corollary}{distribution function \(F_X\) determines distribution \(P^X\)}
-         对于 random variable \(X: \Omega \to \mathbb{R}\), 其 distribution function \(F_X\) 确定了 distribution \(P^X\); 即
+     \begin{corollary}{distribution function \(F_X\) determines distribution \(\bP^X\)}
+         对于 random variable \(X: \Omega \to \mathbb{R}\), 其 distribution function \(F_X\) 确定了 distribution \(\bP^X\); 即
          如果两个 random variable \(X\) 和 \(Y\) 满足 \(F_X = F_Y\), 那么 \(\bP^X = \bP^Y\).
      \end{corollary}
 \end{remark}
@@ -274,32 +274,34 @@ F_X(x) = \bP(X \leq x) = \frac{m([0,x]\times [0,b])}{m([0,a]\times [0,b])} =
 \end{proof}
 因而我们自然得出:
 \begin{theorem}{一个 random variable 是 continuous random variable 的充要条件}
-    一个 random variable \(X: \Omega \to \mathbb{R}\) 的 cdf 一定是 \(m\)-a.e.
-     differentiable 的.\\
-     \(X\) 是一个 continuous random variable 当且
-    仅当 \(\bP^X \ll m\), 并且当且仅当 \[
-    F_X(x) = \int_{-\infty}^x F'_X(t) \;dt \quad \forall x \in \bR
-    \]
+\begin{itemize}
+    \item 一个 random variable \(X: \Omega \to \mathbb{R}\) 的 cdf 一定是 \(m\)-a.e.
+     differentiable 的.
+    \item  \(X\) 是一个 continuous random variable 当且
+    仅当 \(\bP^X \ll m\), 即当且仅当存在一个函数 \(f_X: \bR \to [0,\infty)\), 使得 
+    使得对于任意 Borel set \(A \subseteq \bR\), 有 \[\bP^X(A) = \int_A f_X \;dm\]
+    这个函数 \(f_X\) 即是:
+    \begin{itemize}
+        \item \textbf{distribution 对于 Lebesgue measure 的 Radon-Nikodym derivative}:  \(f_X = \frac{d\bP^X}{dm}\). 
+        \item \textbf{cdf \(F_X\) 的 \(m\)-a.e.导数 \(f_X = F'_X\).}
+    \end{itemize}
+    我们也称这个 \(f_X\) 是
+    continuous random variable \(X\) 的 \textbf{probability density function (pdf).}
+\end{itemize}
 \end{theorem}
 \begin{proof}
     即 remark 的最后一条结论. 由于 \(F_X\) 是一个 \(NBV\) function, 
     因而 \(F_X\) 是 \(m\)-a.e. differentiable 的.\\
     并且, \(F_X \in AC\) iff 它满足 FTC of Lebesgue integral.
-    
 \end{proof}
 \begin{remark}
 因而, 在简化的教材中, 通常会直接定义: 一个 random variable \(X\) 
 是 continuous random variable, 
 如果存在一个 \(f_X\) 使得 \(F_X(x) = \int_{-\infty}^x f(t)\;dt\) for all \(x\).
- 这里其实是跳过了我们刚才的所有步骤, 直接使用了这个等价条件.
-\end{remark}
-\begin{remark}
-    另外, 刚才还提到了另一个等价条件 \(\bP^X \ll m\), 
-    即(by Radon-Nikodym theorem), 存在一个 radon-nikodym derivative \(f_X = \frac{d\bP^X}{dm}\) 
-    使得对于任意 Borel set \(A\), 有 \[\bP^X(A) = \int_A f_X(x) \;dm(x)\]
-    这其实和上面的 \(F_X(x) = \int_{-\infty}^x F'_X(t) \;dt\) 也是等价的.
-    这里的 \(f_X\) 就是 \(F_X\) 的导数 \(F'_X\), 
-    也就是我们通常说的 continuous random variable 的 \textbf{probability density function (pdf).}
+ 这里其实是跳过了我们刚才的所有步骤, 直接使用了这个等价条件. 因为这个条件也等价于:
+     \[
+    F_X(x) = \int_{-\infty}^x F'_X(t) \;dt \quad \forall x \in \bR
+    \]
 \end{remark}
 
 \begin{definition}{probability density function (pdf)}\label{probability density function}
@@ -471,37 +473,99 @@ $$C = \{ x \in [0, 1] \mid x = (0.a_1 a_2 a_3 \dots)_3, \text{ where } a_i \in \
     对于 random variable \(X: \Omega \to \mathbb{R}\), 
     其 expectation 定义为
     \[
-    \bE(X) := \int_\Omega X \;d\bP
+    \bE[X] := \int_\Omega X \;d\bP
     \]
     其 variance 定义为
     \[
-    \text{Var}(X) := \bE((X-\bE(X))^2) = \int_\Omega (X-\bE(X))^2   \;d\bP
+    \text{Var}(X) := \bE[(X-\bE[X])^2] = \int_\Omega (X-\bE[X])^2   \;d\bP
     \]
     
 \end{definition}
+
 \begin{remark}
     \(\int_{\Omega} d\bP = \bP(\Omega) =  1\), 因而
-     \(\bE(X)\) 可以看作是 \(X\) 的值的 weighted average, 
+     \(\bE[X]\) 可以看作是 \(X\) 的值的 weighted average, 
      其中权重就是每个 sample point 在这个原 prob space 上的概率.
-\end{remark}
 
-\begin{proposition}{discrete random variable 的 expectation 和 variance}
+     Note that: \(\bE[X]\) 未必是 finite 的. \(\bE[X] < \infty \iff X \in L^1(\bP)\). 
+     \(\text{Var}(X) < \infty \iff X \in L^2(\bP)\)
+\end{remark}
+要计算 discrete random vairable 的 expectation 和 variance, 直接 by def, sum 就可以:
+\begin{proposition}{discrete random variable 的 expectation 和 variance}\label{discrete random variable 的 expectation 和 variance}
     对于 discrete random variable \(X\) with pmf \(p_X\), 
     \[
-    \bE(X) = \sum_{x} x p_X(x), \quad \text{Var}(X) = \sum_{x} (x-\bE(X))^2 p_X(x)
+    \bE[X] = \sum_{x} x p_X(x), \quad \text{Var}(X) = \sum_{x} (x-\bE[X])^2 p_X(x)
     \]
 \end{proposition}
+非常简单. 
+
+但是对于 continuous random variable 而言, 怎么求呢? 这里有一个 w.r.t. prob measure \(\bP\) 的积分, 
+有点难计算. 我们更希望计算 w.r.t. Lebesgue measure \(m\) 的积分,
+这样就可以用一些经典的方法来算它了.
+
+为了实现这个目标, 我们首先需要一个工具来过渡一下:
+
+\begin{lemma}{用 distribution (\(X\) 的 push-forward measure) 计算 expectation}
+    对于 random variable \(X: \Omega \to \mathbb{R}\), 如果 \(X\) integrable, 那么其 expectation
+    \[
+    \bE[X] = \int_{\mathbb{R}} x \;d\bP^X(x)
+    \]
+\end{lemma}
+\begin{proof}
+    这个结论是 Lebesgue integral 的 change of variable formula 的一个 special case.
+    注意, \(X = \text{id} \circ X\) (\(\text{id}: \mathbb{R} \to \mathbb{R}\) 是恒等函数).
+
+    By change of variable formula,
+    \[
+    \int_\Omega X \;d\bP = \int_\Omega (\text{id} \circ X) \;d\bP = \int_{\mathbb{R}} \text{id}(x) \;d\bP^X(x) = \int_{\mathbb{R}} x \;d\bP^X(x)
+    \]
+    (如果不用 change of variable theorem, 也可以证明. 考虑 simple function 的 case, 显然;
+    然后对 simple function 自然成立, 然后用 monotone convergence theorem 推广到一般情况.)
+
+    //TODO: 从 diffeomorphism version 的 change of variable formula 证明 push-forward version 的 change of variable formula, 然后 apply 这个结论.
+\end{proof}
 
 
 
 
+\begin{proposition}{continuous random variable 的 expectation 和 variance}\label{continuous random variable 的 expectation 和 variance}
+    对于 continuous random variable \(X\) with pdf \(f_X\), 如果 \(\bE[X]\) 和 \(\text{Var}(X)\) 都是 finite 的, 那么
+    \[
+    \bE[X] = \int_{-\infty}^{+\infty} x f_X(x) \;dx, \quad \text{Var}(X) = \int_{-\infty}^{+\infty} (x-\bE[X])^2 f_X(x) \;dx
+    \]
+    并且, 对于任意的 measurable function \(g: \bR \to \bR\), 都有
+    \[
+    \bE[g(X)] = \int_{-\infty}^{+\infty} g(x) f_X(x) \;dx
+    \]
+\end{proposition}
+\begin{proof}
+    由于 \(\bE[X] = \int_{\mathbb{R}} x \;d\bP^X(x)\), 而对于 ctn random variable, \[
+    d\bP^X(x) = f_X(x) \;d\lambda(x)
+    \]
+    从而得证.
+\end{proof}
+
+
+\begin{proposition}{expectation 的性质}
+令 \(X,Y:\Omega \to \bR\) 为 \textbf{integrable} random variables,  则
+\begin{itemize}
+    \item \textbf{linearity of expectation}: \(\bE[aX + bY] = a\bE[X] + b\bE[Y]\) for any \(a,b \in \bR\).
+    \item \textbf{monotonicity of expectation}: 如果 \(X \leq Y\) a.s., 那么 \(\bE[X] \leq \bE[Y]\).
+    \item \textbf{absolute value}: \(\bE[X] \leq \bE[|X|]\)
+\end{itemize}
+\end{proposition}
+这三条性质都容易验证, 直接 follow from linearity of Lebesgue integral,
+ monotonicity of Lebesgue integral, triangle inequality of Lebesgue integral.
 
 
 
-
-
-
-
+\begin{proposition}{computing variance}
+    对于 random variable \(X\) with finite expectation, 
+    \[
+    \text{Var}(X) = \bE[X^2] - (\bE[X])^2
+    \]
+\end{proposition}
+By def, 容易验证.
 
 % discrete random variable 的 pmf, 表示每个离散点 $x$ 的 $P(X^{-1}(\{x\}))$.
 % 即 \[
@@ -523,49 +587,32 @@ $$C = \{ x \in [0, 1] \mid x = (0.a_1 a_2 a_3 \dots)_3, \text{ where } a_i \in \
 
 
 \section{discrete random variables}
-recall  
-\begin{definition}{discrete random variable}
-    对于 random variable \(X: \Omega \to \mathbb{R}\),
-     如果存在一个 countable set \(S \subseteq \mathbb{R}\) 
-     使得 \(\bP(X \in S) = 1\), 
-     那么 \(X\) 是一个 discrete random variable.
-\end{definition}
-\begin{remark}
-    就是说, \textbf{\(X\) 的 range a.s. 是 countable 的} (允许 null set 上
-    的值不在这个 countable set 里, 但是这是 measure theory 
-    下的概念, 所以这些都可以忽略不计). 
-\end{remark}
-\begin{remark}
-    对于 discrete random variable \(X\), 
-    其 distribution function \(F_X\) 是一个 step function, 
-    只有 countable 多个 jump discontinuity, 
-    每个 jump 的大小就是 \(X\) 在那个点的 probability mass.\\
-    因而, 对于 discrete random variable \(X\), 
-    通常考虑其 \textbf{probability mass function (pmf)} \(p_X\) 更加有用:
-    \begin{definition}{probability mass function (pmf)}
-        对于 discrete random variable \(X\), 其 pmf 定义为
+Recall: discrete random variable 是指其 range a.s. 是 countable 的 random variable.
+(存在一个 countable set \(S \subseteq \mathbb{R}\) 
+     使得 \(\bP(X \in S) = 1\))
+
+discrete RV 的 probability mass unction (pmf):
         \[
         p_X(x) := \bP(X = x), \quad \forall x \in \mathbb{R}
         \]
-    \end{definition}
-这个 pmf 就是 \(F_X\) 的 jump size function.\\
-当然, 根据定义明显可得: \[
-\sum_{x} p_X(x) = 1
-\]
- 值得一提的是, 
-    这个 pmf 其实就是 \(X\) 的 distribution \(P^X\) 对于
-     counting measure 的 Radon-Nikodym derivative:
+就是 \(X\) 的 distribution \(P^X\) 对于 counting measure of range \(S\)
+的 Radon-Nikodym derivative:
      \[
-     p_X = \frac{d\bP^X}{d\mu_{\text{counting}}}
+     p_X = \frac{d\bP^X}{d\mu_{\text{S}}}
      \]
-    我们假设 \(X\) 的 range 是 \(S = \{x_1, x_2, \ldots\}\), 
+
+因为假设 \(X\) 的 range 是 \(S = \{x_1, x_2, \ldots\}\), 
     那么对于任意 Borel set \(B\),
     \[
-    \bP^X(B) = \sum_{x_i \in B} \bP(X = x_i) = \sum_{x_i \in B\cap S} p_X(x_i) = \int_A p_X(x) \;d\mu_{\text{counting}}(x)
+    \bP^X(B) = \sum_{x_i \in B} \bP(X = x_i) = \sum_{x_i \in B\cap S} p_X(x_i) = 
+    \int_A p_X(x) \;d\mu_{\text{S}}(x)
      \]     
-\end{remark}
+
+
+
 下面我们给出一些经典的 discrete random variable 的例子, 以及它们的 pmf 和 cdf.
 
+\subsection{Bernoulli distribution and Binomial distribution}
 \begin{example}{(\textbf{Bernoulli distribution})}
     
     令 \(\Omega:= \{\omega_1, \omega_2\}\), \(\cF := 2^{\Omega}\).\\
@@ -609,6 +656,8 @@ S \sim \text{Bin}(n,p)
 得到 heads 的总次数.\\
 \end{example}
 
+
+\subsection{Geometric distribution and Negative Binomial distribution}
 \begin{example}{(\textbf{Geometric distribution})}
 
 我们 perform independent Bernoulli trial, 每次 trial 的 success probability 都是 \(p\).\\
@@ -628,6 +677,7 @@ T \sim \text{Geom}(p)
 
 
 \begin{example}{(\textbf{Negative Binomial distribution})}
+
 这是 Geometric distribution 的 generalization (但不完全一样).\\
 我们 perform independent Bernoulli trial, 
 每次 trial 的 success probability 都是 \(p\). (即 independent and identically distributed)\\
@@ -654,6 +704,8 @@ T_r \sim \text{NB}(r,p)
 得到第 \(r\) 个 heads 之前会经历的 failures 的数量.\\
 \end{example}
 
+
+\subsection{Poisson distribution}
 \begin{example}{(\textbf{Poisson distribution})}
 考虑这一 pmf:
 \[
@@ -810,7 +862,7 @@ P(X \in B ) = P(Y \in \sigma B + \mu)
 
 
 
-\subsection{expectation and variance of normal dist}
+expectation and variance of normal dist:
 Suppose $ X \sim \mathcal{N}(0,1)$. Then \[
 \mathbb{E}(X) =  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x   e^{-\frac{x^2}{2}}    \; dx   = 0
 \]
@@ -861,7 +913,7 @@ Var(Y)  = Var(\sigma X + \mu) =  \mathbb{E}[(\sigma X + \mu - \mu)^2] = \mathbb{
 
 
 
-\subsection{cdf of normal distribution}
+cdf of normal distribution:
 Let $X$ be the std normal distribution.\\
 Its cdf given by: \[
 \Phi(a) :=F_X(a)  = \int_{(-\infty,a]} \rho(x) \; dx = \frac{1}{\sqrt{2\pi}} \int_{(-\infty,a]}  e^{-\frac{x^2}{2}} \; dx
