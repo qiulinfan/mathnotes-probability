@@ -664,6 +664,85 @@ For continuous case:
 
 \begin{example}
     (\textbf{fair coin toss})
+我们投掷一枚 fair coin.
+\(X_1\): 直到 HH 出现钱, 投掷的次数;
 
-    
+\(X_2\): 直到 HT 出现钱, 投掷的次数.
+
+问题: 计算 \(\bE[X_1]\) 和 \(\bE[X_2]\).
+
+\begin{solution}
+    We condition on 第一次 toss \(Y_1\), 以及第二次 toss \(Y_2\).
+
+
+\begin{align*}
+\mathbb{E}\left[X_1\right] & =\mathbb{E}\left[\mathbb{E}\left[X_1 \mid Y_1\right]\right]=\frac{1}{2} \mathbb{E}\left[X_1 \mid Y_1=H\right]+\frac{1}{2} \mathbb{E}\left[X_1 \mid Y_1=T\right] \\
+& =\frac{1}{2}\left(\frac{1}{2} \mathbb{E}\left[X \mid Y_1=H, Y_2=H\right]+\frac{1}{2} \mathbb{E}\left[X \mid Y_1=H, Y_2=T\right]\right)+\frac{1}{2}\left(1+\mathbb{E}\left[X_1\right]\right) \\
+& =\frac{1}{2}\left(\frac{2}{2}+\frac{1}{2}\left(\mathbb{E}\left[X_1\right]+2\right)\right)+\frac{1}{2}\left(1+\mathbb{E}\left[X_1\right]\right) .
+\end{align*}
+解出 \(\bE[X_1] = 6\).
+同理, 可以解出 \(\bE[X_2] = 4\).
+\end{solution}
+
+\end{example}
+
+
+
+\begin{example}
+一只鸡在一段时间内下 \(N\) 个蛋, 其中 \(N \sim \text{Pois}(\lambda)\).
+每只蛋孵化成小鸡的概率为 \(p\), 互相独立.
+令 \(K\) 表示孵化成小鸡的蛋的数量, 计算 \(K|N, \bE[K]\), 以及 
+\(K\) 的 distribution.
+\begin{solution}
+由题意得 \[
+\bP(K=k | N=n) = \binom{n}{k} p^k (1-p)^{n-k}
+\]
+因此, \(K|N =n \sim \text{Bin}(n,p)\) 因而 \(\bE[K|N=n] = np\).
+由 law of total expectation, 
+\[
+\bE[K] = \bE[\bE[K|N]] = \bE[N] \cdot p = \lambda 
+\]
+然后由 law of total probability,
+\begin{align*}
+\bP(K=k) &= \sum_{n=k}^{+\infty} \bP(K=k, N=n) 
+= \sum_{n=k}^{+\infty} \bP(K=k | N=n) \cdot \bP(N=n) \\
+&= \sum_{n=k}^{+\infty} \binom{n}{k} p^k (1-p)^{n-k} \cdot \frac{\lambda^n e^{-\lambda}}{n!} \\
+&= \sum_{n=k}^{+\infty} \frac{n!}{k!(n-k)!} p^k (1-p)^{n-k} \cdot \frac{\lambda^n e^{-\lambda}}{n!} \\
+&= \sum_{n=k}^{+\infty} \frac{\lambda^n e^{-\lambda}}{k!(n-k)!} p^k (1-p)^{n-k} \\
+&= \sum_{n=k}^{+\infty} \frac{(\lambda p)^k (\lambda (1-p))^{n-k} e^{-\lambda}}{k!(n-k)!} \\
+&= \frac{(\lambda p)^k e^{-\lambda}}{k!} \sum_{n=k}^{+\infty} \frac{(\lambda (1-p))^{n-k}}{(n-k)!} \\
+&= \frac{(\lambda p)^k e^{-\lambda}}{k!} \sum_{m=0}^{+\infty} \frac{(\lambda (1-p))^m}{m!} \\
+&= \frac{(\lambda p)^k e^{-\lambda}}{k!} \cdot e^{\lambda (1-p)} = \frac{(\lambda p)^k e^{-\lambda p}}{k!}
+\end{align*}
+因而 \(K \sim \text{Pois}(\lambda p)\).
+\end{solution}
+\end{example}
+
+
+\begin{example}
+令 \((X,Y)\) 为一对 continuous RVs with joint pdf:
+\[
+f_{X,Y}(x,y) = 2e^{-(x+2y)} \mathbf{1}_{ \{x>0, y>0\}}
+\]
+首先, verify \(f_{X,Y}\) is a valid joint pdf, 然后计算 
+\(\bE[X|Y=y]\) 和 \(\bE[X]\).
+\begin{solution}
+\[
+\int_0^{\infty} \int_0^{\infty} 2 e^{-(x+2 y)} d x d y=\int_0^{\infty} 2 e^{-2 y}\left(\int_0^{\infty} e^{-x} d x\right) d y=\int_0^{\infty} 2 e^{-2 y} d y=1
+\]
+verify 很简单. 然后我们首先计算 density of \(Y\):
+\[
+f_Y(y)=\int_0^{\infty} 2 e^{-(x+2 y)} d x=2 e^{-2 y}, \quad y>0
+\]
+然后计算 conditional density of \(X\) given \(Y=y\):
+\[
+f_{X \mid Y}(x \mid y)=\frac{f_{X, Y}(x, y)}{f_Y(y)}=e^{-x}, \quad x>0
+\]
+因而 by \ref{conditional expectation}, \[
+\bE[X \mid Y=y]=\int_0^{\infty} x e^{-x} d x=1
+\]
+然后 by law of total expectation, \[
+\bE[X] = \bE[\bE[X|Y]] = \bE[1] = 1
+\] since \(\bE[X|Y]\) is a constant function.
+\end{solution}
 \end{example}
