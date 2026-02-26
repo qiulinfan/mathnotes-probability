@@ -156,7 +156,14 @@ F_X(x) = \int_{-\infty}^x f_X(t) \, dt
     这就很舒服. 这也给出了 margin distribution 的计算方法: 
     只要对 joint pdf \(f_{\mathbf{X}}\) 在其他维度上积分掉就行了.
 \end{remark}
-
+\begin{remark}
+    注意: \textbf{多个 continuous random variables 的 joint distribution 
+    不一定是 continuous 的.}
+    反例: 考虑 random vector \(\mathbf{X} = (X, X)^T\) where \(X \sim \text{Uniform}(0,1)\)
+    则 $\bP((X,X) \in \{y=x\}) = 1$. 而注意, \(\{y=x\}\) 在 \(\bR^2\) 中的 Lebesgue measure 为 0, 
+    而 absolute continuity 要求: 对于一个零测集, 其 \(\bP^{\mathbf{X}}\) 测度也必须是 0 (这是 \(\bP^{\mathbf{X}} \ll \lambda^n\) 的标准定义), 
+    因而 joint distribution 不是 continuous 的.
+\end{remark}
 
 \begin{proposition}{joint pdf 和 joint cdf 的性质}
 令 \(\mathbf{X} = (X_1, \cdots, X_n)^T\) 是一个 continuous random vector, 
@@ -229,6 +236,14 @@ $$\int_{0}^{1} 2 e^{-2 y} dy = \left[ -e^{-2 y} \right]_{0}^{1} = 1 - e^{-2}$$
 \end{solution}
 \end{example}
 
+\begin{theorem}
+    对于 continuous random vector \(\mathbf{X} = (X_1, \cdots, X_n)^T\),
+取任意 Borel measurable function \(g: \bR^n \to \bR\),
+则 \(g(\mathbf{X})\) 是一个 random variable, 并且如果 \(\bE[|g(\mathbf{X})|] < \infty\), 则
+, 则
+$$\bE[g(\mathbf{X})] = \int_{\bR^n} g(\mathbf{x}) f_{\mathbf{X}}(\mathbf{x}) \, d\lambda^n(\mathbf{x})$$
+\end{theorem}
+
 
 \section{independence and correlation}
 \subsection{independence}
@@ -244,7 +259,7 @@ $$\int_{0}^{1} 2 e^{-2 y} dy = \left[ -e^{-2 y} \right]_{0}^{1} = 1 - e^{-2}$$
     \]
 \end{definition}
 
-\begin{proposition}{discrete and continuous independence: joint density is product of marginal densities} \label{discrete and continuous case of independence: joint density is product of marginal densities}
+\begin{theorem}{discrete and continuous independence: joint density is product of marginal densities} \label{discrete and continuous case of independence: joint density is product of marginal densities}
     令 \(X, Y\) 是两个 random variables. 
     \begin{itemize}
         \item 如果 \(X, Y\) 是 discrete random variables, 
@@ -257,7 +272,7 @@ $$\int_{0}^{1} 2 e^{-2 y} dy = \left[ -e^{-2 y} \right]_{0}^{1} = 1 - e^{-2}$$
         f_{X,Y} = f_X \cdot f_Y
         \]
     \end{itemize}
-\end{proposition}
+\end{theorem}
 \begin{proof}
     discrete case: 显然可得.
     continuous case: 
@@ -265,7 +280,390 @@ $$\int_{0}^{1} 2 e^{-2 y} dy = \left[ -e^{-2 y} \right]_{0}^{1} = 1 - e^{-2}$$
     \(f_{X,Y} = f_X \cdot f_Y \implies F_{X,Y} = F_X F_Y\): 积分即可.
 \end{proof}
 
+\begin{remark}
+关于两个 discrete random variables \(X, Y\) 是否 independent 的判断,
+还有一个直观的方法.
+\begin{proposition}
+    两个 discrete random variables \(X, Y\) 
+    是 independent 的 iff 它们的 joint pmf as a matrix 
+    有 rank 1(每行每列都互为倍数).
+\end{proposition}
+\begin{proof}
+note: 一个矩阵 $M$ 的 rank 等于 1 iff 它可以被分解为两个向量的 outer product
+:$$M = \mathbf{u}\mathbf{v}^\top$$\
+where $\mathbf{u}$ 和 $\mathbf{v}$ 是非零列向量.
+
+($\implies$): 如果 independent, 
+那么对于所有 $i, j$,
+joint probability $p_{ij} = \bP(X=x_i, Y=y_j)$ 
+满足:$$p_{ij} = \bP(X=x_i) \cdot \bP(Y=y_j)$$
+如果我们定义向量 $\mathbf{p}_X = [p_X(x_1), p_X(x_2), \dots]^\top$ 
+和 $\mathbf{p}_Y = [p_Y(y_1), p_Y(y_2), \dots]^\top$, 
+那么整个联合分布矩阵 $P$ 就可以写成:$$P = \mathbf{p}_X \mathbf{p}_Y^\top$$
+这正是 Rank 1 矩阵的标准形式. 
+
+($\impliedby$) 
+如果 $P$ 的 rank 为 1, 
+那么存在向量 $\mathbf{u}$ 和 $\mathbf{v}$ 
+使得 $p_{ij} = u_i v_j$.由于 $\sum_{i,j} p_{ij} = 1$, 
+我们可以归一化这两个向量, 使得 $\sum u_i = 1$ 
+且 $\sum v_j = 1$.此时, $u_i$ 恰好就是 $X$ 的 marginal PMF, 
+$v_j$ 恰好就是 $Y$ 的 marginal PMF. 因此满足 $p_{ij} = p_i \cdot p_j$, 即两个变量独立.
+\end{proof}
+\begin{example}
+    \[
+    P = 
+    \begin{array}{c|cc|c}
+    X \backslash Y & 0 & 1 & \text{Marginal } \bP(X) \\ \hline
+    0 & 0.4 & 0.1 & 0.5 \\
+    1 & 0.4 & 0.1 & 0.5 \\ \hline
+    \text{Marginal } \bP(Y) & 0.8 & 0.2 & 1.0
+    \end{array}
+    \]
+这里的 \(X,Y\) 就是 independent 的 random variables.
+\end{example}
+\end{remark}
+
+
+我们只定义了两个 random variables 的 independence, 
+但是这个定义可以推广到多个 (甚至 uncountably many) random variables 上.
+\begin{definition}{independence of multiple random variables}
+    令 \(\{X_i: i \in I\}\) 是一个 random variables 的 family, 
+    其中 \(I\) 是一个 index set. 
+    则如果对于任意的 finite subset \(J \subseteq I\), 
+    以及对于任意的 Borel sets \(\{A_j: j \in J\}\), 都有
+    \[
+    \bP(X_j \in A_j, \forall j \in J) = \prod_{j\in J} \bP(X_j \in A_j)
+    \]
+    则称这个 family of random variables 是 independent 的.
+\end{definition}
+注意: \textbf{joint density 的 factorization 也可以推广到多个 random variables 上.}
+\begin{proposition}{independence \(\implies\) expectation is closed under product}
+    令 \(\{X_i: i \in I\}\) 是一个 independent 的 random variables 的 family, 
+    则对于任意的 finite subset \(J \subseteq I\), 以及对于任意的 Borel measurable functions \(\{g_j: j \in J\}\), 
+    如果 \(\bE[|g_j(X_j)|] < \infty\) for all \(j \in J\), 则
+    \[
+    \bE\left[\prod_{j\in J} g_j(X_j)\right] = \prod_{j\in J} \bE[g_j(X_j)]
+    \]
+\end{proposition}
+\begin{proof}
+令 $J = \{1, 2, \dots, n\}$.
+由于 $X_1, \dots, X_n$ 是 independent 的, 它们的 joint distribution
+ $\mu_{\mathbf{X}}$ 是其 marginal distributions $\mu_{X_j}$ 的 product measure: $$\mu_{\mathbf{X}} = \mu_{X_1} \times \mu_{X_2} \times \dots \times \mu_{X_n}$$
+根据 Change of Variables Formula, 
+$$\bE\left[\prod_{j=1}^n g_j(X_j)\right] = \int_{\bR^n} 
+\left( \prod_{j=1}^n g_j(x_j) \right) \, d\mu_{\mathbf{X}}(x_1, \dots, x_n)
+= \int_{\bR} \dots \int_{\bR} \left( \prod_{j=1}^n g_j(x_j) \right) \, d\mu_{X_1}(x_1) \dots d\mu_{X_n}(x_n)
+$$
+由于被积函数 $\prod g_j(x_j)$ 是变量分离的, 根据 Fubini's Theorem 可以把积分分解成多个积分的 product:
+$$= \left( \int_{\bR} g_1(x_1) \, d\mu_{X_1}(x_1) \right) \times \dots \times \left( \int_{\bR} g_n(x_n) \, d\mu_{X_n}(x_n) \right)$$
+其中每一项都是$\bE[g_j(X_j)]$.
+\end{proof}
+\begin{remark}
+recall: expectation is a linear operator (因而 linearity 是 regardless of independence).
+但是它不一定是一个 multiplicative operator. 
+
+而这里我们说, 如果 random variables 是 independent 的, 那么 expectation 就是一个 multiplicative operator.
+\end{remark}
+
+
 \subsection{covariance and correlation}
 
 
-\section{conditional distribution}
+\section{conditional distribution function and density}
+\subsection{conditional distribution and its distribution function}
+\begin{definition}{conditional distribution}
+给定 random variables \(X, Y: \Omega \to \mathbb{R}\), 
+我们定义 the conditional distribution of \(X\) given \(Y = y\) 
+为 the probability measure \(\bP^{X|Y=y}\):
+\[
+\bP^{X|Y=y}(A) := \lim_{h\to 0^+} \bP(X \in A \mid y \leq Y \leq y+h),\quad \forall A \in \cB(\bR)
+\]
+并将 function \(F_{X|Y=y}: \bR \to \bR\) defined by \(F_{X|Y=y}(x) := \bP^{X|Y=y}((-\infty, x])\):
+\[
+F_{X|Y}(x|y) := \lim_{h\to 0^+} \bP(X\leq x \mid y \leq Y \leq y+h)
+\]
+称为 the conditional distribution function of \(X\) given \(Y=y\).
+\end{definition}
+\begin{remark}
+注意: 每个取值 \(y\) 都对应一个 conditional distribution measure \(\bP^{X|Y=y}\) 
+和一个 conditional distribution function \(F_{X|Y=y}\).
+因此, conditional distribution 和 conditional distribution function 都是一个 family of measures/functions,
+而不是一个 measure/function.
+
+也就是说, 一个 random variable 可以 induce 出另一个 random variable 的可能 uncountably many 个 conditional distribution.
+\end{remark}
+
+\begin{remark}
+    如果 \(X,Y\) 是两个 discrete random variables, 那么它们的 conditional distribution 就很简单了.
+    \[
+    \bP^{X|Y=y}(\{x\}) = \frac{\bP(X=x, Y=y)}{\bP(Y=y)}
+    \]
+    以及
+    \[
+    F_{X|Y=y}(x) = \sum_{t\leq x} \frac{\bP(X=t, Y=y)}{\bP(Y=y)}
+    \]
+
+    其他情况稍复杂一些. 但是我们可以确定的是:
+\end{remark}
+
+\subsection{conditional density for random variables jointly continuous}
+\begin{theorem}{jointly continuous RVs 之间所有 defined 处总有 conditional density}\label{jointly continuous random variables 之间总有 conditional density}
+    令 \(\mathbf{X} = (X, Y)^T\) 是一个 continuous random vector, 
+    则对于任意 \(y\) 使得 \(f_Y(y) > 0\), 都有 conditional distribution of \(X\) given \(Y=y\) 的 pdf:
+    \[
+    f_{X|Y}(x|y) := \frac{f_{X,Y}(x,y)}{f_Y(y)}
+    \]
+    即: \(\forall x \in \bR\) 有: \[
+    F_{X |Y}(x|y) = \int_{-\infty}^x \frac{f_{X,Y}(t,y)}{f_Y(y)} \, dt
+    \]
+\end{theorem}
+\begin{proof}
+注意: \((X,Y)^T\) 是 continuous random vector \(\implies\) \(Y\) 是一个 continuous random variable. 因而
+因而 \(f_Y(y)\) 是 well-defined 的. (反过来不成立)
+取 \(y\) s.t. \(f_Y(y) > 0\).
+
+则 
+\begin{align*}
+    \mathbb{P}^{X \mid Y=y}(A) &=\lim _{h \rightarrow 0^{+}} \mathbb{P}(X \in A \mid y \leq Y \leq y+h) \\
+    &= \lim _{h \rightarrow 0^{+}} \frac{\mathbb{P}(X \leq x, y \leq Y \leq y+h)}{\mathbb{P}(y \leq Y \leq y+h)}=\lim _{h \rightarrow 0^{+}} \frac{F_{X, Y}(x, y+h)-F_{X, Y}(x, y)}{F_Y(y+h)-F_Y(y)}\\
+    &=\frac{\partial_y F_{X, Y}(x, y)}{f_Y(y)}=\int_{-\infty}^x \frac{f_{X, Y}(s, y)}{f_Y(y)} ds
+\end{align*}
+因而, \(f_{X|Y}(x|y) := \frac{f_{X,Y}(x,y)}{f_Y(y)}\) 是 \(F_{X|Y=y}\) 的 pdf.
+\end{proof}
+\begin{remark}
+    为了保证 continuous random vector 下分量之间的 conditional distribution 总是 (a.e.) 拥有 pdf 的, 我们可以
+    给 not well-defined 处下定义: 如果 \(f_Y(y) = 0\), 就直接 set \(f_{X|Y}(x|y) = 0\) for all \(x\).
+    
+    在这个定义下: continuous random vector 下分量之间的 conditional distribution 也总是 continuous 的.
+\end{remark}
+
+
+\subsection{Law of Total Probability for continuous random vector}
+\begin{theorem}\label{law of total probability for continuous random vector}
+    令 \(\mathbf{X} = (X, Y)^T\) 是一个 continuous random vector, 
+    则对于任意 \(A \in \mathcal{B}(\bR) \), 
+    \[
+    \mathbb{P}((X, Y) \in A)=\int_{-\infty}^{+\infty} \mathbb{P}((X, y) \in A \mid Y=y) f_Y(y) d y
+    \]
+\end{theorem}
+\begin{proof}
+    注意: \[
+    \mathbb{P}\left(Y \in\left\{y \in \mathbb{R}: f_Y(y)=0\right\}\right)=0
+    \]
+    即, \(\left\{Y \in f_Y^{-1}(\{0\})\right\} \) 是一个 null set. (不是说 \(f_Y(y) = 0\) 的 \(y\) 是 null set, 
+    意思是说 \(Y\) 落在这些 \(y\) 上的事件是 null set.)
+
+    因而 compute: 
+    \begin{align*}
+\mathbb{P}(X \in(-\infty, x], Y \leq y) & =\mathbb{P}\left(X \in(-\infty, x],\{Y \leq y\} \cap\left\{Y \notin f_Y^{-1}(\{0\})\right\}\right)=\int_{(-\infty, y] \cap f_Y^{-1}\left(\{0\}^c\right)} \int_{-\infty}^{\infty} f_{X, Y}(s, t) d s d t \\
+& =\int_{(-\infty, y] \cap f_Y^{-1}((0,+\infty))}\left(\int_{-\infty}^x \frac{f_{X, Y}(s, t)}{f_Y(t)} d s\right) f_Y(t) d t \\
+& =\int_{(-\infty, y] \cap f_Y^{-1}((0,+\infty))} \mathbb{P}(X \leq x \mid Y=t) f_Y(t) d t \\
+& =\int_{(-\infty, y] \cap f_Y^{-1}((0,+\infty))} \mathbb{P}(X \leq x \mid Y=t) f_Y(t) d t+\int_{(-\infty, y] \cap f_Y^{-1}(\{0\})} \mathbb{P}(X \leq x \mid Y=t) f_Y \\
+& =\int_{(-\infty, y]} \mathbb{P}(X \leq x \mid Y=t) f_Y(t) d t \\
+& =\int_{-\infty}^y \mathbb{P}(X \leq x \mid Y=t) f_Y(t) d t
+\end{align*}
+\end{proof}
+\begin{remark}
+    recall 最普通的全概率公式: 把样本空间 partition 成几个 disjoint 的事件 \(B_1, \cdots, B_n\),
+    则任意事件\(A\) 等于它在每个 \(B_i\) 上的 conditional probability 的和:
+    $$\mathbb{P}(A) = \sum_{i=1}^n \mathbb{P}(A \cap B_i) = \sum_{i=1}^n \mathbb{P}(A \mid B_i) \mathbb{P}(B_i)$$
+    这很容易理解. 而这里的 law of total probability for continuous random vector 就是这个公式在 continuous case 的推广:
+
+    由于在每一点 \(y\) 上, \((X,Y) \in A\) 的概率都有一个 conditional distribution \((X,Y)\in A | Y = y\), 因而
+    \((X,Y) \in A\) 的概率就等于这个 conditional distribution 在所有 \(y\) 上的加权和, 权重就是 \(Y\) 的 pdf \(f_Y(y)\). 
+    因而才有 \[
+    \mathbb{P}((X, Y) \in A)=\int_{-\infty}^{+\infty} \mathbb{P}((X, y) \in A \mid Y=y) f_Y(y) d y
+    \]
+\end{remark}
+
+\begin{example}
+考虑 random vector \(\mathbf{X} = (X, Y)^T\) with joint pdf
+\[
+f_{X, Y}(x, y)= \begin{cases}4 x y, & \text { if } 0 \leq x \leq 1,0 \leq y \leq 1 \\ 0, & \text { otherwise }\end{cases}
+\]
+计算: \(f_X, f_Y, f_{X|Y}, f_{Y|X}\).
+
+\begin{solution}
+首先计算 margianl pdfs:
+\[
+f_X(x)=\int_{-\infty}^{+\infty} f_{X, Y}(x, y) d y=\int_0^1 4 x y d y=2 x, \text { for } 0 \leq x \leq 1
+\]
+and
+\[
+f_Y(y)=\int_{-\infty}^{+\infty} f_{X, Y}(x, y) d x=\int_0^1 4 x y d x=2 y, \text { for } 0 \leq y \leq 1
+\]
+由于这是一个 continuous random vector, 因而根据\ref{jointly continuous random variables 之间总有 conditional density} 可以得到:
+\[
+f_{X \mid Y}(x \mid y)= \begin{cases}\frac{f_{X, Y}(x, y)}{f_Y(y)}=\frac{4 x y}{2 y}=2 x, & \text { if } x \in[0,1], \\ 0, & \text { otherwise. }\end{cases}
+\]
+同理计算出
+\[
+f_{Y \mid X}(y \mid x)= \begin{cases}\frac{f_{X, Y}(x, y)}{f_X(x)}=\frac{4 x y}{2 x}=2 y, & \text { if } y \in[0,1], \\ 0, & \text { otherwise. }\end{cases}
+\]
+\end{solution}
+\end{example}
+
+
+
+
+\section{conditional expectation}
+\begin{definition}{conditional expectation}\label{conditional expectation}
+令 \(X, Y: \Omega \to \mathbb{R}\) 为 RVs. 
+对于 \(y \in \mathbb{R}\) where \(F_{X|Y} = \bP^{X|Y =y}(X\leq x)\) is defined
+ (这个条件对于 discrete 是筛选掉 \(\bP(y) =0\) 的点, 对于 continuous 这是为了筛选掉 \(f_Y = 0\) 的点), 
+ 我们定义 conditional expectation:
+  \[
+  \bE[X | Y = y] := \int_{-\infty}^{\infty} x \, d\bP^{X|Y=y}(x) 
+  \]
+  特别地, 如果\((X,Y)\) 是一个 discrete random vector, 则它即是:
+  \[
+   \bE[X | Y = y] = \sum_{x} x \bP(X | Y)(x|y) = \sum_{x} x \bP(X = x | Y = y)
+  \]
+  而如果 \((X,Y)\) 是一个 (absolutely) continuous random vector, 则它即是:
+  \[
+   \bE[X | Y = y] = \int_{-\infty}^{\infty} x f_{X|Y}(x|y) \, dx
+  \]
+\end{definition}
+\begin{remark}
+    注意: conditional expectation 对于给定的 \(y\) 是一个值;
+     而它也整体是一个 function of \(y\), 同时也是 function from the sample space \(\Omega\)
+ (更准确而言是 \(\{ \omega \in \Omega : f_Y(Y(\omega))>0  \}\), 但是去掉的
+ 这个集合的测度为零, 所以不用管, a.e. define 即可).
+
+     对于 \(\omega \in \Omega\), \[
+     \bE[X|Y]: \omega \mapsto \bE[X|Y=Y(\omega)]
+     \]
+     Notice: 这个函数是一个 random variable.
+    同理, 我们可以构造 conditional expectation 
+    given multiple random variables \(\bE[X|Y_1, \cdots, Y_n]\). 但是暂时不谈论这个.
+\end{remark}
+
+
+\begin{proposition}{independence 让 conditional distribution, density 和 expectation 都退化}
+    如果 \(X,Y\) 是 independent 的, 那么在任意 defined \(y\) 上, 
+    \[
+    F_{X|Y=y} = F_X, \quad f_{X|Y=y} = f_X, 
+    \]
+    以及 \[
+    \quad \bE[X|Y] = \bE[X]
+    \]
+\end{proposition}
+
+
+\begin{example}\textbf{(constant random variable 的 conditional expectation)}
+
+令 \(X :=b\) 为一个 constant random variable. 
+\(Y\) 为一个 (absolutely) continuous random variable.
+compute: \(\bE[X|Y]\) when \(f_Y(y) > 0\).
+
+\begin{solution}
+    \[
+    F_{X, Y}(x, y)=\mathbb{P}(X \leq x, Y \leq y)=\left\{\begin{array}{ll}
+F_Y(y), & \text { if } x \leq b, \\
+0, & \text { if } x>b
+\end{array}=F_X(x) \cdot F_Y(y)\right.
+\]
+因而它们 independent (当然,,)
+因而 \[
+\bE[X|Y] = \bE[X] = b
+\]
+\end{solution}
+为什么我们要提及这个很呆的例子
+因为我们要说一个很呆但是要说一下的事情: 
+\begin{proposition}
+conditional expectation 满足 linear property.
+即任取 \(a,b\in\bR\), \[
+\bE[aX + b|Y] = a\bE[X|Y] + b
+\]
+\end{proposition} 
+\end{example}
+
+\begin{example}
+    (computation exercise)
+    令 \(X,Y\) 为 RVs with joint pdf \[
+    f_{X, Y}(x, y)= \begin{cases}\frac{1}{y} e^{-\frac{x}{y}} e^{-y}, & x>0, y>0 \\ 0, & \text{otherwise}\end{cases}
+    \]
+    计算: \(\bE[X|Y=y]\).
+
+    \begin{solution}
+        根据 \ref{jointly continuous random variables 之间总有 conditional density} 和 
+        \ref{conditional expectation}, 我们就是要做两件事情: 一个是计算 \(f_Y\), 然后
+        根据 \(f_Y\) 和 \(f_{X,Y}\) 计算出 \(f_{X|Y}\), 
+        最后根据 \(f_{X|Y}\) 积分计算出 \(\bE[X|Y]\).
+
+        那么 \[
+        f_Y(y)=\int_{-\infty}^{+\infty} f_{X, Y}(x, y) d x=e^{-y} \int_0^{+\infty} \frac{1}{y} e^{-x / y} d x=e^{-y}, y>0
+        \]
+        我们发现 \(Y \sim \text{Exp}(1)\). 然后对于 \(y>0\), \[
+        f_{X \mid Y}(x \mid y)=\frac{f_{X, Y}(x, y)}{f_Y(y)}=\frac{1}{y} e^{-x / y}
+        \]
+        因而 \(X|Y = y \sim \text{Exp}(1/y)\).
+        最后, \[
+        \mathbb{E}[X \mid Y=y]=\int_{-\infty}^{+\infty} x f_{X \mid Y}(x \mid y) d x=\frac{1}{y} \int_0^{+\infty} x e^{-x / y} d x=y
+        \]
+        而对于 \(y \leq 0\), 因为 \(f_Y(y) = 0\), $\mathbb{E}[X \mid Y=y]$ is not defined.
+    \end{solution}
+\end{example}
+
+
+//TODO: 如果 \(X\) 是 continous 的, 而 \(Y\) 是 discrete 的,
+那么我们怎么 define conditional distribution, 以及 expectation 呢?
+
+
+
+
+
+
+
+
+\section{law of total expectation}
+\begin{theorem}{law of total expectation}
+    令 \(X, Y: \Omega \to \bR \) 为 RVs, 我们知道它们的 conditional expectation \(\bE[X|Y]\) 也是一个 \(\Omega \to \bR\) 的 RV.
+
+    如果 \(\bE[|\bE[X|Y]|] < \infty\), 则
+    \[
+    \bE[X] = \bE[\bE[X|Y]]
+    \]
+\end{theorem}
+\begin{proof}
+对于更加严格的 conditional expectation 的定义而言
+ (as an orthogonal projection from \(L^2(\Omega, \mathcal{F}, \mathbb{P})\) 
+ onto the subspace of \(Y\)-measurable functions), 这个定理是 trivial 的, 直接 follow from def. 
+在该定义中, \(\bE[X|Y]\) 被定义为一个 \(\sigma(Y)\)-measurable function \(Z\), 
+使得对于任意 \(A \in \sigma(Y)\), 都有 \[
+\int_A Z \, d\mathbb{P} = \int_A X \, d\mathbb{P}
+\]
+那么取 \(A = \Omega\), 自然得到.
+
+而我们目前的定义下, 要证明它则要对于 discrete 和 continuous 两种情况分别计算证明.
+(recall Lebesgue Decomposition Theorem: 
+任意 measure 都可以被分解成一个 discrete 的部分和一个 continuous 的部分以及一个
+可以忽略的 singular 的部分. 因而证明了 discrete 和 continuous 两种情况即可.)
+
+For discrete case:
+\begin{align*}
+\mathbb{E}[\mathbb{E}[X \mid Y]] & =\mathbb{E}_\omega[\mathbb{E}[X \mid Y=Y(\omega)]]=\mathbb{E}_\omega\left[\sum_x x \mathbb{P}(X=x \mid Y=Y(\omega))\right] \\
+& =\sum_x x \mathbb{E}_\omega[\mathbb{P}(X=x \mid Y=Y(\omega))] \\
+& =\sum_x x \sum_y \mathbb{P}(X=x \mid Y=y) \cdot \mathbb{P}(Y=y) \\
+& =\sum_x x \sum_y \mathbb{P}(X=x, Y=y) \\
+& =\sum_x x \mathbb{P}(X=x)=\mathbb{E}[X]
+\end{align*}
+
+For continuous case:
+\begin{align*}
+\mathbb{E}[\mathbb{E}[X \mid Y]] & =\mathbb{E}_\omega\left[\int_{-\infty}^{+\infty} x f_{X \mid Y}(x \mid Y(\omega)) d x\right]=\int_{-\infty}^{+\infty} x \mathbb{E}_\omega\left[f_{X \mid Y}(x \mid Y(\omega))\right] d x \\
+& =\int_{-\infty}^{+\infty} x \int_{-\infty}^{+\infty} f_{X \mid Y}(x \mid y) f_Y(y) d y d x \\
+& =\int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} x f_{X, Y}(x, y) d x d y \\
+& =\int_{-\infty}^{+\infty} x \int_{-\infty}^{+\infty} f_{X, Y}(x, y) d x d x \\
+& =\int_{-\infty}^{+\infty} x f_X(x) d x=\mathbb{E}[X]
+\end{align*}
+\end{proof}
+
+
+
+\begin{example}
+    (\textbf{fair coin toss})
+
+    
+\end{example}
