@@ -77,11 +77,43 @@ probability measure 一定相同. 如果我们考虑不同 prob space 上的 ran
      \(\{(-\infty, x_1] \times \cdots \times (-\infty, x_n]: (x_1,\cdots,x_n) \in \bR^n\}\))
     为它们的 \textbf{joint distribution function (或称 joint cdf)}.
 \end{definition}
+joint distribution 的定义已经包括了如何从多个 random variables 的 distributions
+得到一个 joint distribution.
+而, 我们也可以从一个 joint distribution 的 limit behavior 
+得到每个 random variable 分量的 distributions, 称之为 marginal distribution:
+\begin{definition}{marginal distribution}
+    令 \(\mathbf{X} = (X_1, \cdots, X_n)^T\) 是一个 random vector. 
+    则对于任意 \(i\), \(X_i\) 的 distribution \(\bP^{X_i}\) 
+    被称为 \(\mathbf{X}\) 的第 \(i\) 个分量的 \textbf{marginal distribution}.
+\end{definition}
+我们以 \(\bR^2\) 为例. 得出的结论可以推广到 \(\bR^n\).
+\begin{proposition}{通过 joint distribution 的 limit behavior 得到 marginal distribution}
+    令 \(\mathbf{X} = (X_1, X_2)^T\) 是一个 random vector. 
+    则对于任意 \(x\in \bR\), 有
+    \[\bP(X_1 \leq x) = \lim_{y\to \infty} F_{\mathbf{X}}(x,y)\]
+    \(X_2\) 的 marginal distribution 也可以通过同样的方法得到.
 
+    此外, joint distribution 有其他明显的 limit behaviors:
+    \begin{itemize}
+        \item \[ \lim_{x\to -\infty}F(x,y) = \lim_{y\to -\infty}F(x,y) = 0 \]
+        \item \(F_{\mathbf{X}}\) 对于每个维度都是 increasing 且 right-continuous 的.
+        \item \[ \bP(X\leq x, Y \leq y) = \lim_{z\uparrow y} F(x,z) = \lim_{z\uparrow x} F(z,y) = \lim_{z_1\uparrow x, z_2 \uparrow y}F(z_1, z_2) \]
+        \item \[ \bP(x_1 \leq X \leq x_2, y_1 \leq Y \leq y_2) = F(x_2,y_2) - F(x_1,y_2) = F(x_2,y_1)+F(x_1,y_1) \]
+    \end{itemize}
+\end{proposition}
+\begin{remark}
+    最后一条: 右边相当于 
+    \[
+    \bP(x_1 < X < x_2, Y < y_2) - \bP(x_1 < X < x_2, Y < y_1) 
+    \]
+    因而成立.
+\end{remark}
 
+discrete random vector 很容易处理. 我们可以直接定义 joint pmf.
+而 continuous random vector 需要展开讨论. 接下来我们讲单独讨论
+continuous random vector 的 joint distribution.
 
-我们以 \(\bR^2\) 为例. 得出的结论可以推广到 \(\bR^n\). 
-
+\subsection{condinuous joint cdf 与 joint pdf}
 recall:
  一个随机变量 \(X\) 被称为一个 continuous random variable, 如果它的
 cdf 是 absolutely continuous 的. 这个条件也等价于, 存在一个函数 \(f_X: \bR \to [0,\infty)\) 
@@ -107,27 +139,6 @@ F_X(x) = \int_{-\infty}^x f_X(t) \, dt
     它是 joint distribution measure \(\bP^{\mathbf{X}}\) 
     对于 Lebesgue measure \(\lambda^n\) 的 Radon-Nikodym derivative: \[\frac{d\bP^{\mathbf{X}}}{d\lambda^n} = f_{\mathbf{X}}\]
 \end{remark}
-
-
-\begin{proposition}{joint pdf 和 joint cdf 的性质}
-    \begin{itemize}
-        \item \(f_{\mathbf{X}}\geq 0\) a.e. 并且 \(\int_{\bR^n} f_{\mathbf{X}} \, d\lambda^n = 1\).
-\item 对于任意 \(x_1, \cdots, x_n\), 有 
-\(\bP(X_1 = x_1
-, \cdots,X_n = x_n) = 0\)
-\end{itemize}
-\end{proposition}
-\begin{proof}
-    由于 \(f_{\mathbf{X}}\) 是 \(\bP^{\mathbf{X}}\) 对于 \(\lambda^n\) 的 Radon-Nikodym derivative, 
-    因为任何 Borel 集 $B$ 都有 $P^{\mathbf{X}}(B) \ge 0$,
-     假设存在一个集合 $A \in \mathcal{B}(\mathbb{R}^n)$ 
-     使得在其上 $f_{\mathbf{X}} < 0$ 且 $\lambda^n(A) > 0$, 
-    那么根据积分定义$$\bP^{\mathbf{X}}(A) = \int_A f_{\mathbf{X}} \, d\lambda^n < 0$$
-    因而反证得 \(f_{\mathbf{X}} \geq 0\) a.e. 
-
-    并且 \[\int_{\bR^n} f_{\mathbf{X}} \, d\lambda^n = \bP^{\mathbf{X}}(\bR^n) = 1\]
-\end{proof}
-
 \begin{remark}
     我们已经知道, 只要存在导数 \(f_{\mathbf{X}}\) 可以对于任意 \(\mathbf{x}\in \bR^n\) 
     还原出 joint cdf \(F_{\mathbf{X}}\) 的值, 那么 \(f_{\mathbf{X}}\) 就是 joint pdf, 
@@ -146,17 +157,115 @@ F_X(x) = \int_{-\infty}^x f_X(t) \, dt
     只要对 joint pdf \(f_{\mathbf{X}}\) 在其他维度上积分掉就行了.
 \end{remark}
 
-\begin{definition}{marginal distribution}
-    令 \(\mathbf{X} = (X_1, \cdots, X_n)^T\) 是一个 random vector. 
-    则对于任意 \(i\), \(X_i\) 的 distribution \(\bP^{X_i}\) 
-    被称为 \(\mathbf{X}\) 的第 \(i\) 个分量的 \textbf{marginal distribution}.
-\end{definition}
 
-\begin{proposition}{计算 marginal distribution 的方法}
-如果 \(\mathbf{X}\) 是 continuous 的, 那么任意 \(X_i\) 也是 continuous random variable 
-(即其 cdf 是 absolutely continuous 的), 
-并且: \[
+\begin{proposition}{joint pdf 和 joint cdf 的性质}
+令 \(\mathbf{X} = (X_1, \cdots, X_n)^T\) 是一个 continuous random vector, 
+则它的 joint pdf \(f_{\mathbf{X}}\) 和 joint cdf \(F_{\mathbf{X}}\) 有以下性质: 
+    \begin{itemize}
+        \item \(f_{\mathbf{X}}\geq 0\) a.e. 并且 \(\int_{\bR^n} f_{\mathbf{X}} \, d\lambda^n = 1\).
+\item (如果一个集合 \(A\) 有一个零测维度, 那么 \(\bP^{\mathbf{X}}(A) = 0\))
+\[\bP(X_1 = x_1
+, x_2 \leq X_2 \leq x'_2  \cdots,  x_n \leq  X_n \leq x'_n) = 0\]
+
+\item 每个 \(X_i\) 的 marginal distribution 也是 (absolutely) continuous 的,
+并且 \[
 f_{X_i}(x) = \int_{\bR^{n-1}} f_{\mathbf{X}}(t_1, \cdots, t_{i-1}, x, t_{i+1}, \cdots, t_n) \, dt_1 \cdots dt_{i-1} dt_{i+1} \cdots dt_n
 \]
-    
+例如, \[
+f_{X}(x) = \int_{-\infty}^\infty f_{\mathbf{X}}(x,y) \, dy
+\]
+\item 对每个 \(x_1, \cdots, x_n \in \bR\), 都可以通过偏导数从 joint cdf 得到 
+joint pdf (这个偏导数一定 (a.e.) 存在):
+\[
+f_{\bf{X}}(x_1,\cdots,x_n) = \frac{\partial^n}{\partial x_1 \cdots \partial x_n} F_{\mathbf{X}}(x_1, \cdots, x_n)
+\]
+并且 by Fubini's theorem 可以 (a.e.) 任意换序:
+$$\frac{\partial^n}{\partial x_{\sigma(1)} \dots \partial x_{\sigma(n)}} F_{\mathbf{X}} \stackrel{a.e.}{=} f_{\mathbf{X}}$$
+\end{itemize}
 \end{proposition}
+\begin{proof}
+
+\begin{itemize}
+    \item 由于 \(f_{\mathbf{X}}\) 是 \(\bP^{\mathbf{X}}\) 对于 \(\lambda^n\) 的 Radon-Nikodym derivative, 
+    因为任何 Borel 集 $B$ 都有 $P^{\mathbf{X}}(B) \ge 0$,
+     假设存在一个集合 $A \in \mathcal{B}(\mathbb{R}^n)$ 
+     使得在其上 $f_{\mathbf{X}} < 0$ 且 $\lambda^n(A) > 0$, 
+    那么根据积分定义$$\bP^{\mathbf{X}}(A) = \int_A f_{\mathbf{X}} \, d\lambda^n < 0$$
+    因而反证得 \(f_{\mathbf{X}} \geq 0\) a.e. 
+
+    并且 \[\int_{\bR^n} f_{\mathbf{X}} \, d\lambda^n = \bP^{\mathbf{X}}(\bR^n) = 1\]
+
+\item natural.
+\item 即 marginal distribution 的定义在 continuous case 中的展开
+\item by Fubini's theorem, 以及 joint cdf 的定义.
+\end{itemize}
+    \end{proof}
+
+\begin{example}
+考虑 
+\[
+f_{X, Y}(x, y)= \begin{cases}c e^{-x} e^{-2 y}, & \text { if } x, y>0 \\ 0, & \text { otherwise }\end{cases}
+\]
+Find \(c\) 使得这是一个合法的 joint pdf, 
+并且计算 \(X\) 和 \(Y\) 的 marginal pdfs, 以及 \(\bP(X>1, Y<1)\).
+\begin{solution}
+我们需要
+$$c \left( \int_{0}^{\infty} e^{-x} dx \right) \left( \int_{0}^{\infty} e^{-2 y} dy \right) = 1$$
+evaluate 这两个积分:
+$$\int_{0}^{\infty} e^{-x} dx = \left[ -e^{-x} \right]_{0}^{\infty} = 1,$$
+$$\int_{0}^{\infty} e^{-2 y} dy = \left[ -\frac{1}{2} e^{-2 y} \right]_{0}^{\infty} = \frac{1}{2}$$
+因为 \(c\) 必须为 2.
+
+计算 \(X\) 的 marginal pdf:
+$$f_X(x) = \int_{0}^{\infty} 2 e^{-x} e^{-2 y} dy = 2 e^{-x} \left[ -\frac{1}{2} e^{-2 y} \right]_{0}^{\infty} = e^{-x}$$
+然后计算 \(Y\) 的 marginal pdf:
+$$f_Y(y) = \int_{0}^{\infty} 2 e^{-x} e^{-2 y} dx = 2 e^{-2 y} \left[ -e^{-x} \right]_{0}^{\infty} = 2 e^{-2 y}$$
+最后计算 \(\bP(X>1, Y<1)\):
+$$\bP(X > 1, Y < 1) = \int_{1}^{\infty} \int_{0}^{1} 2 e^{-x} e^{-2 y} dy dx = \left( \int_{1}^{\infty} e^{-x} dx \right) \left( \int_{0}^{1} 2 e^{-2 y} dy \right)$$
+这两个定积分分别为:
+$$\int_{1}^{\infty} e^{-x} dx = \left[ -e^{-x} \right]_{1}^{\infty} = e^{-1},$$
+$$\int_{0}^{1} 2 e^{-2 y} dy = \left[ -e^{-2 y} \right]_{0}^{1} = 1 - e^{-2}$$ 
+因而$$\bP(X > 1, Y < 1) = e^{-1} (1 - e^{-2}) = e^{-1} - e^{-3}$$
+\end{solution}
+\end{example}
+
+
+\section{independence and correlation}
+\subsection{independence}
+\begin{definition}{independence of random variables}
+    l两个 random variables \(X, Y: \Omega \to \bR\) 被称为 independent 的, 
+    如果对于任意的 Borel sets \(A, B \subseteq \bR\), 都有
+    \[
+    \bP(X \in A, Y \in B) = \bP(X \in A) \cdot \bP(Y \in B)
+    \]
+    即: \textbf{它们的 joint distribution 是它们 marginal distributions 的 product.}
+    注意, 这个定义等价于 \[
+    F_{X,Y} = F_X F_Y
+    \]
+\end{definition}
+
+\begin{proposition}{discrete and continuous independence: joint density is product of marginal densities} \label{discrete and continuous case of independence: joint density is product of marginal densities}
+    令 \(X, Y\) 是两个 random variables. 
+    \begin{itemize}
+        \item 如果 \(X, Y\) 是 discrete random variables, 
+        则它们 independent 的条件等价于对于任意 \(x, y\), 都有
+        \[
+        p_{X,Y} = p_X \cdot p_Y
+        \]
+        \item 如果 \(X, Y\) 是 continuous random variables, 则它们 independent 的条件等价于对于任意 \(x, y\), 都有
+        \[
+        f_{X,Y} = f_X \cdot f_Y
+        \]
+    \end{itemize}
+\end{proposition}
+\begin{proof}
+    discrete case: 显然可得.
+    continuous case: 
+    \(F_{X,Y} = F_X F_Y  \implies f_{X,Y} = f_X \cdot f_Y\): 取偏导数即可.
+    \(f_{X,Y} = f_X \cdot f_Y \implies F_{X,Y} = F_X F_Y\): 积分即可.
+\end{proof}
+
+\subsection{covariance and correlation}
+
+
+\section{conditional distribution}

@@ -505,7 +505,7 @@ $$C = \{ x \in [0, 1] \mid x = (0.a_1 a_2 a_3 \dots)_3, \text{ where } a_i \in \
 
 为了实现这个目标, 我们首先需要一个工具来过渡一下:
 
-\begin{lemma}{用 distribution (\(X\) 的 push-forward measure) 计算 expectation}
+\begin{lemma}{用 distribution (\(X\) 的 push-forward measure) 计算 expectation}\label{用 distribution 计算 expectation}
     对于 random variable \(X: \Omega \to \mathbb{R}\), 如果 \(X\) integrable, 那么其 expectation
     \[
     \bE[X] = \int_{\mathbb{R}} x \;d\bP^X(x)
@@ -522,7 +522,9 @@ $$C = \{ x \in [0, 1] \mid x = (0.a_1 a_2 a_3 \dots)_3, \text{ where } a_i \in \
     (如果不用 change of variable theorem, 也可以证明. 考虑 simple function 的 case, 显然;
     然后对 simple function 自然成立, 然后用 monotone convergence theorem 推广到一般情况.)
 
-    //TODO: 从 diffeomorphism version 的 change of variable formula 证明 push-forward version 的 change of variable formula, 然后 apply 这个结论.
+    //TODO: 从 diffeomorphism version 的 change of variable formula 证明 push-forward version 
+    的 change of variable formula, 然后 apply 这个结论.
+    参考: \href{https://en.wikipedia.org/wiki/Change_of_variables}{change of variable}
 \end{proof}
 
 
@@ -635,6 +637,12 @@ discrete RV 的 probability mass unction (pmf):
     以 \(1-p\) 的概率得到 tails (failure).\\
 \end{example}
 
+\begin{proposition}
+    如果 \(X \sim \text{Ber}(p)\), 
+    那么 \(\bE[X] = p\), \(\text{Var}(X) = p(1-p)\).
+\end{proposition}
+显然.
+
 \begin{example}{(\textbf{Binomial distribution})}
 
 我们 independently repeat \(n\) 次 Bernoulli trial, 
@@ -655,7 +663,29 @@ S \sim \text{Bin}(n,p)
 它 model 的是: 比如我们 toss 一枚 biased coin \(n\) 次,
 得到 heads 的总次数.\\
 \end{example}
-
+\begin{proposition}
+    如果 \(S \sim \text{Bin}(n,p)\), 那么 \(\bE[S] = np\), \(\text{Var}(S) = np(1-p)\).
+\end{proposition}
+\begin{proof}
+    \[
+    \bE[X] = \sum_{k=1}^n k \cdot \bP(X = k) = 
+    \sum_{k=1}^n k \cdot \binom{n}{k} p^k (1-p)^{n-k} =
+    p(1-p)^{n-1} \sum_{k=1}^n k \cdot \binom{n}{k} (\frac{p}{1-p})^{k-1}
+    \]
+    由于 \[
+    (1+t)^n = \sum_{k=0}^{n} \binom{n}{k} t^k \implies n(1+t)^{n-1} = \sum_{k=1}^n k \cdot \binom{n}{k} t^{k-1}
+    \]
+    可以得到 \[
+    \bE[X] = p(1-p)^{n-1} \cdot n(1+\frac{p}{1-p})^{n-1} = np
+    \]
+    然后计算得
+    \(
+    \text{Var}(X) = np(1-p)
+    \). 但是这是比较麻烦的方法. 
+    也可以利用 \(X = \sum_{i=1}^n X_i\), 
+    其中 \(X_i \sim \text{Ber}(p)\) i.i.d 这个事实来计算, 那么直接通过
+    线性叠加 Bernoulli random variable 的 expectation 和 variance 就可以了.
+\end{proof}
 
 \subsection{Geometric distribution and Negative Binomial distribution}
 \begin{example}{(\textbf{Geometric distribution})}
@@ -674,6 +704,23 @@ T \sim \text{Geom}(p)
 它 model 的是: 比如我们 toss 一枚 biased coin, 
 第一次得到 heads 的 trial number.\\
 \end{example}
+\begin{proposition}
+    如果 \(X \sim \text{Geom}(p)\), 那么 \(\bE[X] = 1/p\),
+     \(\text{Var}(X) = (1-p)/p^2\).
+\end{proposition}
+\begin{proof}
+    \[
+    \bE[X] = \sum_{k=1}^\infty k(1-p)^{k-1}p = p\sum_{k=1}^\infty k(1-p)^{k-1} = 
+    p \big( -\frac{d}{d(1-p)} \sum_{k=0}^\infty (1-p)^k \big) = 
+    -p -\frac{d}{dp} \frac{1}{1-(1-p)}  = \frac{1}{p}
+    \]
+    similarly, 可以计算得\[
+    \bE[X^2] =\frac{2-p}{p^2}
+    \]
+    因而 \[
+    \text{Var}[X] = \bE[X^2] - (\bE[X])^2 = \frac{1-p}{p^2}
+    \]
+\end{proof}
 
 
 \begin{example}{(\textbf{Negative Binomial distribution})}
@@ -805,12 +852,58 @@ Further remark: Poisson distribution 的用途.
 \end{remark}
 \end{example}
 
-
+\begin{proposition}
+    如果 \(X \sim \text{Poi}(\lambda)\), 那么 \(\bE[X] = \lambda\), \(\text{Var}(X) = \lambda\).
+\end{proposition}
+\begin{proof}
+recall \(e^x\) 的 taylor expansion: \[
+e^x = \sum_{k=0}^\infty \frac{x^k}{k!}
+\]
+因而
+    \[
+    \bE[X] = \sum_{k=0}^\infty k e^{-\lambda} \frac{\lambda^k}{k!} = 
+    e^{-\lambda} \lambda \sum_{k=1}^\infty \frac{\lambda^{k-1}}{(k-1)!} =
+    e^{-\lambda} \lambda e^{\lambda} = \lambda
+    \]
+similarly, 可以计算得 \[
+\bE[X^2] = \lambda^2 + \lambda
+\]
+因此, \[
+\text{Var}(X) = \bE[X^2] - (\bE[X])^2 = \lambda
+\]
+\end{proof}
 
 
 
 
 \section{continuous random variables}
+recall: 总而言之, continuous random variable 是指其 distribution \(\bP^X\)
+对于 Lebesgue measure \(m\) 是 absolutely continuous 的 random variable, 
+即存在一个 pdf \(f_X\) 使得\[
+F_X(x) = \int_{-\infty}^x f_X(y) dy 
+\] 对于任意 \(x\) 都成立.
+
+而由 \( \bE[X]= \int_{\Omega} X d\bP = \int_{\mathbb{R}} x d\bP^X = \int_{\mathbb{R}} x f_X(x) dx \) 可得 
+\[
+\bE[X] = \int_{-\infty}^{+\infty} x f_X(x) dx, \quad \text{Var}(X) = \int_{-\infty}^{+\infty} (x-\bE[X])^2 f_X(x) dx
+\]
+
+这里还有一个额外的结论:
+\begin{proposition}
+     对于任意的 measurable function \(g: \bR \to \bR\), 都有
+\[
+\bE[g(X)] = \int_{-\infty}^{+\infty} g(x) f_X(x) dx
+\]
+\end{proposition}
+\begin{proof}
+\begin{align*}
+\bE[g(X)] &= \int_{\Omega} g(X(w))\, d\bP(w) \\
+&=  \int_{\Omega} g\circ X \, d\bP \\
+&= \int_{\bR} g \, ;d\bP^X \\
+&= \int_{-\infty}^{+\infty} g(x) f_X(x) \, dx
+\end{align*}
+\end{proof}
+
 
 \subsection{normal random variables}
 (5.2 in book)
@@ -985,7 +1078,7 @@ each $X_i$ 都是一个 trial of tossing the $p$-coin.\\
 
 
 (5.3 in book.)
-\subsection{exponential random variables}
+\subsection{exponential distribution}
 
 我们称 $X$ 为一个 exponential random variable with parameter $\lambda$, 如果它的 pdf is given by: \[
 f(x) = \begin{cases}

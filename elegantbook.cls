@@ -1371,7 +1371,7 @@
 \newcommand{\borel}{\mathcal{B}}
 \newcommand{\extR}{\overline{\mathbb{R}}}
 \newcommand{\ds}{\displaystyle}
-
+\newcommand{\tl}{\text}
 
 \newcommand{\insertpic}[4][width=\textwidth]{
     \begin{figure}[htbp]
