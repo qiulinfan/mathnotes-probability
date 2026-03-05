@@ -840,6 +840,7 @@ $$
 \end{remark}
 
 \begin{remark}
+
 Further remark: Poisson distribution 的用途.
 \begin{itemize}
     \item 它是 model "大量级的小概率事件" 的通用模型.\\ 
@@ -874,12 +875,29 @@ similarly, 可以计算得 \[
 \end{proof}
 
 
+\subsubsection{Poisson distribution 的 additivity}
+\begin{theorem}{additivity of Poisson distribution}
+    如果 \(X \sim \text{Poi}(\lambda_1)\), \(Y \sim \text{Poi}(\lambda_2)\) are independent, 那么
+    \[
+    X + Y \sim \text{Poi}(\lambda_1 + \lambda_2)
+    \]
+\end{theorem}
+\begin{remark}
+这个事实通过简单的计算即可得到. 
+
+但是值得一提的是, 我们之后会证明一个结论: 两个 independent 的 random variable 
+的 sum 的 distribution 是它们 convolution 的 distribution.
+
+而 Poisson distribution 的 convolution 仍然是 Poisson distribution, 
+并且是 linear 的. 这就是 additivity of Poisson distribution 的本质原因.
+\end{remark}
+
 
 
 \section{continuous random variables}
 recall: 总而言之, continuous random variable 是指其 distribution \(\bP^X\)
 对于 Lebesgue measure \(m\) 是 absolutely continuous 的 random variable, 
-即存在一个 pdf \(f_X\) 使得\[
+等价于存在一个 pdf \(f_X\) 使得\[
 F_X(x) = \int_{-\infty}^x f_X(y) dy 
 \] 对于任意 \(x\) 都成立.
 
@@ -899,128 +917,545 @@ F_X(x) = \int_{-\infty}^x f_X(y) dy
 \begin{align*}
 \bE[g(X)] &= \int_{\Omega} g(X(w))\, d\bP(w) \\
 &=  \int_{\Omega} g\circ X \, d\bP \\
-&= \int_{\bR} g \, ;d\bP^X \\
+&= \int_{\bR} g \, d\bP^X \\
 &= \int_{-\infty}^{+\infty} g(x) f_X(x) \, dx
 \end{align*}
 \end{proof}
 
+下面我们介绍一些常见的 continuous random variables, 以及它们的 pdf, cdf, expectation 和 variance.
 
-\subsection{normal random variables}
-(5.2 in book)
+\subsection{uniform distribution: 最简单的 continuous RV}
+\begin{definition}{uniform distribution}
+如果 \(f_X(x) = \frac{1}{b-a}\) on \((a,b)\) and \(0\) elsewhere,
+那么我们称 \(X\) 的 distribution \(P^X\) 为一个 
+\textbf{uniform distribution}, 写作
+\[
+X \sim U([a,b])
+\]
+\end{definition}
+
+对于 uniform distribution, 很容易计算得:
+\[
+F_X(x) = \frac{x-b}{b-a}, \quad \bE[X] = \frac{a+b}{2}, \quad 
+\text{Var}(X) = \frac{(b-a)^2}{12}
+\]
+\begin{example}{(uniform distribution 的 pdf 和 cdf)}
+    
+考虑 $X \sim U([a,b])$, 其 pdf 和 cdf 的图像如下:
+\begin{center}
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1cm, y=2cm]
+        % PDF subplot
+        \draw[->] (-0.5,0) -- (5,0) node[right] {$x$};
+        \draw[->] (0,-0.3) -- (0,1.2) node[above] {$f_X(x)$};
+        
+        % Line at x=a, x=b
+        \draw[dashed, gray] (1,-0.2) -- (1,0);
+        \draw[dashed, gray] (4,-0.2) -- (4,0);
+        \node[below] at (1,-0.25) {$a$};
+        \node[below] at (4,-0.25) {$b$};
+        
+        % PDF function
+        \draw[line width=1.5pt] (1,0.75) -- (4,0.75);
+        \draw[line width=1.5pt] (0.5,0) -- (1,0);
+        \draw[line width=1.5pt] (4,0) -- (4.5,0);
+        
+        % Vertical lines at endpoints
+        \draw[line width=1pt, dashed] (1,0) -- (1,0.75);
+        \draw[line width=1pt, dashed] (4,0) -- (4,0.75);
+        
+        \node at (2.5,1) {$\frac{1}{b-a}$};
+        \node at (2.5,-0.8) {pdf: $f_X(x) = \frac{1}{b-a}$};
+        
+    \end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1cm, y=2cm]
+        % CDF subplot
+        \draw[->] (-0.5,0) -- (5,0) node[right] {$x$};
+        \draw[->] (0,-0.3) -- (0,1.3) node[above] {$F_X(x)$};
+        
+        % Line at x=a, x=b
+        \draw[dashed, gray] (1,-0.25) -- (1,0);
+        \draw[dashed, gray] (4,-0.25) -- (4,0);
+        \node[below] at (1,-0.3) {$a$};
+        \node[below] at (4,-0.3) {$b$};
+        
+        % CDF function: flat at 0, then linear, then flat at 1
+        \draw[line width=1.5pt] (0.5,0) -- (1,0);
+        \draw[line width=1.5pt] (1,0) -- (4,1);
+        \draw[line width=1.5pt] (4,1) -- (4.5,1);
+        
+        % Vertical lines at endpoints
+        \draw[line width=0.8pt, dashed] (1,0) -- (1,1);
+        \draw[line width=0.8pt, dashed] (4,0) -- (4,1);
+        \draw[line width=0.8pt, dashed] (0,1) -- (1,1);
+        
+        \node[left] at (-0.1,1) {$1$};
+        \node at (2.5,-0.8) {cdf: $F_X(x) = \frac{x-a}{b-a}$};
+        
+    \end{tikzpicture}
+\end{minipage}
+\end{center}
+
+\end{example}
+
+
+\subsection{exponential distribution: geometric distribution 的 continuous version}
+Exponential random variable model 的是一盏灯的 remaining lifetime. 
+它 assume: 任意时间, 这盏灯有一个 constant 的磨损速率.
+
+假设它的磨损速率是 \(\lambda = \lambda_X(t)\) for all \(t\), 
+那么在任意时间 \(t\) 上:
+\[
+\lambda_X(t) = \lim_{h\to 0^+} \frac{P(X \in (t, t+h])}{h} 
+= \lim_{h\to0^+}\frac{\bP(t \leq X \leq t+h)}{h}  \cdot \frac{1}{\bP(X > t)}
+= \frac{f_X(t)}{1 - F_X(t)}
+\]
+
+即 ODE: 
+\[
+\lambda = \frac{F_X'(t)}{1 - F_X(t)}
+\]
+with initial condition \(F_X(0) = 0\).
+
+我们知道这个 ODE 的 solution 是: \[
+F_X(t) = \begin{cases}
+    1 - e^{-\lambda t}, \quad t > 0\\
+    0, \quad t \leq 0
+\end{cases},
+\quad 
+f_X(t) = \begin{cases}
+    \lambda e^{-\lambda t}, \quad t > 0\\
+    0, \quad t \leq 0 
+\end{cases}
+\]
+
+\begin{definition}{exponential distribution}
+我们称 $X$ 为一个 \textbf{exponential random variable} with parameter $\lambda$,
+如果它的 pdf is given by: \[
+f(x) = \begin{cases}
+    \lambda e^{-\lambda x}, \quad x > 0\\
+    0, \quad x \leq 0
+\end{cases}
+\]
+写作\[  
+X \sim \text{Exp}(\lambda)
+\]
+\end{definition}
+刚才已经计算出, exponential random variable 的
+distribution 为\[
+F_X(x) = \begin{cases}
+    \int _{-\infty}^x f(t) \; dt = \lambda \int_0 ^x e^{-\lambda t} \; dt = 1 - e^{-\lambda x}, \quad x> 0\\
+    0,\quad x<0
+\end{cases}
+\]
+容易验证, $F_X(x) =0$ when $x \to -\infty$, 以及 $F_X(x) \to 1$ when $x \to \infty$
+
+计算其 expectation:
+\begin{align}
+\mathbb{E}[X^n] &= \lambda \int_0^\infty x^n e^{-\lambda x } \; dx  \\
+&= - \int_0 ^\infty  x^n(e^{-\lambda x})' \; dx \\
+&=  0 + \int_0 ^\infty n x^{n-1} e^{-\lambda x} \; dx \\
+&= \frac{n}{\lambda} \mathbb{E}(X^{n-1})
+\end{align}
+并 notice: $\mathbb{E}[X^0] = \mathbb{E}[1] = 1$. 
+因而 recursively get: \[
+\mathbb{E}[X^n] = \frac{n!}{\lambda^n}
+\]
+即: 
+\(\mathbb{E}[X] = \frac{1}{\lambda}, \mathbb{E}[X^2] = \frac{2}{\lambda^2}, \cdots  \)
+从而: \[
+Var[X] = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
+\]
+
+\begin{center}
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1cm, y=2cm]
+        % PDF subplot
+        \draw[->] (-0.5,0) -- (6,0) node[right] {$x$};
+        \draw[->] (0,-0.3) -- (0,0.6) node[above] {$f_X(x)$};
+        
+        % x轴刻度
+        \foreach \x in {0, 2, 4, 6} {
+            \draw (\x,-0.05) -- (\x,0.05);
+            \node[below] at (\x,-0.15) {\x};
+        }
+        
+        % y轴刻度
+        \foreach \y in {0, 0.2, 0.4} {
+            \draw (-0.1,\y) -- (0.1,\y);
+            \node[left] at (-0.15,\y) {\y};
+        }
+        
+        % PDF function: lambda * e^(-lambda*x)
+        \draw[line width=1.5pt, domain=0:6, samples=100] plot (\x, {0.5*exp(-0.5*\x)});
+        
+        % y轴
+        \draw[line width=0.8pt] (0,-0.3) -- (0,0.6);
+        
+        \node[above right] at (0.5,0.5) {$f_X(x) = \lambda e^{-\lambda x}$};
+        \node[below] at (3,-0.6) {(a) pdf};
+        
+    \end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1cm, y=2cm]
+        % CDF subplot
+        \draw[->] (-0.5,0) -- (6,0) node[right] {$x$};
+        \draw[->] (0,-0.3) -- (0,1.3) node[above] {$F_X(x)$};
+        
+        % x轴刻度
+        \foreach \x in {0, 2, 4, 6} {
+            \draw (\x,-0.05) -- (\x,0.05);
+            \node[below] at (\x,-0.15) {\x};
+        }
+        
+        % y轴刻度
+        \foreach \y in {0, 0.5, 1} {
+            \draw (-0.1,\y) -- (0.1,\y);
+            \node[left] at (-0.15,\y) {\y};
+        }
+        
+        % CDF function: 1 - e^(-lambda*x) for x >= 0
+        \draw[line width=0.8pt] (-0.5,0) -- (0,0);
+        \draw[line width=1.5pt, domain=0:6, samples=100] plot (\x, {1-exp(-0.5*\x)});
+        
+        % 水平虚线在y=1处
+        \draw[dashed, gray] (0,1) -- (6,1);
+        \node[left] at (-0.3,1) {$1$};
+        
+        % y轴
+        \draw[line width=0.8pt] (0,-0.3) -- (0,1.3);
+        
+        \node[below right] at (3,0.7) {$F_X(x) = 1 - e^{-\lambda x}$};
+        \node[below] at (3,-0.6) {(b) cdf};
+        
+    \end{tikzpicture}
+\end{minipage}
+\end{center}
+
+
+\begin{remark}
+exponential 随机变量是 geometric 随机变量的 continuous analogue.
+因为 geometric random variable 是假设一个事件在 
+每个时间点以 constant 的概率发生,
+用来 model 它第一次发生的时间;
+
+而 exponential random variable 其实也是, 只是 on a continuous
+ time scale: 
+ 它假设的 constant 损坏率其实 implies:
+\textbf{在任意时间, 如果灯还没坏, 那么灯此刻坏掉的概率是 constant 的.} 
+\begin{theorem}{memoryless property of exponential distribution}
+任意 continuous RV, \[
+ \bP(X > b+ t \mid X > b) = \bP(X>t) \iff X \text{ is an exponential random variable}
+    \]
+\end{theorem}
+\begin{proof}
+简单而言
+\begin{align}
+     &   P(X > b+ t \mid X > b) = P(X>t) \\
+   \Longleftrightarrow  & P(X > b+t) = P(X > t) P(X>b) \\
+    \Longleftrightarrow  & X \text{ exponential}
+\end{align}
+\end{proof}
+因而对于 geometric RV 的 pmf, 当我们把时间间隔 (discrete time interval) 变得越来越小,
+这一行为的极限就变为了 exponential RV 的 pdf. 
+
+这是一个很自然的 limit behavior, 此处不验证了.
+\end{remark}
+
+\begin{example}
+假设我们有一个 storage battery, 它的 lifetime 是 exponentially distributed 的, 并且 average 为 10 hours. Suppose 我们想要 use this battery for 5 hours for.
+
+计算: probability of finishing the task, if:\\
+(a) 使用一个 new battery\\
+(b) 使用一个已经用过 2 hours 的 battery\\
+\begin{solution}
+    \[
+    \mathbb{E}[X] = 10 = \frac{1}{\lambda} \implies \lambda = \frac{1}{10}
+    \]
+如果我们使用一个 new battery, 则 want: $P(X>5) = 1 - P(X<5) = 1- F_X(5) = e^{-\frac{1}{2}}$
+如果我们使用一个用过 2 hours 的 battery, 则 want: \[
+P(X> 5+2 \mid X > 2) = \frac{e^{-(5+2)\lambda}}{e^{-2\lambda }} = e^{-5\lambda} = = e^{-\frac{1}{2}}
+\]
+Notice:  \[
+P(X>5) = P(X> 5+2 \mid X > 2)
+\]
+\end{solution} 
+
+\end{example}
+
+
+
+
+
+\subsection{Gamma distribution: negative binomial distribution 的 continuous version}
+recall Gamma 函数:
+\[
+    \Gamma(\alpha) = \int_0^\infty x^{\alpha - 1} e^{-x}\; dx
+\]
+这个函数有一个重要的性质: \[
+\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)  
+\]
+因而对于 \(n\in \mathbb{N}\), 我们有: \[
+\Gamma(n) = (n-1)!
+\]
+Gamma 函数就是 factorial 函数的 continuous generalization.
+
+\begin{definition}{$\Gamma$-distribution}
+如果 continuous random variable $X$ 的 pdf 是: 
+$$
+f_X(x)= \begin{cases}
+\displaystyle \frac{\lambda^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\lambda x}, & x>0, \\ 
+0, & x \leq 0 
+\end{cases}
+$$
+那么我们称 $X$ 服从 \textbf{$\Gamma$ distribution}, 写作\[
+X \sim \Gamma(\alpha, \lambda)
+\]
+其中 $\alpha > 0$ 称为 shape parameter, $\lambda > 0$ 称为 rate parameter.
+\end{definition}
+
+\(\Gamma\) distribution 的 cdf 这样求: for \(a \geq 0\),
+\begin{align*}
+    F_X(a) = \int_{-\infty}^a f_X(x) \; dx &= \int_0^a \frac{\lambda^\alpha}{\Gamma(\alpha)} x^{\alpha -1} e^{-\lambda x} \; dx \\
+    &= \frac{1}{\Gamma(\alpha)} \int_0^{\lambda a} t^{\alpha -1} e^{-t} \; dt
+\end{align*}
+and for \(a < 0\), \(F_X(a) = 0\).
+
+
+Expectation:  
+\begin{align*}
+    \mathbb{E}[X] &= \frac{1}{\Gamma(\alpha)} \int_0^\infty (\lambda x )^{\alpha -1} \lambda  e^{-\lambda x} \; dx\\
+    &=  \frac{1}{\lambda \Gamma(\alpha)}  \int_0^\infty x^\alpha e^{-x} \; dx \\
+    &= \frac{\Gamma(\alpha + 1)}{\lambda \Gamma(\alpha)} = \frac{\alpha}{\lambda}
+\end{align*}
+(since $\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$.)
+同理我们可以计算得: \(
+\mathbb{E}[X^2] = \frac{\alpha(\alpha+1)}{\lambda^2}
+\)
+从而 \[
+\text{Var}[X] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = \frac{\alpha(\alpha+1)}{\lambda^2} - \frac{\alpha^2}{\lambda^2} = \frac{\alpha}{\lambda^2}
+\] 
+
+容易发现: 当 \(\alpha = 1\) 时, \(\Gamma\) distribution 就退化成了 exponential distribution.
+\[
+\Gamma(1,\lambda) = \text{Exp}(\lambda)  
+\]
+而当 \(\alpha\) 是一个正整数 \(n\) 时, \(\Gamma\) distribution 实际就是 \(n\) 个 
+independent exponential distribution 的 sum: 
+\begin{proposition}{Gamma distribution 即是 independent exponential distribution 的 sum}
+Let \(X_1, X_2, \cdots, X_n \sim \text{Exp}(\lambda)\) be i.i.d., 则 
+\[
+\Gamma(n,\lambda) = \sum_{i=1}^n X_i
+\]
+
+\end{proposition}
+\begin{proof}
+    证明这一结论除了硬算之外, 更快的方法是通过 moment generating function. 
+    //TODO
+\end{proof}
+
+
+    \begin{remark}
+        Gamma distribution 即多个 i.i.d. exponential distribution 的 sum; 而我们知道 
+        exponential distribution 是 geometric distribution 的 continuous analogue; 
+        因而 \textbf{Gamma distribution 也是 negative binomial distribution 的 continuous analogue.}
+
+        考虑固定 rate parameter $\lambda = 1$，不同 shape parameter $\alpha$ 的 Gamma distribution：
+
+        \begin{center}
+        \begin{tabular}{cc}
+            \begin{minipage}{0.48\textwidth}
+                \centering
+                \begin{tikzpicture}[x=0.8cm, y=3cm]
+                    % PDF subplot
+                    \draw[->] (-0.5,0) -- (8,0) node[right] {$x$};
+                    \draw[->] (0,-0.15) -- (0,0.55) node[above] {$f_X(x)$};
+                    
+                    % x轴刻度
+                    \foreach \x in {0, 2, 4, 6, 8} {
+                        \draw (\x,-0.03) -- (\x,0.03);
+                    }
+                    
+                    % Gamma(1,1) = Exp(1)
+                    \draw[line width=1.2pt, domain=0:8, samples=150, blue] plot (\x, {exp(-\x)});
+                    \node[blue, right] at (1,0.35) {$\alpha=1$};
+                    
+                    % Gamma(2,1)
+                    \draw[line width=1.2pt, domain=0:8, samples=150, red] plot (\x, {\x*exp(-\x)});
+                    \node[red, right] at (2,0.25) {$\alpha=2$};
+                    
+                    % Gamma(3,1)
+                    \draw[line width=1.2pt, domain=0.1:8, samples=150, green] plot (\x, {0.5*\x*\x*exp(-\x)});
+                    \node[green, right] at (3,0.18) {$\alpha=3$};
+                    
+                    % Gamma(5,1)
+                    \draw[line width=1.2pt, domain=0.1:8, samples=150, purple] plot (\x, {(1/24)*\x*\x*\x*\x*exp(-\x)});
+                    \node[purple, right] at (4.5,0.12) {$\alpha=5$};
+                    
+                    \node at (4,-0.35) {(a) pdf: $\lambda=1$};
+                \end{tikzpicture}
+            \end{minipage} &
+            \begin{minipage}{0.48\textwidth}
+                \centering
+                \begin{tikzpicture}[x=0.8cm, y=0.8cm]
+                    % CDF subplot
+                    \draw[->] (-0.5,0) -- (8,0) node[right] {$x$};
+                    \draw[->] (0,-0.15) -- (0,1.3) node[above] {$F_X(x)$};
+                    
+                    % x轴刻度
+                    \foreach \x in {0, 2, 4, 6, 8} {
+                        \draw (\x,-0.05) -- (\x,0.05);
+                    }
+                    
+                    % y轴刻度
+                    \foreach \y in {0, 0.5, 1} {
+                        \draw (-0.15,\y) -- (0.15,\y);
+                        \node[left] at (-0.2,\y) {\y};
+                    }
+                    
+                    % Gamma(1,1)
+                    \draw[line width=1.2pt, domain=0:8, samples=150, blue] plot (\x, {1-exp(-\x)});
+                    \node[blue, above left] at (6,0.85) {$\alpha=1$};
+                    
+                    % Gamma(2,1) - approximate
+                    \draw[line width=1.2pt, domain=0:8, samples=150, red] plot (\x, {1-(1+\x)*exp(-\x)});
+                    \node[red, above left] at (6,0.72) {$\alpha=2$};
+                    
+                    % Gamma(3,1) - approximate
+                    \draw[line width=1.2pt, domain=0:8, samples=150, green] plot (\x, {1-(1+\x+0.5*\x*\x)*exp(-\x)});
+                    \node[green, above left] at (6,0.6) {$\alpha=3$};
+                    
+                    % Gamma(5,1) - approximate
+                    \draw[line width=1.2pt, domain=0:8, samples=150, purple] plot (\x, {1-(1+\x+0.5*\x*\x+(1/6)*\x*\x*\x+(1/24)*\x*\x*\x*\x)*exp(-\x)});
+                    \node[purple, above left] at (6,0.48) {$\alpha=5$};
+                    
+                    % 水平虚线
+                    \draw[dashed, gray] (0,1) -- (8,1);
+                    
+                    \node at (4,-0.35) {(b) cdf: $\lambda=1$};
+                \end{tikzpicture}
+            \end{minipage} \\
+            & \\
+            \multicolumn{2}{c}{
+                \begin{minipage}{0.96\textwidth}
+                    \begin{itemize}
+                        \item 当 $\alpha=1$ 时, Gamma 分布退化为指数分布, pdf 单调递减;
+                        \item 随着 $\alpha$ 增大, pdf 从 0 处开始上升, 形成驼峰形状, 并逐渐向右平移;
+                        \item cdf 随 $\alpha$ 增大而上升变缓, 表示分布的右尾变长。
+                    \end{itemize}
+                \end{minipage}
+            } \\
+        \end{tabular}
+        \end{center}
+    \end{remark}
+
+
+\subsection{normal random variables: 最重要的 continuous RV, 任意 RV 的叠加极限}
 \begin{definition}
 我们称 $X$ is \textbf{normally distributed with parameter $\mu$ and $\sigma$}, if the pdf of $X$ is given by: \[
-\rho(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2 \sigma ^2}}
+p(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2 \sigma ^2}}
 \]
 写作: \[
 X \sim \mathcal{N}(\mu, \sigma^2)
 \]
-\end{definition}
 特别地, 当 $\mu =0, \sigma = 1$ 时, \[
 X \sim \mathcal{N}(0, 1)
 \]被称为 \textbf{standard normal distribution.}
+\end{definition}
 
 
-容易验证: \(\int_{\mathbb{R}} \rho  = 1 \)
+\begin{itemize}
+\item 验证其为 valid pdf: 
+
+我们首先验证 standard normal distribution. 令:
 
 \[
 I := \int_ 0^\infty e^{\frac{-y^2}{2}} \; dy
 \]
-\[
-I^2 = \Bigg(\int_ 0^\infty e^{\frac{-y^2}{2}} \; dy\Bigg)\Bigg(\int_ 0^\infty e^{\frac{-x^2}{2}} \; dx\Bigg) = \int
+则
+\begin{align*}
+I^2 & = \int_ 0^\infty e^{\frac{-y^2}{2}} \; dy \cdot \int_ 0^\infty e^{\frac{-x^2}{2}} \; dx \\
+& = \int_{\bR^2_{\geq 0}} e^{-\frac{x^2+y^2}{2}} \; dx \, dy \\
+& = \int_0^{\pi/2} \int_0^\infty e^{-\frac{r^2}{2}} r \; dr \, d\theta \\
+& = \int_0^{\pi/2} \bigg( -e^{-\frac{r^2}{2}} \bigg|_0^\infty \bigg) d\theta \\
+& = \int_0^{\pi/2} 1 \; d\theta = \frac{\pi}{2}
+\end{align*}
+
+从而得到 \(I = \frac{\sqrt{2\pi}}{2}\). 因而
+ \(\int_{-\infty}^{\infty} e^{-\frac{x^2}{2}} \, dx = \sqrt{2\pi}\), 
+因而 \(\int_{\mathbb{R}} p(x) \, dx = 1 \). 
+
+从而对于任意的 $\mu$ 和 $\sigma$, 通过 change of variable formula 
+易得 \(\int_{\mathbb{R}} p(x) \, dx = 1 \).
+
+
+\item 计算其 expectation 和 variance:
+
+我们只需要计算 standard normal distribution 的 expectation 和 variance, 
+然后通过 expectation 的 linearity 和 variance 的 scale invariance 来计算.
+
+令 $ X \sim \mathcal{N}(0,1)$. Then \[
+\mathbb{E}[X] =  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x   e^{-\frac{x^2}{2}}    \; dx   = 0
 \]
-
-
-
-
-
-
-rescaling to std normal distribution: 
-Suppose \[
-Y \sim \mathcal{N}(\mu, \sigma^2)
-\] we define \[
-X : = \frac{Y - \mu}{\sigma}
-\]
-Then we have: \[
-X \sim \mathcal{N}(0,1)
-\]
-这是容易验证的. 因为: \[
-X \in B \;\; \Longleftrightarrow  \;\; \frac{Y-\mu}{\sigma} \in B \;\; \Longleftrightarrow  \;\; Y \in \sigma B + \mu
-\]
-因而 \[
-P(X \in B ) = P(Y \in \sigma B + \mu)
-\]
-
-
-
-
-
-
-expectation and variance of normal dist:
-Suppose $ X \sim \mathcal{N}(0,1)$. Then \[
-\mathbb{E}(X) =  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x   e^{-\frac{x^2}{2}}    \; dx   = 0
-\]
-since this is \textbf{odd function}.
-
-And  \begin{align}
-    \mathbb{E}(X^2) &=  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x^2   e^{-\frac{x^2}{2}}    \; dx   \\
-    &= \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x (x  e^{-\frac{x^2}{2}})    \; dx \\
-    &= \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x   ( e^{-\frac{x^2}{2}} )'   \; dx   \\
-    & = - \frac{1}{\sqrt{2\pi }}  x e^{-\frac{x^2}{2}} \bigg|^\infty_{-\infty}  +  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}}  e^{-\frac{x^2}{2}}    \; dx \\
-    &= 0 + 1 = 1
-\end{align}
+因为这是一个 \textbf{odd function}. 从而
+\begin{align*}
+    \mathbb{E}[X^2] &=  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x^2   e^{-\frac{x^2}{2}}    \; dx  
+    = \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x (x  e^{-\frac{x^2}{2}})    \; dx 
+    = \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}} x   ( e^{-\frac{x^2}{2}} )'   \; dx  \\ 
+    & = - \frac{1}{\sqrt{2\pi }}  x e^{-\frac{x^2}{2}} \bigg|^\infty_{-\infty}  +  \frac{1}{\sqrt{2\pi }} \int _{\mathbb{R}}  e^{-\frac{x^2}{2}}    \; dx 
+    = 0 + 1 = 1
+\end{align*}
 
 从而: \[
-Var(X) = 1
+\text{Var}(X) = 1
 \]
 
 
 
-
-For general normally distributed $Y$, 我们知道了 $X : = \frac{Y - \mu}{\sigma}$ 的 $\mathbb{E}(X)  = 0$, $Var(X) = 1$, 因而 \[
-\mathbb{E}(Y) = \mathbb{E}(\sigma X + \mu)   = \mu
+For general normally distributed $Y$, 我们知道了 $X : = \frac{Y - \mu}{\sigma}$ 的 $\mathbb{E}[X]  = 0$, $\text{Var}(X) = 1$, 因而 \[
+\mathbb{E}[Y] = \mathbb{E}[\sigma X + \mu]   = \mu
 \]
+and
 \[
-Var(Y)  = Var(\sigma X + \mu) =  \mathbb{E}[(\sigma X + \mu - \mu)^2] = \mathbb{E} (\sigma^2 X^2) = \sigma^2 \mathbb{E}[X^2] = \sigma^2 
+\text{Var}(Y)  = \text{Var}(\sigma X + \mu) =  \mathbb{E}[(\sigma X + \mu - \mu)^2] = \mathbb{E} (\sigma^2 X^2) = \sigma^2 \mathbb{E}[X^2] = \sigma^2 
 \]
 
-\begin{remark}
-    对于 normally distributed $X$, 
-    \[ \mathbb{E}(X^k) =  \frac{1}{\sqrt{2\pi}} \int_\mathbb{R} x^k  e^{-\frac{x^2}{2}}  \; dx  \]
+对于多个 i.i.d. normally distributed $X$, 
+    \[ \mathbb{E}[X^k] =  \frac{1}{\sqrt{2\pi}} \int_\mathbb{R} x^k  e^{-\frac{x^2}{2}}  \; dx  \]
     For $k$ odd, it is $0$.\\
     For $k$ even:
-  \begin{align}
-      \mathbb{E}(X^k) &=  \frac{1}{\sqrt{2\pi}} \int_\mathbb{R} x^{k-1} (x e^{-\frac{x^2}{2}})  \; dx  \\
+  \begin{align*}
+      \mathbb{E}[X^k] &=  \frac{1}{\sqrt{2\pi}} \int_\mathbb{R} x^{k-1} (x e^{-\frac{x^2}{2}})  \; dx  \\
       & = -\frac{1}{\sqrt{2\pi}} \int_\mathbb{R} x^{k-1} ( e^{-\frac{x^2}{2}}) ' \; dx \\
       &= 0 + \frac{1}{\sqrt{2\pi}} \int_\mathbb{R} (x^{k-1})' e^{-\frac{x^2}{2}} \;dx \\
       & = \frac{k-1}{\sqrt{2\pi}} \int_\mathbb{R} x^{k-2} e^{-\frac{x^2}{2}} \;dx  \\
-      & = (k-1) \mathbb{E}(X^{k-2})
-   \end{align}  
+      & = (k-1) \mathbb{E}[X^{k-2}]
+   \end{align*}
    从而: \[
-   \mathbb{E(X^k )} = \begin{cases}
+   \mathbb{E}[X^k] = \begin{cases}
        0 ,\quad k = 2j-1 \\
        (2j-1)(2j-3)\cdots 1 = \frac{(2j)!}{2^j j!},\quad k=2j
    \end{cases}
    \]
-\end{remark}
 
-
-
-
-cdf of normal distribution:
-Let $X$ be the std normal distribution.\\
-Its cdf given by: \[
+\item 其 cdf: 
+ \[
 \Phi(a) :=F_X(a)  = \int_{(-\infty,a]} \rho(x) \; dx = \frac{1}{\sqrt{2\pi}} \int_{(-\infty,a]}  e^{-\frac{x^2}{2}} \; dx
 \]
-Important numerical values:
+我们在微积分中知道, 这个 integral 没有 closed form solution.
+因而我们只能给出数值 approximation. Important numerical values:
 \[
-\Phi(-3) \approx 0.0013
+\Phi(-3) \approx 0.0013; \quad \Phi(-2) \approx 0.023; \quad \Phi(-1) \approx 0.159
 \] 
-\[
-\Phi(-2) \approx 0.023
-\]
-\[
-\Phi(-1) \approx 0.159
-\]
 
 
 Note 由于 $\rho$ (std) 是一个 even function, 有 \(P(X < -1) = P(X>1)\)
@@ -1032,36 +1467,22 @@ P(X \text{ is two std dev from mean}) \approx 0.046 = 4.6\%
 \]\[
 P(X \text{ is three std dev from mean}) \approx 0.0026 = 0.26\%
 \]
-
-为什么 normal random variables 非常重要: comes from a "universality property" called \textbf{central limit theorem.} (will be covered later). Now we state a special case: 
-
+\end{itemize}
 
 
+为什么 normal random variables 非常重要: 因为有一个
+universality property called \textbf{central limit theorem.} 之后的章节我们会展开讨论:
+\paragraph*{任意的 random variable, 只要 expectation 和 variance 都是 finite 的, 
+那么它们的叠加极限都会服从 normal distribution.\\}
 
-Let $S_n$ be 投掷 $n$ 次 $p$-coin 中得到的 $\#$heads. 即 \[
-P(H) := p
-\]
-我们已经知道, $S_n$ 是一个 binomial discrete random variable. 且有 \[
-\mathbb{E}(S_n) = np, \quad  Var(S_n) = npq, \quad \sigma(S_n) = \sqrt{npq}
-\]
-
- 
-\begin{theorem}{DeHavre's Central limit theorem}
+这里我们先给出一个 special case of central limit theorem:
+\begin{theorem}{DeHavre's Central limit theorem for binomial distribution}
+令 \(S_n \sim \text{Bin}(n, p)\), 则
     \[
     \lim_{n\to \infty} P\Bigg( \frac{S_n - \mathbb{E}(S_n)}{\sigma(S_n)} \in (a,b)\Bigg) = \Phi(b) - \Phi(a) = \frac{1}{\sqrt{2\pi}} \int_{(a,b)} e^{-\frac{x^2}{2}} \; dx
     \]
 \end{theorem}
-
-
-
-
-Write $S_n$ into $n$ 个 i.i.d. random variables
-\[
-S_n = \sum_{i=1}^n X_i
-\]
-each $X_i$ 都是一个 trial of tossing the $p$-coin.\\
-
-
+(Proof: later chapters.)
 
 \begin{example}
     Toss a million times 一个 fair coin. Approximate the prob that we get more than $501000$ heads: 
@@ -1070,230 +1491,112 @@ each $X_i$ 都是一个 trial of tossing the $p$-coin.\\
     \]
     \[
     \sigma(S_{1000000}) = \sqrt{npq} = 500
-    \] 因而: \[
-    P(S_{1000000} > 501000) = P(S_{1000000} - \mathbb{E}(S_{1000000}) > 1000) = P(\frac{S_{1000000} - \mathbb{E}(S_{1000000})}{\sigma(S_{1000000})} > \frac{1000}{500}) = 1-\Phi(2) = \Phi(-2)  \approx 0.159  
-    \]
+    \] 因而:
+    \begin{align*}
+        \bP(S_{1000000} > 501000) &= \bP(S_{1000000} - \mathbb{E}(S_{1000000}) > 1000) \\
+    &= \bP\left(\frac{S_{1000000} - \mathbb{E}(S_{1000000})}{\sigma(S_{1000000})} > \frac{1000}{500}\right)  \\
+    &\approx 1-\Phi(2) = \Phi(-2)  \approx 0.159 
+    \end{align*}
 \end{example}
 
-
-
-(5.3 in book.)
-\subsection{exponential distribution}
-
-我们称 $X$ 为一个 exponential random variable with parameter $\lambda$, 如果它的 pdf is given by: \[
-f(x) = \begin{cases}
-    \lambda e^{-\lambda x}, \quad x > 0\\
-    0, \quad x \leq 0
-\end{cases}
-\]
-
-
-Distribution function given by: \[
-F_X(x) = \begin{cases}
-    \int _{-\infty}^x f(t) \; dt = \lambda \int_0 ^x e^{-\lambda t} \; dt = 1 - e^{-\lambda x}, \quad x> 0\\
-    0,\quad x<0
-\end{cases}
-\]
-容易验证, $F_X(x) =0$ when $x \to -\infty$, 以及 $F_X(x) \to 1$ when $x \to \infty$
-
-\begin{align}
-P(X> 0)& = 1 - P(X<0)      \\
-&= 1- F_X(a) \\
-&= e^{-\lambda a}
-\end{align}
-
-
-Expectation and moments: 
-We compute the moment $\mathbb{E}[X^n], \quad n\geq 0$
-
-$\mathbb{E}[X^0] = \mathbb{E}[1] = 1$
-
-\begin{align}
-\mathbb{E}[X^n] &= \lambda \int_0^\infty x^n e^{-\lambda x } \; dx  \\
-&= - \int_0 ^\infty  x^n(e^{-\lambda x})' \; dx \\
-&=  0 + \int_0 ^\infty n x^{n-1} e^{-\lambda x} \; dx \\
-&= \frac{n}{\lambda} \mathbb{E}(X^{n-1})
-\end{align}
-
-因而 recursively get: \[
-\mathbb{E}[X^n] = \frac{n!}{\lambda^n}
-\]
-
-\(\mathbb{E}[X] = \frac{1}{\lambda}, \mathbb{E}[X^2] = \frac{2}{\lambda^2}, \cdots  \)
-
-
-从而: \[
-Var[X] = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
-\]
-
-
-Recall the Gamma function: \[
-n!  = \int_0^\infty x^n e^{-x} \; dx  = \Gamma(n+1) \]
-
-
-Interpretation: \textbf{exponential r.v. 是 geometric r.v. 的 continuous analogue.}
-
-
-First time to get heads in a seq of Bernoulli coins:
-\begin{align}
-    p(k) &= (1-p)^{k-1} p  \\
-    &= (1-p)^k \frac{p}{1-p}
-\end{align}
-如果我们令 $e^{-\lambda} := 1-p$
-就得到: \[
-p(k) = e^{-\lambda k} \frac{p}{1-p} 
-\]
-和 discrete 的 geometric distribution 相似, exponential distribution 是用来 \textbf{model the first time an event occurs}.
-
-
-\begin{example}
-    Suppose 一个 storage battery 的 lifetime 是 exponentially distributed 的, 并且 average 为 10 hours. Suppose 我们想要 use this battery for 5 hours for.
-计算: probability of finishing the task, if:\\ 
-(a) 使用一个 new battery\\
-(b) 使用一个已经用过 2 hours 的 battery\\
-\begin{solution}
-    \[
-    \mathbb{E}[X] = 10 = \frac{1}{\lambda} \implies \lambda = \frac{1}{10}
-    \]
-如果我们使用一个 new battery, 则 want: $P(X>5) = 1 - P(X<5) = 1- F_X(5) = e^{-\frac{1}{2}}$
-如果我们使用一个用过 2 hours 的 battery, 则 want: \[
-P(X> 5+2 \mid X > 2) = \frac{e^{-(5+2)\lambda}}{e^{-2\lambda }} = e^{-5\lambda} = = e^{-\frac{1}{2}}
-\]
-\end{solution}
-
-Notice: 我们发现 \[
-P(X>5) = P(X> 5+2 \mid X > 2)
-\]
-\end{example}
-
-\begin{theorem}
-一 ctn r.v. 有: \[
-    P(X > b+ t \mid X > b) = P(X>t)
-    \]
-\textbf{当且仅当它是一个 exponential random variable.}
-\end{theorem}
-\begin{remark}
-    "如果 $X$ 表示某个 event 发生的时间, 在已经过去时间 $b$ 而没发生的情况下, 再过时间 $t$ 发生这个时间的条件概率, 等于从时间 $0$ 开始, 过时间 $t$ 发生这个事件的初始概率."\\
-    并且 notice 这是一个 iff statement
-\end{remark}
-
-\begin{proof}
-\begin{align}
-     &   P(X > b+ t \mid X > b) = P(X>t) \\
-   \Longleftrightarrow  & P(X > b+t) = P(X > t) P(X>b) \\
-    \Longleftrightarrow  & X \text{ exponential (check) }
-\end{align}
-\end{proof}
+\paragraph*{除此之外 need to mention: Poission distribution 当 \(\lambda \to \infty\) 时, 
+也得到 normal distribution.\\}
+这并不是一个令人惊讶的事情. 也可以用 central limit theorem 来解释. 
+因为 recall: Poisson distribution 有一个很重要的 property: additivity. 
+因而 \(\lambda \to \infty\) 也可以看作 
+\(n\) 个 i.i.d. Poisson distribution 的 sum 在 \(n\to \infty \) 时的极限行为, 
+从而通过 central limit theorem 得到 normal distribution.
 
 
 
+\subsection{summmary of discrete and continuous variables examples}
+\begin{center}
 
-
-\subsection{Gamma distribution}
-
-\begin{definition}{$\Gamma$-distribution}
-Recall $\Gamma$ function: \[
-    \Gamma(\alpha) = \int_0^\infty x^{\alpha - 1} e^{-x}\; dx
-    \]
-一个 ctn r.v. 被称为 have Gamma distribution with parameter $\alpha, \lambda$, 写作 $X \sim \Gamma(\alpha, \lambda)$, (其中 $\alpha > 0, \lambda > 0$), 如果它的 pdf 为 \[
-f(x) = \begin{cases}
-    \frac{\lambda e^{-\lambda x} (\lambda x)^{\alpha -1} }{\Gamma (\alpha)}, \quad x>0 \\
-    0, \quad x \leq 0
-\end{cases}
-\]
-\end{definition}
-\begin{remark}
-我们已经知道, $\Gamma$ 函数是对 define 在自然数上的 factorial 函数, 推广到 defined 在 $[0,\infty)$ 上.
-我们有:  \[
-\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)
-\]\[
-n! = \Gamma(n+1)
-\]
-\end{remark}
-
-
-Interpretation: $\Gamma$ distribution 的 random variable 是 binomial random variable 的 ctn version.
-
-考虑 $\alpha : = n$ 为一个正整数, 那么它可以用来 model the first time an event occurs in a Poission process.
-
-Expectation:  \begin{align}
-    \mathbb{E}[X] &= \frac{1}{\Gamma(\alpha)} \int_0^\infty (\lambda x )^{\alpha -1} \lambda  e^{-\lambda x} \; dx\\
-    &=  \frac{1}{\lambda \Gamma(\alpha)}  \int_0^\infty x^\alpha e^{-x} \; dx \\
-    &= \frac{\Gamma(\alpha + 1)}{\lambda \Gamma(\alpha)} = \frac{\alpha}{\lambda}
-\end{align}
-(since $\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$.)
-
-我们可以计算得: \[
-\mathbb{E}[X^2] = \frac{\alpha}{\lambda^2}
-\]
-
-\subsection{Cauchy distribution}
-\begin{definition}
-    一个 random variable 被称为 have Cauchy distribution with parameter $\theta \in \mathbb{R}$, 如果它的 pdf 是: \[
-    f(x)   =\frac{1}{\pi} \frac{1}{1+(x-\theta)^2} , \quad x\in \mathbb{R}
-    \]
-    当 $\theta = 0$ 时, 被称为 standard Cauchy distribution.
-\end{definition}
-
-
-CDF: \begin{align}
-    F_X(a) = \int_{-\infty}^a f(x) \; dx &= \frac{1}{\pi} \int_0^\infty \frac{1}{1+ (x-\theta)^2} \; dx \\ 
-    &= \frac{1}{\pi} \int_0^\infty  \frac{1}{1+ y^2} \; dy \\
-    &= \frac{1}{\pi} \arctan y \Big|_{\infty}^{a - \theta} \\
-    &=  \frac{1}{\pi} (\arctan (a - \theta) + \frac{\pi}{2}) \\
-    &= \frac{1}{\pi} \arctan (a - \theta) + \frac{1}{2}
-\end{align}
-
-\begin{example}
-A macro-beam flashlight is spin around tis center located at $(0,1)$.\\
-假设 the angle of the flashlight is uniform in $(-\frac{\pi}{2}, \frac{\pi}{2})$, 并令 $X$ 为 the point on $x$-axis where the beam hits.\\
-The distribution function of $X$ is: \[
-F_X(a) = P(X < a) = P(\tan \alpha < a) = P(\alpha < \arctan a)
-\]
-因而 $X$ 为一个 std Cauchy r.v.  
-\end{example}
-
-Interpretation: Brownian motion models (among many other things) the motion of small particles, 比如气体和液体分子.\\
-
-FACT: 如果 start the Brownian motion at $(0,1)$, 并令 $X $ 表示 the first point that the motion hits the $x$-axis, 那么 $X$ 为一个 std Cauchy r.v.  
-
-
-
-
-\begin{remark}
-Distribution of a function of a random variable: \\
-令 $F_X$ 为一个 r.v. $X$ 的 cdf.\\
-考虑 $Y := X^3$.\\
-那么 $Y$ 的 distribution 是什么? \[
-F_Y(a) = P(X^3 < a ) = P(X < a^3) = F_X(a^{1/3})
-\]
-更加 generally, 如果 \[
-Y: = g(X)
-\]
-where $g$ 是一个 $\mathbb{R}\to \mathbb{R}$ 的 measurable function. \\
-那么: \[
-F_Y(a) = P(g(x) < a) = F_X(g^{-1} (a) )
-\]
-并且 pdf of $Y$: 
-\begin{align}
-\rho_y(x)  = \frac{d}{ dx} F_y(x) &= \frac{d}{dx} F_X(g^{-1}(a)) \\
-&= F_X(g^{-1}(x)) \frac{d}{dx} g^{-1}(x) \\
-&= f_x(g^{-1}(x)) \frac{d}{dx} g^{-1}(x)
-\end{align}
-
-\end{remark}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{5pt}
+\small
+\begin{tabular}{|p{1.9cm}|p{2.8cm}|p{4.2cm}|p{1.2cm}|p{1.2cm}|p{4cm}|}
+\hline
+ \textbf{distribution} & \textbf{pmf / pdf} & \textbf{cdf} & \textbf{$\bE[X]$} & \textbf{$\text{Var}(X)$} & \textbf{meaning} \\
+\hline
+ $\text{Ber}(p)$ &
+$\bP(X=1)=p$, 
+$\bP(X=0)=1-p$ &
+$F(x)=1-p, 0\le x<1$ &
+$p$ &
+$p(1-p)$ &
+一次 Bernoulli trial (unfair coin) 的结果 \\
+\hline
+ $\text{Bin}(n,p)$ &
+$\bP(X=k)=\binom{n}{k}p^k(1-p)^{n-k}$, $k=0,\dots,n$ &
+$F(k)=\sum_{j=0}^{\lfloor k\rfloor}\binom{n}{j}p^j(1-p)^{n-j}$ &
+$np$ &
+$np(1-p)$ &
+$n$ 次 i.i.d. Bernoulli trials 中的成功次数\\
+\hline
+$\text{Geom}(p)$  &
+$\bP(X=k)=(1-p)^{k-1}p$, $k\ge 1$ &
+$F(k)=1-(1-p)^k$ &
+$\frac{1}{p}$ &
+$\frac{1-p}{p^2}$ &
+Bernoulli trial 第一次成功所需的试验次数 \\
+\hline
+$\text{NB}(r,p)$  &
+$\bP(X=k)=\binom{k+r-1}{k}(1-p)^k p^r,\ k\ge 0$ &
+$F(k)=\sum_{j=0}^{k}\binom{j+r-1}{j}(1-p)^j p^r$ &
+$\frac{r(1-p)}{p}$ &
+$\frac{r(1-p)}{p^2}$ &
+Bernoulli trial 在 $r$ 次成功之前观察到的失败次数 \\
+\hline
+ $\text{Poi}(\lambda)$ &
+$\bP(X=k)=e^{-\lambda}\frac{\lambda^k}{k!},\ k\ge 0$ &
+$F(k)=\sum_{j=0}^{k}e^{-\lambda}\frac{\lambda^j}{j!}$ &
+$\lambda$ &
+$\lambda$ &
+fixed window (time/space) 下某一事件的计数 \\
+\hline
+$U([a,b])$ &
+$f(x)=\frac{1}{b-a}$, $a\le x\le b$ &
+$F(x)=\begin{cases}
+0,&x<a\\
+\frac{x-a}{b-a},&a\le x\le b\\
+1,&x>b
+\end{cases}$ &
+$\frac{a+b}{2}$ &
+$\frac{(b-a)^2}{12}$ &
+uniform choice on an interval\\
+\hline
+$\text{Exp}(\lambda)$ &
+$f(x)=\lambda e^{-\lambda x}$, $x\ge 0$ &
+$F(x)=\begin{cases}
+0,&x\le 0\\
+1-e^{-\lambda x},&x>0
+\end{cases}$ &
+$\frac{1}{\lambda}$ &
+$\frac{1}{\lambda^2}$ &
+固定平均发生率下, 某事件第一次发生要等多久\\
+\hline
+$\Gamma(\alpha,\lambda)$ &
+$f(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x}$, $x\ge 0$ &
+$F(x)=\frac{1}{\Gamma(\alpha)}\int_{0}^{\lambda x} t^{\alpha-1}e^{-t}\,dt$ &
+$\frac{\alpha}{\lambda}$ &
+$\frac{\alpha}{\lambda^2}$ &
+$\alpha$ 个 i.i.d. exponential distributions 的和 (固定平均发生率下，第 $\alpha$ 次事件出现前要等多久)\\
+\hline
+$N(\mu,\sigma^2)$ &
+$f(x)=1/\sigma\sqrt{2\pi}\exp(-(x-\mu)^2/2\sigma^2)$ &
+no elementary closed form&
+$\mu$ &
+$\sigma^2$ &
+大量微小独立扰动 (测量误差/自然波动) 叠加后的结果\\
+\hline
+\end{tabular}
+\end{center}
 
 
 
 
 
 
-
-
-
-
-
-
-\section{independence}
 
 
