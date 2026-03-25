@@ -1,9 +1,11 @@
-.PHONY: all main chapters docs deploy depoly clean
+.PHONY: all main chapters docs deploy depoly clean tex md
 
 PYTHON := python3
 ifeq ($(OS),Windows_NT)
 PYTHON := python
 endif
+
+CHAPTER_STEM := $(word 2,$(MAKECMDGOALS))
 
 # 默认目标：生成主 PDF 和所有章节 PDF
 all: chapters
@@ -26,6 +28,12 @@ docs:
 	@$(PYTHON) scripts/generate_mkdocs_config.py
 	@mkdocs build
 
+tex:
+	@$(PYTHON) scripts/convert_notes.py --stem "$(CHAPTER_STEM)" --chapter-dir chapters --direction md-to-tex
+
+md:
+	@$(PYTHON) scripts/convert_notes.py --stem "$(CHAPTER_STEM)" --chapter-dir chapters --direction tex-to-md
+
 deploy:
 	@mkdocs build
 	@mkdocs gh-deploy --force --remote-branch gh-deploy
@@ -42,3 +50,6 @@ clean:
 # 完全清理（包括 PDF）
 clean-all: clean
 	-@rm -f build/*.pdf *.pdf
+
+%:
+	@:
