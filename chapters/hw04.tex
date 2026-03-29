@@ -1,0 +1,309 @@
+\chapter*{Homework 4}
+\section*{Problem 1}
+Let $X$ be a random variable with values in $[0,+\infty]$ 
+such that $\mathbb{E}[X]=0$. 
+Explain why $X<\infty$ almost surely and show that $X=0$ almost surely.
+
+\begin{proof}
+
+Since $X \ge 0$ and $\mathbb{E}[X]=0<\infty$, by Markov's inequality, for any $t>0$,
+\[
+\mathbb{P}(X \ge t) \le \frac{\mathbb{E}[X]}{t} = 0
+\]
+Hence $\mathbb{P}(X \ge t)=0$ for all $t>0$. In particular,
+\[
+\mathbb{P}(X = +\infty) = \lim_{t \to +\infty} \mathbb{P}(X \ge t) =  \lim_{t \to +\infty} 0 = 0
+\]
+that is, $X<\infty$ almost surely.
+
+
+Also notice that
+\[
+\{X>0\} = \bigcup_{n=1}^\infty \left\{X \ge \frac{1}{n}\right\}
+\]
+and by countable subadditivity,
+\[
+\mathbb{P}(X>0) \le \sum_{n=1}^\infty \mathbb{P}\left(X \ge \frac{1}{n}\right) = 0
+\]
+Thus $\mathbb{P}(X>0)=0$.
+And since $X$ takes values in $[0,+\infty]$,
+ we have $$\bP(\{X=0\}) = \bP(\{X \le 0\}) = 1 - \bP(\{X>0\}) = 1$$, and
+
+This finishes the proof that $X<\infty$ a.s. and $X=0$ a.s.
+\end{proof}
+
+
+\section*{Problem 2}
+Let $X$ be a random variable with $\bE[X] = 3$ 
+and $\bE[X^2] = 13$. Show that:
+$$ 
+\bP(-2\leq X \leq 8) \geq \frac{21}{25}
+ $$   
+\begin{solution}
+    
+Compute the variance of $X$:
+\[
+\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = 13 - 3^2 = 4
+\]
+Observe that
+\[
+\mathbb{P}(-2 \le X \le 8) = \mathbb{P}(|X-3| \le 5)
+\]
+By Chebyshev's inequality,
+\[
+\mathbb{P}(|X-3| \ge 5) \le \frac{\mathrm{Var}(X)}{5^2} = \frac{4}{25}
+\]
+Therefore,
+\[
+\mathbb{P}(|X-3| \le 5) = 1 - \mathbb{P}(|X-3| \ge 5) \ge 1 - \frac{4}{25} = \frac{21}{25}
+\]
+Thus,
+\[
+\mathbb{P}(-2 \le X \le 8) \ge \frac{21}{25}
+\]
+\end{solution}
+
+\section*{Problem 3}
+Let $X, Y$ be two random variables such that
+ $\mathbb{P}(Y=1)=1 / 5, \mathbb{P}(Y=2)=3 / 5$ 
+and $\mathbb{P}(Y=3)= 1 / 5$. In addition
+$$
+X|\{Y=1\} \sim \operatorname{Exp}(2), X|\{Y=2\} \sim \operatorname{Exp}(3) \text { and } X \mid\{Y=3\}=7 .
+$$
+Compute the moment generating function of $X$.
+\begin{solution}
+Compute each conditional moment generating function:
+
+For $X\mid \{Y=1\}\sim \operatorname{Exp}(2)$
+\[
+\mathbb{E}[e^{tX}\mid Y=1]=\frac{2}{2-t}, \quad t<2
+\]
+For $X\mid \{Y=2\}\sim \operatorname{Exp}(3)$
+\[
+\mathbb{E}[e^{tX}\mid Y=2]=\frac{3}{3-t}, \quad t<3
+\]
+For $X\mid \{Y=3\}=7$, 
+\[
+\mathbb{E}[e^{tX}\mid Y=3]=e^{7t}
+\]
+Then we use the law of total expectation conditioning on $Y$: 
+for any $t$ such that the expectations below are finite, we have
+\begin{align*}
+M_X(t)=\mathbb{E}[e^{tX}]
+&=\sum_{y=1}^3 \mathbb{E}[e^{tX}\mid Y=y]\mathbb{P}(Y=y)\\
+&=\frac{1}{5}\cdot \frac{2}{2-t}
++\frac{3}{5}\cdot \frac{3}{3-t}
++\frac{1}{5}e^{7t}\\
+&=\frac{2}{5(2-t)}+\frac{9}{5(3-t)}+\frac{1}{5}e^{7t},
+\quad t<2
+\end{align*}
+So the moment generating function of $X$ is
+\[
+M_X(t)=\frac{2}{5(2-t)}+\frac{9}{5(3-t)}+\frac{1}{5}e^{7t},
+\quad t<2
+\]
+\end{solution}
+
+\section*{Problem 4}
+For any $n \in \mathbb{N}$ with $n \geq 1$ we set $a_n=1 /\left(2 n^2\right)$. 
+Consider the sequence of random variables $\left(X_n\right)_{n \in \mathbb{N}}$ with
+$$
+X_n= 
+\begin{cases}
+0, & \text { with probability } a_n \\ 
+1, & \text { with probability } 1-2 a_n \\ 
+n^2, & \text { with probability } a_n
+\end{cases}
+$$
+Check if $\left(X_n\right)$ converges in probability and 
+if $\left(X_n\right)$ converges in $L^1$.
+\begin{solution}
+
+We first show that $X_n \to 1$ in probability.
+
+Let $\varepsilon>0$.\\
+For $n$ large enough s.t. $n^2-1>\varepsilon$,
+$|X_n-1|>\varepsilon$ iff $X_n=0$ or $X_n=n^2$. Therefore,
+\[
+\mathbb{P}(|X_n-1|>\varepsilon)
+=\mathbb{P}(X_n=0)+\mathbb{P}(X_n=n^2)
+=a_n+a_n
+=2a_n
+=\frac{1}{n^2}
+\]
+Since
+\(
+\frac{1}{n^2}\to 0
+\), we have: 
+\[
+\lim_{n\to\infty} \
+\bP(|X_n -1| > \varepsilon) = 0
+\]
+Since $\varepsilon>0$ is arbitrary, we conclude that
+$$
+X_n \xrightarrow{\mathbb{P}} 1
+$$
+
+We then show that $X_n$ does not converge to $1$ in $L^1$.
+
+We compute
+\begin{align*}
+\mathbb{E}[|X_n-1|]
+&=|0-1| a_n + |1-1| (1-2a_n) + |n^2-1|  a_n\\
+&=a_n + (n^2-1)a_n\\
+&= n^2 a_n = \frac{1}{2} \not\to 0
+\end{align*}
+Hence
+\[
+X_n \not\xrightarrow{L^1} 1
+\]
+\end{solution}
+
+\section*{Problem 5}
+Let $X$ and $Y$ be independent random variables with densities
+$$
+f_X(x)=\left\{
+\begin{array}{ll}
+2 x, & 0 \leq x \leq 1, \\
+0, & \text { otherwise }
+\end{array} \quad f_Y(y)= 
+\begin{cases}1 / 2, & 0 \leq y \leq 2 \\
+0, & \text { otherwise }
+\end{cases}\right.
+$$
+Find the distribution function of the sum $Z=X+Y$.
+
+\begin{solution}
+
+Since $X$ and $Y$ are independent, the density of
+\(
+Z=X+Y
+\)
+is given by convolution:
+\[
+f_Z(z)=\int_{-\infty}^{\infty} f_X(x)f_Y(z-x)\,dx
+\]
+where we know 
+\[
+f_X(x)=2x \mathbf{1}_{[0,1]}(x), \quad f_Y(y)=\frac12 \mathbf{1}_{[0,2]}(y)
+\]
+Thus
+\begin{align*}
+f_Z(z)
+&=\int_{-\infty}^{\infty} 2x \cdot \frac12 
+\mathbf{1}_{[0,1]}(x)\mathbf{1}_{[0,2]}(z-x)\,dx\\
+&=\int_{-\infty}^{\infty}x  \bigg(\mathbf{1}_{[0,1]}(x)\bigg)  \bigg( \mathbf{1}_{[0,2]}(z-x)\bigg)   \,dx\\
+&=\int_{\max(0,z-2)}^{\min(1,z)} x\,dx
+\end{align*}
+
+Compute this piecewise:
+If $0\le z\le 1$, then the interval is $[0,z]$, so
+\[
+f_Z(z)=\int_0^z x\,dx=\frac{z^2}{2}
+\]
+If $1\le z\le 2$, then the interval is $[0,1]$, so
+\[
+f_Z(z)=\int_0^1 x\,dx=\frac12
+\]
+If $2\le z\le 3$, then the interval is $[z-2,1]$, so
+\[
+f_Z(z)=\int_{z-2}^1 x\,dx
+=\frac{1-(z-2)^2}{2}
+\]
+Outside $[0,3]$, clearly $f_Z(z)=0$.
+Therefore,
+\[
+f_Z(z)=
+\begin{cases}
+0, & z<0,\\
+\dfrac{z^2}{2}, & 0\le z\le 1,\\
+\dfrac12, & 1\le z\le 2,\\
+\dfrac{1-(z-2)^2}{2}, & 2\le z\le 3,\\
+0, & z>3
+\end{cases}
+\]
+Now we integrate to get the cdf.
+For $z<0$, $F_Z(z)=0$.
+
+For $0\le z\le 1$,
+\[
+F_Z(z)=\int_0^z \frac{t^2}{2}\,dt=\frac{z^3}{6}
+\]
+For $1\le z\le 2$,
+\[
+F_Z(z)=F_Z(1)+\int_1^z \frac12\,dt
+=\frac16+\frac{z-1}{2}
+=\frac{z}{2}-\frac13
+\]
+For $2\le z\le 3$,
+\[
+F_Z(z)=F_Z(2)+\int_2^z \frac{1-(t-2)^2}{2}\,dt = \frac23+\frac{z-2}{2}-\frac{(z-2)^3}{6}
+\]
+And for $z\ge 3$, $F_Z(z)=1$.
+
+Hence the cdf of $Z=X+Y$ is
+\[
+F_Z(z)=
+\begin{cases}
+0, & z<0,\\
+\dfrac{z^3}{6}, & 0\le z\le 1,\\
+\dfrac{z}{2}-\dfrac13, & 1\le z\le 2,\\
+\dfrac23+\dfrac{z-2}{2}-\dfrac{(z-2)^3}{6}, & 2\le z\le 3,\\
+1, & z\ge 3
+\end{cases}
+\]
+\end{solution}
+
+
+\section*{Problem 6}
+Let $a_1, a_2, \ldots, a_n$ and $\lambda$ be positive constants and 
+let $\left\{X_i: 1 \leq i \leq n\right\}$ be independent random variables with
+$$
+X_i \sim \Gamma\left(a_i, \lambda\right), \quad i=1,2, \ldots, n
+$$
+(i.e., with the same second parameter $\lambda$ ). 
+Show that $X_1+X_2+\cdots+X_n \sim \Gamma(a, \lambda)$, 
+with $a=\sum_{i=1}^n a_i$.
+\begin{proof}
+
+Let
+\[
+S_n:=X_1+X_2+\cdots+X_n,
+\quad a=\sum_{i=1}^n a_i
+\]
+We need to show that $
+S_n \sim \Gamma(a,\lambda)
+$.
+
+Since \(X_i \sim \Gamma(a_i,\lambda)\), its moment generating function is
+\[
+M_{X_i}(t)=\mathbb{E}[e^{tX_i}]
+=\left(\frac{\lambda}{\lambda-t}\right)^{a_i},
+\quad t<\lambda
+\]
+
+Since \(X_1,\dots,X_n\) are independent, 
+the moment generating function of \(S_n\) is
+\[
+M_{S_n}(t)
+=\mathbb{E}[e^{t(X_1+\cdots+X_n)}]
+=\prod_{i=1}^n \mathbb{E}[e^{tX_i}]
+=\prod_{i=1}^n M_{X_i}(t)
+\]
+Therefore,
+\[
+M_{S_n}(t)
+=\prod_{i=1}^n \left(\frac{\lambda}{\lambda-t}\right)^{a_i}
+=\left(\frac{\lambda}{\lambda-t}\right)^{\sum_{i=1}^n a_i}
+=\left(\frac{\lambda}{\lambda-t}\right)^a,
+\quad t<\lambda
+\]
+
+Note this is exactly the moment generating function of a
+ \(\Gamma(a,\lambda)\) random variable. Hence,
+\[
+S_n = 
+X_1+\cdots+X_n \sim \Gamma(a,\lambda),
+\quad a=\sum_{i=1}^n a_i
+\]
+\end{proof}
