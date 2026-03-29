@@ -151,6 +151,57 @@ make depoly
 - Windows 下终端偶发找不到 `make` 时，重开终端即可。
 - `make docs` 后可先运行 `mkdocs serve` 本地预览，再执行部署。
 
+## LaTeX / Markdown 双向转换
+
+仓库里新增了一个脚本 `scripts/convert_notes.py`，用于在 `.tex` 和 `.md` 之间做基础结构转换：
+
+- 标题层级：`\chapter` / `\section` / `\subsection` / ... 与 Markdown `#` / `##` / `###` / ... 互转
+- 定理类环境：`theorem`, `definition`, `proposition`, `corollary`, `lemma`, `example`, `proof`, `solution`, `remark`, `note`, `exercise`, `problem`
+- 列表环境：Markdown unordered list 对应 `itemize`，ordered list 对应 `enumerate`
+- 图片：默认转成 HTML `<img ... />`，并尽量保留 `width=...`；普通 Markdown 图片也支持转回 `\includegraphics`
+- 粗体：`\textbf{...}` 与 Markdown `**...**` 互转
+- 代码块：LaTeX `verbatim` / `lstlisting` / `minted` 转 Markdown fenced code block，Markdown fenced code block 转 `verbatim`
+- TeX 注释：会跳过普通 `% ...` 注释行和行尾注释
+- 数学环境：
+  - LaTeX `\begin{align}...\end{align}` / `\[...\]` 转 Markdown `$$...$$`
+  - LaTeX `\(...\)` 转 Markdown `$...$`
+  - Markdown `$...$` 转 LaTeX `\(...\)`
+  - Markdown `$$...$$` 转 LaTeX 时，会根据内容做启发式判断：如果包含 `&` 或 `\\`，则转成 `align*`，否则转成 `\[...\]`
+
+使用示例：
+
+```bash
+# 自动根据输入后缀判断方向
+python scripts/convert_notes.py chapters/01-combinatorics&prob_space.tex
+
+# 显式指定 tex -> md
+python scripts/convert_notes.py chapters/01-combinatorics&prob_space.tex docs/01-combinatorics.md --direction tex-to-md
+
+# 显式指定 md -> tex
+python scripts/convert_notes.py notes/example.md chapters/example.tex --direction md-to-tex
+
+# 在 chapters/ 里按章节名转换（不带扩展名）
+python scripts/convert_notes.py --stem 01-basic-combinatorics --chapter-dir chapters --direction md-to-tex
+```
+
+也可以直接通过 `make` 调用，默认只操作 `chapters/` 目录：
+
+```bash
+# chapters/01-basic-combinatorics.md -> chapters/01-basic-combinatorics.tex
+make tex 01-basic-combinatorics
+
+# chapters/01-basic-combinatorics.tex -> chapters/01-basic-combinatorics.md
+make md 01-basic-combinatorics
+```
+
+说明：
+
+- 这是一个面向笔记写作的结构化转换脚本，不是完整的 LaTeX/Markdown parser。
+- 它优先保证你当前笔记里常见的标题、定理环境、列表、行内数学、块级数学能直接转换。
+- 图片宽度目前支持基础保留：例如 `\includegraphics[width=0.5\textwidth]{...}` 会转成带 `style="width: 50%;"` 和 `data-latex-width="0.5\textwidth"` 的 HTML `<img />`，再转回时优先恢复原始 LaTeX 宽度表达式。
+- 其他 `includegraphics` 选项、以及 fenced code block 的语言信息在转回 LaTeX 时目前不会完整保留；Markdown 代码块默认转成 `verbatim`。
+- 如果后续你还想加表格、代码块、图片、引用等规则，直接在这个脚本上继续扩展即可。
+
 ## 文件组织
 
 - **PDF 文件**：生成在项目根目录（如 `main.pdf`, `hw02.pdf`）
