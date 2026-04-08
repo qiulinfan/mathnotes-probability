@@ -1,0 +1,434 @@
+\chapter*{Homework 5}
+\section*{Problem 1}
+Let $\left(U_i\right)_{i \in \mathbb{N}}$ be an i.i.d sequence 
+of random variables with $U_i \sim U([0,1])$. Show that
+\begin{itemize}
+\item $\lim _{n \rightarrow \infty}\left(U_1 U_2 \ldots U_n\right)^{1 / n}=e^{-1}$ almost surely.
+\item $\lim _{n \rightarrow \infty} U_1 U_2 \ldots U_n=0$ almost surely.
+\end{itemize}
+\begin{proof}
+\begin{itemize}
+\item
+Let
+\[
+X_i := -\log U_i, \quad i \in \mathbb{N}
+\]
+Since \(U_i \sim U([0,1])\), for \(x \ge 0\),
+\[
+\mathbb{P}(X_i \le x)
+= \mathbb{P}(-\log U_i \le x)
+= \mathbb{P}(U_i \ge e^{-x})
+= 1 - e^{-x}
+\]
+Thus \(X_i \sim \mathrm{Exp}(1)\), so
+\(
+\mathbb{E}[X_i] = 1
+\). 
+Also,
+\[
+\log\left((U_1U_2\cdots U_n)^{1/n}\right)
+= \frac{1}{n}\sum_{i=1}^n \log U_i
+= -\frac{1}{n}\sum_{i=1}^n X_i
+\]
+By the Strong Law of Large Numbers,
+\[
+\frac{1}{n}\sum_{i=1}^n X_i = \frac{1}{n}\sum_{i=1}^n \log U_i\to 1
+\quad \text{a.s.}
+\]
+Since the exponential function is continuous,
+\[
+(U_1U_2\cdots U_n)^{1/n}
+= \exp\left(\frac{1}{n}\sum_{i=1}^n \log U_i\right)
+\to e^{-1}
+\quad \text{a.s.}
+\]
+
+\item
+Let
+\[
+P_n := U_1U_2\cdots U_n
+\]
+Then from the first part we instantly have
+\[
+P_n^{1/n} \to e^{-1} < 1
+\quad \text{a.s.}
+\]
+Then for any event \(\omega\) in the event of probability one where this convergence holds,
+choose \(r\) s.t. 
+\(
+e^{-1} < r < 1
+\), 
+then for all sufficiently large \(n\),
+\[
+P_n(\omega)^{1/n} < r,\quad \text{i.e.} \quad P_n(\omega) < r^n
+\]
+Since \(0<r<1\), we have \(r^n \to 0\). Therefore
+\(
+P_n(\omega) \to 0
+\). Therefore 
+\[
+U_1U_2\cdots U_n \to 0
+\quad \text{a.s.}
+\]
+\end{itemize}
+\end{proof}
+
+
+
+\section*{Problem 2}
+A factory produces small resistors, and the resistance of each resistor 
+is a random variable $X_i$ with unknown mean $\mu$ and variance $\sigma^2=0.25$ ohms $^2$.
+The quality control engineer wants to estimate the average resistance of a batch. 
+She decides to measure $n$ resistors and compute the sample average
+$$
+\bar{X}_n:=\frac{X_1+X_2+\cdots+X_n}{n}
+$$
+
+Determine approximately the number of resistors $n$ 
+she needs to measure so that the probability that 
+the sample mean differs from the true mean by more than 0.005 ohms 
+is less than $1 \%$, i.e.,
+$$
+\mathbb{P}\left(\left|\bar{X}_n-\mu\right|>0.005\right)<0.01
+$$
+\begin{proof}
+By linearity of expectation, 
+\[
+\mathbb{E}[\bar X_n]=\mu
+\]
+And (assmuming the \(X_i\) are independent), we have
+$$
+\mathrm{Var}\left(\sum_{i=1}^n X_i\right) = 
+\sum_{i=1}^n \mathrm{Var}(X_i) + 
+\sum_{i \neq j} \mathrm{Cov}(X_i, X_j) = n \sigma^2 = 0.25 n
+$$
+Thus 
+\[
+\mathrm{Var}(\bar X_n)=\frac{\sigma^2}{n}=\frac{0.25}{n}
+\]
+By Chebyshev's inequality, for any \(\varepsilon>0\),
+\[
+\mathbb{P}\left(|\bar X_n-\mu|>\varepsilon\right)
+\le \frac{\mathrm{Var}(\bar X_n)}{\varepsilon^2}
+\]
+Taking \(\varepsilon=0.005\), we get
+\[
+\mathbb{P}\left(|\bar X_n-\mu|>0.005\right)
+\le \frac{0.25/n}{(0.005)^2}
+= \frac{0.25}{n\cdot 0.000025}
+= \frac{10000}{n}
+\]
+We want this upper bound to be less than \(0.01\), 
+so it is enough to require
+\[
+\frac{10000}{n}<0.01
+\]
+Therefore, she needs to measure approximately
+\(
+n \approx 1{,}000{,}000
+\)
+resistors.
+\end{proof}
+
+
+
+
+\section*{Problem 3}
+Let $\left(X_n\right)_{n \in \mathbb{N}}$ be a sequence of random variables 
+with $\mathbb{P}\left(X_n \neq 0\right)=1 / n^2$ for all $n \in \mathbb{N}$.
+ Show that with probability 1, 
+there exists an $n_0 \in \mathbb{N}$ such that $X_n=0$ for all $n \geq n_0$.
+\begin{proof}
+Let
+\[
+A_n := \{X_n \neq 0\}, \quad n \in \mathbb{N}
+\]
+Then
+\(
+\mathbb{P}(A_n)=\frac{1}{n^2} 
+\) by assumption. 
+Hence
+\[
+\sum_{n=1}^\infty \mathbb{P}(A_n)
+= \sum_{n=1}^\infty \frac{1}{n^2}
+< \infty
+\]
+By Borel-Cantelli lemma,
+\[
+\mathbb{P}\left( \limsup_{n \to \infty} A_n \right) = 0
+\]
+So with probability \(1\), only finitely many of the events \(A_n\) occur. In other words, with probability \(1\), there exists \(n_0 \in \mathbb{N}\) such that for all \(n \ge n_0\),
+\[
+A_n^c = \{X_n=0\}
+\]
+occurs. Equivalently,
+\[
+X_n=0 \qquad \text{for all } n \ge n_0
+\]
+
+Therefore, with probability \(1\), there exists \(n_0 \in \mathbb{N}\) such that \(X_n=0\) for all \(n \ge n_0\).
+\end{proof}
+
+
+
+
+
+
+
+
+\section*{Problem 4}
+Assume that $\left(X_n\right)_{n \in \mathbb{N}}$ be a sequence of i.i.d random variables 
+with density
+$$
+f(x)= 
+\begin{cases}
+\frac{1}{2 \sqrt{x}}, & \text { if } x \in(0,1), 
+\\ 0, & \text { otherwise }
+\end{cases}
+$$
+\begin{itemize}
+    \item Find the distribution function of $X_1$.
+    \item Let $Y_n=\min \left\{X_1, \ldots, X_n\right\}$ for any $n \in \mathbb{N}$.
+     Show that $n^2 Y_n \xrightarrow{d} Y$, where $Y$ has distribution function
+$$
+F_Y(x)= 
+\begin{cases}
+0, & \text { if } x \leq 0 \\ 
+1-e^{-\sqrt{x}}, & \text { otherwise }
+\end{cases}
+$$
+\end{itemize}
+
+\begin{proof}
+\begin{itemize}
+\item
+For \(x \in \mathbb{R}\),
+\[
+F_{X_1}(x)=\mathbb{P}(X_1\le x)=\int_{-\infty}^x f(t)\,dt
+=
+\begin{cases}
+0, & x\le 0,\\[1mm]
+\displaystyle \int_0^x \frac{1}{2\sqrt{t}}\,dt=\sqrt{x}, & 0<x<1,\\[2mm]
+1, & x\ge 1.
+\end{cases}
+\]
+
+\item
+If \(x\le 0\), then \(n^2Y_n\ge 0\), so
+\[
+\mathbb{P}(n^2Y_n\le x)=0
+\]
+Now consider \(x>0\). Then
+\[
+\mathbb{P}(n^2Y_n>x)=\mathbb{P}\left(Y_n>\frac{x}{n^2}\right)
+\]
+Since
+\[
+Y_n>\frac{x}{n^2}
+ \iff  
+X_1>\frac{x}{n^2},\dots,X_n>\frac{x}{n^2}
+\]
+and the \(X_i\) are independent,
+\[
+\mathbb{P}\left(Y_n>\frac{x}{n^2}\right)
+=\left(\mathbb{P}\left(X_1>\frac{x}{n^2}\right)\right)^n
+\]
+For all sufficiently large \(n\), we have \(0<\frac{x}{n^2}<1\), hence
+\[
+\mathbb{P}\left(X_1>\frac{x}{n^2}\right)
+=1-F_{X_1}\left(\frac{x}{n^2}\right)
+=1-\sqrt{\frac{x}{n^2}}
+=1-\frac{\sqrt{x}}{n}
+\]
+Therefore,
+\[
+\mathbb{P}(n^2Y_n>x)=\left(1-\frac{\sqrt{x}}{n}\right)^n
+\]
+so
+\[
+F_{n^2Y_n}(x)
+=\mathbb{P}(n^2Y_n\le x)
+=1-\left(1-\frac{\sqrt{x}}{n}\right)^n
+\]
+Taking \(n\to\infty\), we use the standard limit
+\[
+\left(1-\frac{a}{n}\right)^n \to e^{-a}
+\]
+with \(a=\sqrt{x}\), we obtain
+\[
+F_{n^2Y_n}(x)\to 1-e^{-\sqrt{x}}, \quad x>0
+\]
+Thus,
+\[
+F_{n^2Y_n}(x)\to
+\begin{cases}
+0, & x\le 0,\\
+1-e^{-\sqrt{x}}, & x>0
+\end{cases}
+\]
+which is exactly \(F_Y(x)\). Hence
+\[
+n^2Y_n \xrightarrow{d} Y
+\]
+\end{itemize}
+\end{proof}
+
+
+\section*{Problem 5}
+Let $\left(X_n\right)_{n \in \mathbb{N}}$ be a sequence of random variables 
+with values in $\mathbb{R}$. 
+Show that there exists a sequence $\left(a_n\right)_{n \in \mathbb{N}}$ with $a_n>0$ such that
+$$
+\frac{X_n}{a_n} \xrightarrow{\text { a.s. }} 0
+$$
+For simplicity you may assume that $X_n \sim \operatorname{Exp}(1 / n)$.
+
+Hint: For any $n \in \mathbb{N}$ construct $b_n$ such that 
+$\mathbb{P}\left(\left|X_n\right| \geq b_n\right) \leq \frac{1}{2^n}$ 
+and use Borel-Cantelli for the events $\left\{\left|X_n\right| / b_n \geq n\right\}$.
+
+
+\begin{proof}
+For each $n\in\mathbb{N}$, choose $b_n>0$ such that
+$$
+\mathbb{P}(|X_n|\ge b_n)\le \frac{1}{2^n}
+$$
+Notice such a choice is always possible, since $|X_n|$ is a well-defined 
+random variable, which implies $\mathbb{P}(|X_n|\ge t)\to 0$ as $t\to\infty$.
+
+Now define
+$$a_n := n b_n > 0$$
+Consider the sequence of events
+$$
+E_n := \left\{ \frac{|X_n|}{a_n} \ge \frac{1}{n} \right\}
+$$
+By the definition of $a_n$, we have
+$$
+E_n = \left\{ \frac{|X_n|}{n b_n} \ge \frac{1}{n} \right\} 
+= \{ |X_n| \ge b_n \}
+$$
+It follows that
+$$
+\sum_{n=1}^\infty \mathbb{P}(E_n) =
+ \sum_{n=1}^\infty \mathbb{P}(|X_n| \ge b_n) \le 
+ \sum_{n=1}^\infty \frac{1}{2^n} < \infty
+$$
+By the first Borel-Cantelli lemma,
+$$
+\mathbb{P}(E_n \text{ infinitely often}) = 0
+$$
+This means that for almost all $\omega \in \Omega$, 
+there exists $N(\omega) \in \mathbb{N}$ such that: for all 
+$n \ge N(\omega)$, the event $E_n$ does not occur, 
+i.e.,
+$$\frac{|X_n(\omega)|}{a_n} < \frac{1}{n}
+$$
+Since $1/n \to 0$ as $n \to \infty$, it follows immediately that
+$$
+\frac{X_n}{a_n} \to 0 \quad \text{a.s.}
+$$
+If we assume $X_n \sim \mathrm{Exp}(1/n)$, 
+we can provide an explicit sequence. 
+Since
+$$
+\mathbb{P}(X_n \ge t) = e^{-t/n} \quad \text{for } t \ge 0
+$$
+we can choose $b_n = n^2 \log 2$. So that
+$$
+\mathbb{P}(X_n \ge b_n) = e^{-(n^2 \log 2)/n} = e^{-n \log 2} = \frac{1}{2^n}
+$$
+Then $a_n = n b_n = n^3 \log 2$, the general argument above guarantees that
+$$
+\frac{X_n}{a_n} = 
+\frac{X_n}{n^3 \log 2} \xrightarrow{\text{a.s.}} 0
+$$
+This completes the proof.
+\end{proof}
+
+
+
+
+
+
+
+\section*{Problem 6}
+Let $\left\{X_i\right\}_{i \geq 1}$ be i.i.d. positive integer-valued random variables 
+with $0<\mathbb{E}\left[X_1\right]<\infty$. 
+Interpret $X_i$ as the number of children in family $i$. 
+From the first $n$ families, choose a child uniformly at random among all children. 
+Let $N_n$ denote the number of children in the selected child's family. 
+Show that $N_n \xrightarrow{d} X_1^*$, where $X_1^*$ has distribution
+
+$$
+\mathbb{P}\left(X_1^*=k\right)=\frac{k \mathbb{P}\left(X_1=k\right)}{\mathbb{E}\left[X_1\right]}
+$$
+
+
+\begin{proof}
+For each \(n\in\mathbb{N}\), let
+\[
+S_n:=X_1+\cdots+X_n
+\]
+be the total number of children in the first \(n\) families.
+
+Given \(X_1,\dots,X_n\), we choose one child uniformly 
+at random among these \(S_n\) children. 
+Hence, conditionally on \(X_1,\dots,X_n\), 
+the probability that the chosen child comes from a family 
+with exactly \(k\) children is
+\[
+\mathbb{P}(N_n=k \mid X_1,\dots,X_n)
+=
+\frac{\sum_{i=1}^n X_i \mathbf{1}_{\{X_i=k\}}}{S_n}
+\]
+Since \(X_i \mathbf{1}_{\{X_i=k\}} = k \mathbf{1}_{\{X_i=k\}}\), this becomes
+\[
+\mathbb{P}(N_n=k \mid X_1,\dots,X_n)
+=
+\frac{k\sum_{i=1}^n \mathbf{1}_{\{X_i=k\}}}{S_n}
+=
+\frac{k \cdot \frac{1}{n}\sum_{i=1}^n \mathbf{1}_{\{X_i=k\}}}{\frac{1}{n}\sum_{i=1}^n X_i}
+\]
+
+By the Strong Law of Large Numbers,
+\[
+\frac{1}{n}\sum_{i=1}^n \mathbf{1}_{\{X_i=k\}}
+\to \mathbb{E}[\mathbf{1}_{\{X_1=k\}}]
+= \mathbb{P}(X_1=k)
+\quad \text{a.s.}
+\]
+and
+\[
+\frac{1}{n}\sum_{i=1}^n X_i
+\to \mathbb{E}[X_1]
+\quad \text{a.s.}
+\]
+Since \(0<\mathbb{E}[X_1]<\infty\), it follows that
+\[
+\mathbb{P}(N_n=k \mid X_1,\dots,X_n)
+\to
+\frac{k\mathbb{P}(X_1=k)}{\mathbb{E}[X_1]}
+\quad \text{a.s.}   
+\]
+
+Taking expectations on both sides, and using dominated convergence because
+\(
+0 \le \mathbb{P}(N_n=k \mid X_1,\dots,X_n)\le 1
+\),
+we obtain
+\[
+\mathbb{P}(N_n=k)
+=
+\mathbb{E}\big[\mathbb{P}(N_n=k \mid X_1,\dots,X_n)\big]
+\to
+\frac{k\mathbb{P}(X_1=k)}{\mathbb{E}[X_1]}
+\]
+Thus, for every \(k\in\mathbb{N}\),
+\[
+\mathbb{P}(N_n=k)\to \mathbb{P}(X_1^*=k)
+\]
+Hence
+\[
+N_n \xrightarrow{d} X_1^*
+\]
+\end{proof}
