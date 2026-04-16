@@ -583,6 +583,155 @@ By def, 容易验证.
 
 
 
+\subsection{inequalities for expectation and variance}
+
+
+
+
+
+
+\subsection{covariance and correlation between two random variables}
+\begin{definition}{covariance}
+给定两个 random variables \(X, Y\), 我们定义它们的 covariance 为
+\[
+\text{Cov}(X,Y) := \bE[(X-\bE[X])(Y-\bE[Y])]
+\]
+\end{definition}
+\begin{remark}
+ Covariance 丈量两个 random variables 之间的 linear relationship: 
+ 对于一个事件,  \(X,Y\) 把它映射到的值是正相关的, 还是负相关的, 还是不相关的.
+    Geometric intuition of covariance:
+    考虑取这两个 random variables 的一些 sample points 并分别作为 \((x,y)\) 坐标.
+    \begin{itemize}
+        \item 如果它们的 covariance 是正的, 那么这些 sample points 倾向于拟合为一个斜率为正的 tendency line;
+        \item 如果它们的 covariance 是负的, 那么这些 sample points 倾向于拟合为一个斜率为负的 tendency line;
+        \item 如果它们的 covariance 是 0, 那么这些 sample points 倾向于拟合为一个水平的 tendency line.
+    \end{itemize}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+    % Positive covariance
+    \begin{scope}[xshift=0cm]
+        \draw[->] (-0.5,0) -- (3,0) node[right] {$x$};
+        \draw[->] (0,-0.5) -- (0,3) node[above] {$y$};
+        \foreach \x/\y in {0.5/0.6, 0.8/0.9, 1.2/1.3, 1.5/1.6, 1.8/1.9, 2.2/2.3, 2.5/2.5}
+            \fill (\x,\y) circle (2pt);
+        \draw[dashed, red] (0.3,0.4) -- (2.7,2.7);
+        \node[below] at (1.5,-0.5) {Cov$(X,Y) > 0$};
+    \end{scope}
+    
+    % Negative covariance
+    \begin{scope}[xshift=5cm]
+        \draw[->] (-0.5,0) -- (3,0) node[right] {$x$};
+        \draw[->] (0,-0.5) -- (0,3) node[above] {$y$};
+        \foreach \x/\y in {0.5/2.4, 0.8/2.2, 1.2/1.7, 1.5/1.4, 1.8/1.1, 2.2/0.7, 2.5/0.5}
+            \fill (\x,\y) circle (2pt);
+        \draw[dashed, red] (0.3,2.7) -- (2.7,0.3);
+        \node[below] at (1.5,-0.5) {Cov$(X,Y) < 0$};
+    \end{scope}
+    
+    % Zero covariance
+    \begin{scope}[xshift=10cm]
+        \draw[->] (-0.5,0) -- (3,0) node[right] {$x$};
+        \draw[->] (0,-0.5) -- (0,3) node[above] {$y$};
+        \foreach \x/\y in {0.5/1.5, 0.8/1.2, 1.2/1.8, 1.5/1.4, 1.8/1.6, 2.2/1.3, 2.5/1.5}
+            \fill (\x,\y) circle (2pt);
+        \draw[dashed, red] (0.3,1.5) -- (2.7,1.5);
+        \node[below] at (1.5,-0.5) {Cov$(X,Y) = 0$};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+\end{remark}
+
+
+
+\begin{proposition}{covariance 的基本性质: as a symmetric bilinear form (and inner product)}
+\begin{itemize}
+    \item independence \(\implies\) zero covariance, 但是 zero covariance 不一定 \(\implies\) independence.
+    \item RV sum 的 variance 可分解成 variances 和 covariance:   \[\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X,Y)\]
+    \item covariance 是一个 \textbf{symmetric bilinear form }(并且 \textbf{translation-invariant}, 忽略 translation) 的 operator: 
+    \[\text{Cov}(aX+b, cY+d) = ac \, \text{Cov}(X,Y) \]
+    \[\text{Cov}(X,Y) = \text{Cov}(Y,X)\]
+    \[\text{Cov}(X+Y, Z) = \text{Cov}(X, Z) + \text{Cov}(Y, Z)\]
+    \item covariance 满足 positive semi-definiteness: \(\text{Cov}(X,X) = \text{Var}(X) \geq 0\).
+\end{itemize}
+\end{proposition}
+\begin{proof}
+\begin{itemize}
+    \item independence \(\implies\) 期望的乘积等于乘积的期望, 因而 covariance 是 0. 但是 zero covariance 不一定 \(\implies\) independence,
+有一个经典反例: 考虑 \(X\) 是任意按原点对称的分布, 比如一个 standard normal distribution; 而定义 \(Y = X^2\),
+此时 $$\text{Cov}(X, X^2) = E[X \cdot X^2] - E[X]E[X^2] = E[X^3] - E[X]E[X^2]$$
+由于 \(X\) 的分布是关于原点对称的, \(E[X^3] = 0\) 且 \(E[X] = 0\), 因而 covariance 是 0.
+但是 \(X\) 和 \(Y\) 显然不是 independent 的.
+\item $$
+\operatorname{Var}(X+Y)=\mathbb{E}\left[(X+Y)^2\right]-(\mathbb{E}[X+Y])^2=\mathbb{E}\left[X^2\right]-(\mathbb{E}[X])^2+\mathbb{E}\left[Y^2\right]-(\mathbb{E}[Y])^2+2(\mathbb{E}[X Y]-\mathbb{E}[X] \mathbb{E}[Y])
+$$
+\item $$
+\operatorname{Cov}(a X+b, c Y+d)=\mathbb{E}[(a X+b-\mathbb{E}[a X+b])(c Y+d-\mathbb{E}[c Y+d])]=\mathbb{E}[(a X-\mathbb{E}[a X])(c Y-\mathbb{E}[c Y])]=a c \operatorname{Cov}(X, Y)
+$$
+\item by def.
+\item by def.
+\end{itemize}
+\end{proof}
+\begin{remark}
+第一条的反例值得注意. 这说明了covariance 只能捕捉 linear relationship, 即趋势是否呈直线, 而不能捕捉 nonlinear relationship. 
+比如, 如果 \((X,Y)\) 的联合分布 as a graph 是个圆圈, 那么 covariance 就是 0 而无法说明它们之间的关系.
+
+为什么我们可以准确地说这是一种线性关系, 因为本质上, 我们既然说明了 covariance 是
+(随机变量空间 $L^2(\Omega, \mathcal{F}, P)$ 上的)一个 symmetric bilinear form, 并且它显然满足 positive semi-definiteness:
+\[
+\text{Cov}(X,X) = \text{Var(X)} \geq 0
+\]
+那么它就是一个合法的 inner product on  $L^2(\Omega, \mathcal{F}, P)$. 
+更加准确而言, 这是一个 \textbf{inner product on the quotient space} $L^2(\Omega, \mathcal{F}, P) / \sim$, 
+其中 $\sim$ 是 equivalence relation: 所有只差一个 constant 的 random variables 
+都被认为是 equivalent 的, 被减去了它们自己的均值, 移动到了原点上. 
+(这个 space 还是 complete 的 since \(L^2\), 因而它其实是一个 Hilbert space. 原始的和 quotient 都是.)
+
+原始 \(L^2\) space 的内积: \[\langle X, Y \rangle = \bE[XY]\]
+因而自然而言, 我们 work on 的 quotient space 的内积就应该是 covariance:
+ \[\langle X, Y \rangle_{\text{Cov}} = \bE[(X-\bE[X])(Y-\bE[Y])] = \text{Cov}(X,Y)\]
+
+在这个空间上, 由 covariance 这个 inner product induce 出的 norm 即为一个
+ random variable 的 standard deviation:
+$$\|X\| = \sqrt{\text{Var}(X)} = \sigma_X$$
+
+而两个 random variables \(X, Y\) 之间的夹角 \(\theta\) 的 cosine, 我们也专门做一个定义:
+\begin{definition}{correlation}\label{def:correlation}
+$$
+\rho(X, Y)=\frac{\operatorname{Cov}(\mathrm{X}, \mathrm{Y})}{\sqrt{\operatorname{Var}(X)} \sqrt{\operatorname{Var}(Y)}}
+$$
+\end{definition}
+显然, \[
+\rho(X, Y) = \cos \theta
+\]
+where \(\theta\) 是 \(X, Y\) 之间的夹角.
+And we have: \[
+\text{Cov}(X,Y) =  \sigma_X \sigma_Y \rho(X,Y)
+\]
+从而有以下显然的结论: 
+\begin{itemize}
+    \item \(\rho(X,Y) \in [-1,1]\)
+    \item 如果 \(\rho(X,Y) = 1\), 那么 \(Y = aX + b\) for some \(a > 0\) and \(b\); 如果
+     \(\rho(X,Y) = -1\), 那么 \(Y = aX + b\) for some \(a < 0\) and \(b\).\
+    \item By Cauchy-Schwarz inequality, \(|\text{Cov}(X,Y)| \leq \sigma_X \sigma_Y\).
+\end{itemize}
+\end{remark}
+
+\begin{remark}
+我们刚才将 covariance 作为 inner product, 是在 quotient space 
+\(L^2(\Omega, \mathcal{F}, P) / \sim\) 上讨论; 而原始的 \(L^2\) space 
+上的 inner product 是 \(\bE[XY]\). 这个原始 space 上的 Cauchy-Swartz 也值得一提: 
+
+$$
+\mathbb{E}\left[Z_1^2\right] \mathbb{E}\left[Z_2^2\right] \geq\left(\mathbb{E}\left[Z_1 Z_2\right]\right)^2
+$$其中等号取得条件是 \(Z_1 = a Z_2\) for some \(a \in \bR\). \(a\) 
+可以计算得是$$a = \frac{\mathbb{E}\left[Z_1 Z_2\right]}{\mathbb{E}\left[Z_2^ 2\right]}$$ 
+
+
+\end{remark}
+
+
+
 
 
 
