@@ -335,53 +335,26 @@ $$
     
 \end{example}
 
-\section{independence}
-\begin{definition}{independence of random variables}
+\section{independence of two random variables}
+\subsection{independence of two random variables 的三种等价定义}
+\begin{definition}{independence of random variables, def 1: joint distribution is product of marginal distributions}
     两个 random variables \(X, Y: \Omega \to \bR\) 被称为 independent 的, 
     如果对于任意的 Borel sets \(A, B \subseteq \bR\), 都有
     \[
     \bP(X \in A, Y \in B) = \bP(X \in A) \cdot \bP(Y \in B)
     \]
-    即: \textbf{它们的 joint distribution 是它们 marginal distributions 的 product.}
-    注意, 这个定义等价于 \[
+    注意这个定义等价于 for all points \((x, y) \in \mathbb{R}^2\),
+    \[
     F_{X,Y}(x, y) = F_X(x) F_Y(y)   
     \]
+    即\textbf{它们的 joint distribution 是它们 marginal distributions 的 product.}
 \end{definition}
-\begin{remark}
-Recall 两个事件 independence 的定义: 
-$$ 
-\mathbb{P}( A \cap B) = \mathbb{P}( A) \cdot \mathbb{P}( B)
-$$
-这个定义其实等价于: 对于任意的 Borel sets \(A, B\), 都有
-$$
-\mathbb{P}( A \mid B) = \mathbb{P}( A)  
-$$
-by definition of conditional probability.
-它的意义是: \textbf{知道一个事件发生了, 对于另一个事件发生没有任何帮助.}
-
-
-而再看到两个 random variables independence 的定义是:
-$$
-\mathbb{P}(X \in A, Y \in B) = \mathbb{P}(X \in A) \cdot \mathbb{P}(Y \in B)
-$$
-这个定义等价于: 对于任意的 Borel sets \(A, B\), 都有
-$$
-\mathbb{P}(X \in A \mid Y \in B) = \mathbb{P}(X \in A)  
-$$
-by definition of conditional probability.
-并且把 \(X\) 和 \(Y\) 的位置交换当然也等价 (
-$
-\mathbb{P}(Y \in B \mid X \in A) = \mathbb{P}(Y \in B)
-$
-). 
-
-所以它实际上意义是: \textbf{知道一个 random variable 的值, 对于另外一个没有任何帮助. }
-
-因而它们的 joint distribution 可以分解成 marginal distributions 的 product.
-\end{remark}
-
-
-
+对于 discrete 和 continuous random variables 而言, 这还意味着 independence 等价于:
+\begin{itemize}
+        \item joint pmf 是 marginal pmfs 的 product, for discrete case.
+        \item joint pdf 是 marginal pdfs 的 product, for continuous case.
+\end{itemize}
+详细而言: 
 \begin{theorem}{discrete and continuous independence: joint density is product of marginal densities} \label{discrete and continuous case of independence: joint density is product of marginal densities}
     令 \(X, Y\) 是两个 random variables. 
     \begin{itemize}
@@ -406,9 +379,73 @@ $
     \end{itemize}
 \end{proof}
 
+
+\begin{remark}
+
+Recall 两个事件 independence 的定义: 
+$$ 
+\mathbb{P}( A \cap B) = \mathbb{P}( A) \cdot \mathbb{P}( B)
+$$
+也等价于对于任意的 Borel sets \(A, B\) where \(\bP(B) > 0\), 都有
+$$
+\mathbb{P}( A \mid B) = \mathbb{P}( A)  
+$$
+即: 一个事件发生与否都不会对另一个事件发生的概率产生任何影响.
+
+
+而再看到两个 random variables independence 的定义是:
+$$
+\mathbb{P}(X \in A, Y \in B) = \mathbb{P}(X \in A) \cdot \mathbb{P}(Y \in B)
+$$
+这个定义也当然等价于:
+\begin{proposition}{independence of random variables, def 2: conditional distribution is marginal distribution}
+两个 random variables \(X, Y\) 是 independent 的, iff: 对于任意的 Borel sets \(A, B\), 
+如果\(\bP(Y \in B) > 0\), 则
+$$
+\mathbb{P}(X \in A \mid Y \in B) = \mathbb{P}(X \in A)  
+$$
+即: \textbf{\(X\) 的 conditional distribution,
+ 不论给定 \(Y\) 的任何信息, 都等于 \(X\) 的 marginal distribution.}
+\end{proposition}
+
+所以它实际上意义是: \textbf{知道一个 random variable 的任何信息, 对于另外一个都没有任何帮助. }
+
+因而\textbf{它们的 joint distribution 可以分解成 marginal distributions 的 product}.
+\end{remark}
+
+\begin{remark}
+
+Furthermore: 我们不难发现一件事情, 可以\textbf{在 independence 
+of two events 和 independence of two random variables 之间建立一个桥梁:}
+\begin{proposition}{independence of random variables, 
+def 3: generated sigma-algebras}
+令 \(X, Y\) 是两个 random variables. 
+    则 \(X, Y\) 是 independent 的 iff:
+     \(X\) 生成的 sigma-algebra \(\sigma(X)\) 和 \(Y\) 生成的 sigma-algebra 
+     \(\sigma(Y)\) 中分别任取一个事件, 这两个事件都是 independent 的. 即:
+$$
+\forall A \in \sigma(X), \forall B \in \sigma(Y), \quad 
+\bP(A \cap B) = \bP(A) \cdot \bP(B)
+$$
+\end{proposition}
+这严格说明了: \textbf{两个 random variables 之间的 independence, 
+本质上是它们各自蕴含的 information
+(由 generated sigma-algebra 严格刻画) 的完全不相关}:  
+对 \(X\) 的观测对于
+预测 \(Y\) 的任何行为都不提供任何帮助, 反之亦然.\\
+\end{remark}
+
+以上就是 independence of two random variables 的定义, 以及其 
+information geometric intuition.
+
+下面我们讲 independence between two random variables, generalize 
+到 mutual independence among 任意的 family of random variables.
+
+
+\subsection{mutual independence of a family of random variables: 强于 pairwise independence}
 我们定义了两个 random variables 的 independence, 
 但是这个定义可以推广到多个 (甚至 uncountably many) random variables 上.
-\begin{definition}{independence of multiple random variables}
+\begin{definition}{\textbf{mutual independence} of multiple random variables}
     令 \(\{X_i: i \in I\}\) 是一个 random variables 的 family, 
     其中 \(I\) 是一个 index set. 
     则如果对于任意的 finite subset \(J \subseteq I\), 
@@ -418,7 +455,160 @@ $
     \]
     则称这个 family of random variables 是 independent 的.
 \end{definition}
-注意: \textbf{joint density 的 factorization 也可以推广到多个 random variables 上.} 
+注意: \textbf{joint mass $\&$ density 的 factorization 也可以推广到多个 random variables 上.} 
+有一件事情值得说明: 
+这里定义的是\textbf{mutual independence}, 也就是说, 对于任意的 finite subset \(J\),
+它们的 joint distribution 都 factorizes into product of marginal distributions.
+
+而\textbf{两两 independent 的 random variables family 不一定是 mutual independent 的.}
+即: 如果对于任意的 \(i \neq j\), \(X_i\) 和 \(X_j\) 是 independent 的,
+并不意味着对于任意的 finite subset \(J\), \(\{X_j: j \in J\}\) 是 independent 的. 
+
+举个例子: 
+
+\begin{example}{pairwise independence does NOT imply mutual independence}
+假设我们抛掷两枚公平的硬币.
+令 $X, Y$ 是两个 independent 的 random variables, 
+且都服从 uniform distribution on $\{-1, 1\}$. 即:
+$$
+\bP(X=1) = \bP(X=-1) = \frac{1}{2}, \quad \bP(Y=1) = \bP(Y=-1) = \frac{1}{2}
+$$
+现在, 我们定义第三个 random variable $Z$ 为前两者的 product:
+$$
+Z = X \cdot Y
+$$
+容易验证: $X, Y, Z$ 两两 independent, 但不 mutual independent.
+因为如果只是知道 $X$ 的值, 那么我们对于 $Z$ 的值完全没有信息
+(因为有一个完全随机的 $Y$ 没有任何已知信息); 同样, 
+如果只是知道 $Y$ 的值, 那么我们对于 $Z$ 的值也完全没有信息;
+
+但是, 如果我们同时知道 $X$
+和 $Y$ 的值, 那么 $Z$ 的值就完全确定了. 
+
+这说明 \textbf{pairwise independence 只能保证局部的信息解耦, 
+而 mutual independence 则保证了在这个 family of random variables 之间的全局信息解耦.}
+\end{example}
+
+
+
+
+\subsection{independent $\implies$ uncorrelated}
+Independence 的概念会让我们回忆起另外一个刻画两个 random variables 
+之间关系的概念: covariance, 它丈量了\textbf{两个 random variables 之间的线性关系}.
+
+ covariance 的定义:
+$$
+\operatorname{Cov}(X, Y):=\mathbb{E}[(X-\mathbb{E}[X])(Y-\mathbb{E}[Y])] = \mathbb{E}[XY]-\mathbb{E}[X] \mathbb{E}[Y]
+$$
+
+我们容易发现: \textbf{independence 是一个比 covariance 为 0 (即 uncorrelated) 更强的概念:}
+\begin{proposition}{independent 严格强于 uncorrelated}
+    令 \(X, Y\) 是两个 random variables. 
+    则 \(X, Y\) 是 independent 的 \(\implies\) \(\operatorname{Cov}(X, Y) = 0\).
+    但是 \(\operatorname{Cov}(X, Y) = 0\) 不一定 \(\implies\) \(X, Y\) 是 independent 的.
+\end{proposition}
+\begin{proof}
+\begin{itemize}
+    \item independence \(\implies\) covariance 是 0, 因为 independence 显然 imply\(E[XY] = E[X]E[Y]\), 
+    从而 covariance 的定义式中 \(E[XY] - E[X]E[Y] = 0\).
+    \item  有一个经典反例: 考虑 \(X\) 是任意按原点对称的分布, 比如一个 standard normal distribution; 而定义 \(Y = X^2\),
+此时 $$\text{Cov}(X, X^2) = E[X \cdot X^2] - E[X]E[X^2] = E[X^3] - E[X]E[X^2]$$
+由于 \(X\) 的分布是关于原点对称的, \(E[X^3] = 0\) 且 \(E[X] = 0\), 因而 covariance 是 0.
+但是 \(X\) 和 \(Y\) 显然不是 independent 的.
+\end{itemize}
+\end{proof}
+\begin{remark}
+本质上, independence 是一种最强的全局信息不相关性. 
+而 covariance 只度量 linear relationship.  
+试想: 如果这两个随机变量之间的关系是这样的呢?
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+    \draw[->] (-2.5,0) -- (2.5,0) node[right] {$x$};
+    \draw[->] (0,-2.5) -- (0,2.5) node[above] {$y$};
+    \draw[dashed, blue!70] (0,0) circle (1.8);
+    \foreach \x/\y in {
+        1.8/0, 1.27/1.27, 0/1.8, -1.27/1.27,
+        -1.8/0, -1.27/-1.27, 0/-1.8, 1.27/-1.27,
+        1.56/0.9, 0.9/1.56, -0.9/1.56, -1.56/0.9,
+        -1.56/-0.9, -0.9/-1.56, 0.9/-1.56, 1.56/-0.9
+    }
+        \fill (\x,\y) circle (1.8pt);
+    \node[above right] at (0.65,1.35) {$x^2+y^2=r^2$};
+    \node[below] at (0,-2.2) {Cov$(X,Y)=0$, but $X,Y$ are not independent};
+\end{tikzpicture}
+\end{center}
+那么它们的 covariance 是 0, 但是它们显然不是 independent 的. 所以 covariance 
+忽略了很多非线性的关系, 而 independence 则完全捕捉了所有的关系. \\
+\end{remark}
+
+刚才说到, 两个 random variables 的 independence 显然 imply 
+$\mathbb{E}[XY] = \mathbb{E}[X]\mathbb{E}[Y]$.
+而 BTW: 这个性质其实\textbf{可以 generalize 到任意
+ finite number of independent random variables 的 product 上, 并且
+ 我们可以在这些 random variables 上任意地施加 Borel measurable functions}, 
+ 只要保证这些函数的 expectation 是 finite 的,
+\begin{theorem}{independence \(\implies\) expectation is closed under product}
+    令 \(\{X_i: i \in I\}\) 是一个 independent 的 random variables 的 family, 
+    则对于任意的 finite subset \(J \subseteq I\), 以及对于任意的 Borel measurable functions \(\{g_j: j \in J\}\), 
+    如果 \(\bE[|g_j(X_j)|] < \infty\) for all \(j \in J\), 则
+    \[
+    \bE\left[\prod_{j\in J} g_j(X_j)\right] = \prod_{j\in J} \bE[g_j(X_j)]
+    \]
+    特别地, 取每个 \(g_j(x) = x\), 则
+    \[\bE\left[\prod_{j\in J} X_j\right] = \prod_{j\in J} \bE[X_j]\]
+\end{theorem}
+\begin{proof}
+令 $J = \{1, 2, \dots, n\}$.
+由于 $X_1, \dots, X_n$ 是 independent 的, 它们的 joint distribution
+ $\mu_{\mathbf{X}}$ 是其 marginal distributions $\mu_{X_j}$ 的 product measure: $$\mu_{\mathbf{X}} = \mu_{X_1} \times \mu_{X_2} \times \dots \times \mu_{X_n}$$
+根据 Change of Variables Formula, 
+$$\bE\left[\prod_{j=1}^n g_j(X_j)\right] = \int_{\bR^n} 
+\left( \prod_{j=1}^n g_j(x_j) \right) \, d\mu_{\mathbf{X}}(x_1, \dots, x_n)
+= \int_{\bR} \dots \int_{\bR} \left( \prod_{j=1}^n g_j(x_j) \right) \, d\mu_{X_1}(x_1) \dots d\mu_{X_n}(x_n)
+$$
+由于被积函数 $\prod g_j(x_j)$ 是变量分离的, 根据 Fubini's Theorem 可以把积分分解成多个积分的 product:
+$$= \left( \int_{\bR} g_1(x_1) \, d\mu_{X_1}(x_1) \right) \times \dots \times \left( \int_{\bR} g_n(x_n) \, d\mu_{X_n}(x_n) \right)$$
+其中每一项都是$\bE[g_j(X_j)]$.
+\end{proof}
+\begin{remark}
+recall: expectation is a linear operator (因而 linearity 是 regardless of independence).
+但是它不一定是一个 multiplicative operator. 
+
+而这里我们说, \textbf{如果 random variables 是 independent 的, 那么 expectation 就是一个 multiplicative operator.}
+\end{remark}
+
+
+实际上: 当这些 Borel measurable functions \(\{g_j: j \in J\}\) 
+全都 bounded 时, 这个定理其实反向也是成立的:
+\begin{theorem}
+    令 \(\{X_i: i \in I\}\) 是一个family of random variables.
+    如果对于任意的 finite subset \(J \subseteq I\), 以及任意的
+     bounded Borel measurable functions \(\{g_j: j \in J\}\), 都有
+    \[
+    \bE\left[\prod_{j\in J} g_j(X_j)\right] = \prod_{j\in J} \bE[g_j(X_j)]
+    \]
+    则这个 family of random variables 是 independent 的.
+\end{theorem}
+\begin{proof}
+不妨特取 indicator functions.
+对于任意的 Borel sets $A, B \subseteq \bR$, 
+令 $f(x) = I_A(x)$, $g(y) = I_B(y)$.
+代入等式得到:$$\bE[I_A(X) \cdot I_B(Y)] = \bE[I_A(X)] \cdot \bE[I_B(Y)]$$
+注意到 $I_A(X) \cdot I_B(Y) = I_{\{X \in A, Y \in B\}}$. 根
+据 expectation of indicator function 等于 probability,
+我们立刻得到:$$\bP(X \in A, Y \in B) = \bP(X \in A) \cdot \bP(Y \in B)$$
+\end{proof}
+注意:\textbf{ \(g(x) = x\) 并不是 bounded 的 function, 因而 uncorrelation $\not \implies$ independence.}\\
+
+
+OK. 以上是 pretty much general properties of independence. 
+最后我们看一下, 对于 discrete 和 continuous random variables 而言, 
+independence 的 characterization 具体长什么样子.
+
+
+
+
+
 
 \subsection{discrete RV independence 的 characterization}
 \begin{remark}
@@ -476,37 +666,41 @@ $v_j$ 恰好就是 $Y$ 的 marginal PMF. 因此满足 $p_{ij} = p_i \cdot p_j$, 
 即: 固定 \(x\), \(y\)-distribution 的横截面永远长得像 \(f_Y\), 只是乘上了一个常数 \(f_X(x)\) 而已. 同样的, 固定 \(y\), \(x\) 分布的横截面永远长得像 \(f_X\), 只是乘上了一个常数 \(f_Y(y)\) 而已.
 \end{itemize}
 
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+    \begin{scope}
+        \draw[->] (-0.2,0) -- (3.8,0) node[right] {$x$};
+        \draw[->] (0,-0.2) -- (0,3.2) node[above] {$y$};
+        \fill[blue!8] (0.5,0.5) rectangle (3.2,2.6);
+        \draw[thick, blue!60] (0.5,0.5) rectangle (3.2,2.6);
+        \draw[thick, orange] (1.2,0.5) -- (1.2,2.6);
+        \draw[thick, red!70] (2.5,0.5) -- (2.5,2.6);
+        \node[below] at (1.2,0) {$x_1$};
+        \node[below] at (2.5,0) {$x_2$};
+        \node[blue!60] at (1.85,2.95) {support of $f_{X,Y}$};
+        \draw[->, orange] (1.2,1.55) -- (4.55,2.15);
+        \draw[->, red!70] (2.5,1.55) -- (4.55,0.95);
+    \end{scope}
+
+    \begin{scope}[xshift=5.4cm]
+        \draw[->] (-0.2,0) -- (3.4,0) node[right] {$y$};
+        \draw[->] (0,-0.2) -- (0,3.1) node[above] {$f_{X,Y}(x,y)$};
+        \draw[thick, orange, domain=0.2:3.0, smooth] plot (\x,{2.2*exp(-((\x-1.6)^2)/0.55)});
+        \draw[thick, red!70, domain=0.2:3.0, smooth] plot (\x,{1.2*exp(-((\x-1.6)^2)/0.55)});
+        \node[orange] at (2.55,2.45) {$x=x_1$};
+        \node[red!70] at (2.55,1.35) {$x=x_2$};
+        \node[below] at (1.6,-0.45) {same shape, only different scale};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+图左边表示 joint pdf 的 support 是一个矩形; 图右边表示在两个不同的 \(x\)-位置切开以后,
+得到的都是同一个 \(f_Y\) 形状的 copy, 只是分别乘上了不同的常数 \(f_X(x_1)\) 和 \(f_X(x_2)\).
+对 fixed \(y\) 的 horizontal slices 也完全同理.
 
 
 
-\subsection{independence \(\implies\) expectation is closed under product}
-\begin{proposition}{independence \(\implies\) expectation is closed under product}
-    令 \(\{X_i: i \in I\}\) 是一个 independent 的 random variables 的 family, 
-    则对于任意的 finite subset \(J \subseteq I\), 以及对于任意的 Borel measurable functions \(\{g_j: j \in J\}\), 
-    如果 \(\bE[|g_j(X_j)|] < \infty\) for all \(j \in J\), 则
-    \[
-    \bE\left[\prod_{j\in J} g_j(X_j)\right] = \prod_{j\in J} \bE[g_j(X_j)]
-    \]
-\end{proposition}
-\begin{proof}
-令 $J = \{1, 2, \dots, n\}$.
-由于 $X_1, \dots, X_n$ 是 independent 的, 它们的 joint distribution
- $\mu_{\mathbf{X}}$ 是其 marginal distributions $\mu_{X_j}$ 的 product measure: $$\mu_{\mathbf{X}} = \mu_{X_1} \times \mu_{X_2} \times \dots \times \mu_{X_n}$$
-根据 Change of Variables Formula, 
-$$\bE\left[\prod_{j=1}^n g_j(X_j)\right] = \int_{\bR^n} 
-\left( \prod_{j=1}^n g_j(x_j) \right) \, d\mu_{\mathbf{X}}(x_1, \dots, x_n)
-= \int_{\bR} \dots \int_{\bR} \left( \prod_{j=1}^n g_j(x_j) \right) \, d\mu_{X_1}(x_1) \dots d\mu_{X_n}(x_n)
-$$
-由于被积函数 $\prod g_j(x_j)$ 是变量分离的, 根据 Fubini's Theorem 可以把积分分解成多个积分的 product:
-$$= \left( \int_{\bR} g_1(x_1) \, d\mu_{X_1}(x_1) \right) \times \dots \times \left( \int_{\bR} g_n(x_n) \, d\mu_{X_n}(x_n) \right)$$
-其中每一项都是$\bE[g_j(X_j)]$.
-\end{proof}
-\begin{remark}
-recall: expectation is a linear operator (因而 linearity 是 regardless of independence).
-但是它不一定是一个 multiplicative operator. 
 
-而这里我们说, 如果 random variables 是 independent 的, 那么 expectation 就是一个 multiplicative operator.
-\end{remark}
 
 
 \section{conditional distribution function and density}

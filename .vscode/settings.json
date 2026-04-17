@@ -6,7 +6,7 @@
       "args": [
         "-lualatex",
         "-interaction=nonstopmode",
-        "-synctex=0",
+        "-synctex=1",
         "-file-line-error",
         "-outdir=build",
         "%DOC%"
@@ -26,10 +26,14 @@
   "latex-workshop.latex.auxDir": "build",
   "latex-workshop.view.pdf.viewer": "tab",
   "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
-  "latex-workshop.latex.autoBuild.run": "onSave",
-  "latex-workshop.latex.autoBuild.interval": 3000,
+  "latex-workshop.synctex.afterBuild.enabled": false,
+  "latex-workshop.latex.autoBuild.run": "onFileChange",
+  "latex-workshop.latex.autoBuild.interval": 1500,
   "latex-workshop.latex.autoClean.run": "never",
   "latex-workshop.view.pdf.refresh.viewer": "auto",
+  "latex-workshop.view.pdf.reload.transition": "none",
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1200,
   "[latex]": {
     "editor.wordBasedSuggestions": "off",
     "editor.wordBasedSuggestionsMode": "off",

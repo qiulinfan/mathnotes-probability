@@ -591,9 +591,39 @@ Solving the system, we find $\mathbb{P}\left(W_A\right)=0.6$.
     则称 \(\{A_i\}_{i \in I}\) 是 mutually independent 的.
 \end{definition}
 \begin{remark}
-    根据条件概率的定义, 容易得出: 两个 events \(A, B\) independent 的定义\textbf{等价于 \(\mathbb{P}(A \mid B) = \mathbb{P}(A)\)}, 即事件 \(B\) 的发生与否不影响事件 \(A\) 发生的概率.\\
-    将它推广到多个事件: 即\textbf{任意一个事件的发生与否都不影响其他事件发生的概率}.
+
+    根据条件概率的定义, 容易得出: 
+    两个 events \(A, B\) independent 
+    的定义\textbf{等价于 \(\mathbb{P}(A \mid B) = \mathbb{P}(A)\)}, 即事件 \(B\) 的发生与否不影响事件 \(A\) 发生的概率.\\
+\begin{proposition}{independence of two events 的等价定义}
+    对于 prob space \((\Omega, \mathcal{F}, \mathbb{P})\), 
+    两个 events \(A, B \in \mathcal{F}\) 
+    independent 
+    iff: 
+    \[\mathbb{P}(B \mid A) = \mathbb{P}(B)\]
+\end{proposition}
+\begin{proof}
+Directly follows from the definition of conditional probability.
+\end{proof}
+因而 independence of two events 的定义等价于: 
+事件 \(A\) 的发生与否不影响事件 \(B\) 发生的概率 (反之亦然).
+
+将它推广到多个事件: 即\textbf{任意一个事件的发生与否都不影响其他事件发生的概率}.
 \end{remark}
+\begin{remark}
+    
+我们从 measure 的角度看待两个事件的 independence: 
+首先 $\mathbb{P}(B) = 0$ 是 trivial case, 而
+如果 $\mathbb{P}(B) > 0$, 那么 independence 其实可以化为一个等式:
+$$\frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)} = \frac{\mathbb{P}(A)}{\mathbb{P}(\Omega)}$$
+意思是: 事件 $A$ 在 $B$ 这个 set 中占据的 measure 比例, 
+完全等于事件 $A$ 在整个空间 $\Omega$ 中占据的 measure 比例; 
+也就是说, \textbf{事件 $B$ 的发生并没有改变事件 $A$ 在空间中的 measure 分布.}
+
+因而, 这两个集合在 measure (probability) 的意义下是完全解耦的, 
+这就是 independence 的 information geometric 意义.
+\end{remark}
+
 
 \begin{proposition}
     如果 events \(A\) 和 \(B\) independent, 则 \(A\) 和 \(B^c\) 也是 independent 的.
