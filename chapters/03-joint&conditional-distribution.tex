@@ -378,6 +378,10 @@ $$
         \item \(f_{X,Y}(x, y) = f_X(x) \cdot f_Y(y) \implies F_{X,Y}(x, y) = F_X(x) F_Y(y)\): 积分即可.
     \end{itemize}
 \end{proof}
+因而对于 independent 的两个 
+random variables, 固定 $X= x_0$, 那么联合密度函数
+$f_{X,Y}(x_0, y)$ 就是 $Y$ 的边际密度函数 $f_Y(y)$ 乘上
+一个常数 $f_X(x_0)$.\\
 
 
 \begin{remark}
@@ -410,7 +414,7 @@ $$
 
 所以它实际上意义是: \textbf{知道一个 random variable 的任何信息, 对于另外一个都没有任何帮助. }
 
-因而\textbf{它们的 joint distribution 可以分解成 marginal distributions 的 product}.
+因而\textbf{它们的 joint distribution 可以分解成 marginal distributions 的 product}.\\
 \end{remark}
 
 \begin{remark}
@@ -694,11 +698,6 @@ $v_j$ 恰好就是 $Y$ 的 marginal PMF. 因此满足 $p_{ij} = p_i \cdot p_j$, 
 \end{tikzpicture}
 \end{center}
 
-图左边表示 joint pdf 的 support 是一个矩形; 图右边表示在两个不同的 \(x\)-位置切开以后,
-得到的都是同一个 \(f_Y\) 形状的 copy, 只是分别乘上了不同的常数 \(f_X(x_1)\) 和 \(f_X(x_2)\).
-对 fixed \(y\) 的 horizontal slices 也完全同理.
-
-
 
 
 
@@ -942,6 +941,8 @@ conditional expectation 满足 linear property.
 
 //TODO: 如果 \(X\) 是 continous 的, 而 \(Y\) 是 discrete 的,
 那么我们怎么 define conditional distribution, 以及 expectation 呢?
+这个时候我们就需要用到
+之前说的 generated \(\sigma\)-algebra 的概念了.
 
 
 

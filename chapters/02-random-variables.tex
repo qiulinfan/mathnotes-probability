@@ -752,7 +752,8 @@ By def, 容易验证.
 \begin{definition}{covariance}
 给定两个 random variables \(X, Y\), 我们定义它们的 covariance 为
 \[
-\text{Cov}(X,Y) := \bE[(X-\bE[X])(Y-\bE[Y])]
+\text{Cov}(X,Y) := \bE[(X-\bE[X])(Y-\bE[Y])] = 
+\mathbb{E}[XY] - \bE[X]\bE[Y]
 \]
 \end{definition}
 \begin{remark}
@@ -818,7 +819,6 @@ $$
 
 \begin{theorem}{covariance as a positive semi-definite symmetric bilinear form}
 \begin{itemize}
-    \item independence \(\implies\) zero covariance, 但是 zero covariance 不一定 \(\implies\) independence.
 \item covariance 是一个 \textbf{symmetric bilinear form }(并且 \textbf{translation-invariant}, 忽略 translation) 的 operator: 
     \[\text{Cov}(aX+b, cY+d) = ac \, \text{Cov}(X,Y) \]
     \[\text{Cov}(X,Y) = \text{Cov}(Y,X)\]
@@ -827,19 +827,51 @@ $$
 \end{itemize}
 \end{theorem}
 \begin{proof}
-\begin{itemize}
-\item $$
-\operatorname{Cov}(a X+b, c Y+d)=\mathbb{E}[(a X+b-\mathbb{E}[a X+b])(c Y+d-\mathbb{E}[c Y+d])]=\mathbb{E}[(a X-\mathbb{E}[a X])(c Y-\mathbb{E}[c Y])]=a c \operatorname{Cov}(X, Y)
-$$
-\item by def.
-\item by def.
-\end{itemize}
+By def.
 \end{proof}
-\begin{remark}
-第一条的反例值得注意. 这说明了covariance 只能捕捉 linear relationship, 即趋势是否呈直线, 而不能捕捉 nonlinear relationship. 
-比如, 如果 \((X,Y)\) 的联合分布 as a graph 是个圆圈, 那么 covariance 就是 0 而无法说明它们之间的关系.
 
-为什么我们可以准确地说这是一种线性关系, 因为本质上, 我们既然说明了 covariance 是
+
+
+最后我们会谈一谈\textbf{所有 square-integrable 的 random variables 
+组成的空间}: 
+$$
+\left\{X \in L^2(\Omega, \mathcal{F}, \mathbb{P}): \mathbb{E}[X]=0\right\} / \sim
+$$ 
+其中 \(\sim\) 表是 almost sure equality 的等价类, 即
+$$
+X \sim Y \Longleftrightarrow \mathbb{P}(\{\omega \in \Omega: X(\omega)=Y(\omega)\})=1
+$$
+这个空间是一个 Hilbert space, 也就是说, 它是一个 complete inner product space.
+在这个空间中, expectation 消失了, 而 covariance 作为这个空间上的 inner product, 
+ standard deviation (square of variance) 
+作为这个空间的 norm.
+
+
+\begin{remark}
+covariance 捕捉 linear relationship, 即趋势是否呈直线,
+不过不能捕捉 nonlinear relationship. 之后在学习 independence 的时候, 
+我们会知道即便 covariance 为 0, \(X\) 和 \(Y\) 仍然可能是 dependent 的.
+比如, 如果 \((X,Y)\) 的联合分布 as a graph 是个圆圈, 那么 covariance 
+就是 0, 但显然这两个变量之间是有关系的.
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+    \draw[->] (-2.5,0) -- (2.5,0) node[right] {$x$};
+    \draw[->] (0,-2.5) -- (0,2.5) node[above] {$y$};
+    \draw[dashed, blue!70] (0,0) circle (1.8);
+    \foreach \x/\y in {
+        1.8/0, 1.27/1.27, 0/1.8, -1.27/1.27,
+        -1.8/0, -1.27/-1.27, 0/-1.8, 1.27/-1.27,
+        1.56/0.9, 0.9/1.56, -0.9/1.56, -1.56/0.9,
+        -1.56/-0.9, -0.9/-1.56, 0.9/-1.56, 1.56/-0.9
+    }
+        \fill (\x,\y) circle (1.8pt);
+    \node[above right] at (0.65,1.35) {$x^2+y^2=r^2$};
+    \node[below] at (0,-2.2) {Cov$(X,Y)=0$, but $X,Y$ are not independent};
+\end{tikzpicture}
+\end{center}
+
+为什么我们可以准确地说这是一种线性关系, 
+因为本质上, 我们既然说明了 covariance 是
 (随机变量空间 $L^2(\Omega, \mathcal{F}, P)$ 上的)一个 symmetric bilinear form, 并且它显然满足 positive semi-definiteness:
 \[
 \text{Cov}(X,X) = \text{Var(X)} \geq 0
