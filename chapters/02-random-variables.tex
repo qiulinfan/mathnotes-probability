@@ -602,23 +602,15 @@ $$C = \{ x \in [0, 1] \mid x = (0.a_1 a_2 a_3 \dots)_3, \text{ where } a_i \in \
 Distribution 是一个 random variable 的完整刻画, 而这一节我们来谈一谈 expectation 
 和 variance, 这是一个 random variable 的两个重要的数值特征: 它的均值和离散程度.
 
-最后我们会谈一谈\textbf{所有 square-integrable 的 zero-centered random variables 
-组成的空间}: 
-$$
-\left\{X \in L^2(\Omega, \mathcal{F}, \mathbb{P}): \mathbb{E}[X]=0\right\} / \sim
-$$ 
-其中 \(\sim\) 表是 almost sure equality 的等价类, 即
-$$
-X \sim Y \Longleftrightarrow \mathbb{P}(\{\omega \in \Omega: X(\omega)=Y(\omega)\})=1
-$$
-这个空间是一个 Hilbert space, 也就是说, 它是一个 complete inner product space.
-在这个空间中, expectation 消失了, 而 covariance 作为这个空间上的 inner product, 
- standard deviation (square of variance) 
-作为这个空间的 norm.
+最后我们会谈一谈\textbf{$L^2(\Omega, \mathcal{F}, \mathbb{P})$ 空间}: 
+ all square-integrable random variables; 以及它的一个重要 subspace 
+$L_0^2(\Omega, \mathcal{F}, \mathbb{P})$: 
+所有 square-integrable 的 zero-centered random variables. 
+它们都是由 random variables 组成的 Hilbert space, 并且在其中, 
+expectation, variance, covariance 都会得到一个非常自然的 interpretation, 
+展现这个空间的几何结构.
 
 
-
- 中, 还有一个重要的特征: 它的 distribution 的 second moment,
 \subsection{expectation and variance 的 definition 和计算方法}
 随机变量的 \textbf{expectation} 是它 w.r.t. 它所在概率空间 prob measure \(\bP\) 的积分, 
 表示它的值的 prob-weighted average; 
@@ -747,8 +739,64 @@ By def, 容易验证.
 
 
 
-\subsection{covariance and correlation: $L^2$ random variables 的 inner product 与夹角}
-刚才我
+\subsection{$L_0^2(\Omega, \mathcal{F}, \mathbb{P})$ 与 covariance and correlation as inner product and cosine}
+我们 recall measure theory 中的一丢丢 functional analysis 的内容:
+$$ 
+L^2(\Omega, \mathcal{F}, \mathbb{P}) = \{X: \Omega \to \bR \mid X \text{ is measurable(即 RV)) and } \bE[X^2] < \infty\} / \sim
+ $$
+where $\sim$ 表示 almost sure equality 的等价类, 即
+$$
+X \sim Y \Longleftrightarrow \mathbb{P}(\{\omega \in \Omega: X(\omega)=Y(\omega)\})=1
+$$
+即把所有 a.s. 相等的 random variables 都看作相等.
+
+我们知道, 这是一个 \textbf{Hilbert space}, 即一个 complete inner product space, 其中
+\begin{itemize}
+    \item 两个 random variables as vectors 的 inner product 定义为:
+$
+\langle X, Y \rangle := \bE[XY]
+$ 即它们的 second 
+\item 一个 random variable 的 norm 即:
+$
+\|X\| := \sqrt{\langle X, X \rangle} = \sqrt{\bE[X^2]}
+$ 即它的 second moment 的 square root.
+它表示了这个 random variable 的整体离散程度.
+\end{itemize}
+虽然这个空间已经有一定的 information geometry 了, 但是我们实际上希望能够
+用一个结构来描述两个 random variables 之间的线性相关性:
+\begin{itemize}
+    \item 任意取一个 $\omega$,  $X(\omega)$ 较大 (距离它的 expectation 较远) 的时候, 
+    $Y(\omega)$ 是否也通常较大 (距离它的 expectation 较远)? 
+    $X(\omega)$ 较小的时候, $Y(\omega)$ 是否也通常较小?
+\end{itemize}
+而 $L^2(\Omega, \mathcal{F}, \mathbb{P})$ 这个空间作为一个 Hilbert space 时, 两个
+random variables 之间的距离其实是它们作为函数的相似性而不是它们变化趋势 (波动) 的相似性. 
+
+比如考虑 $X=x$ 和 $Y=x+5$, 它们的线性相关性其实是 1, 即变化趋势完全相同, 但是
+它们在 $L^2([0,4], \mathcal{F}, \mathbb{P})$ 中的 cosine similarity 却是
+$$
+\frac{\langle X, Y \rangle}{\|X\|\|Y\|} =
+\frac{46 / 3}{\sqrt{(16 / 3)(151 / 3)}}=\frac{46}{\sqrt{2416}} \approx 0.936
+$$
+我们希望的是这个 cosine similarity 应当是 1. 
+即, 应该忽略掉绝对数值, 而是考虑这两个 random variables 的变化趋势. 
+
+因而 solution: normalize 每个 random variable, 把它们移动到
+均值为 0 的位置! 即: 把每个 $X$ center 为 $X-\bE[X]$. 这就是:
+\begin{definition}{zero-centered square integrable random variables $L^2_0(\Omega, \mathcal{F}, \mathbb{P})$}
+我们定义:
+$$
+L^2_0(\Omega, \mathcal{F}, \mathbb{P}) := \{X \in L^2(\Omega, \mathcal{F}, \mathbb{P}) \mid \bE[X] = 0\}
+$$    
+注意, 这个空间是 $L^2(\Omega, \mathcal{F}, \mathbb{P})$ 的一个 subspace.
+\end{definition}
+
+
+并且, \textbf{我们可以通过把每个 $X$ center 为 $X-\bE[X]$ 的行为,
+把 $X$ 从 $L^2(\Omega, \mathcal{F}, \mathbb{P})$ 投影到
+$L^2_0(\Omega, \mathcal{F}, \mathbb{P})$ 这个 subspace 上. }\\
+
+而投影+度量的行为, 就是计算: 
 \begin{definition}{covariance}
 给定两个 random variables \(X, Y\), 我们定义它们的 covariance 为
 \[
@@ -758,7 +806,12 @@ By def, 容易验证.
 \end{definition}
 \begin{remark}
  Covariance 丈量两个 random variables 之间的 linear relationship: 
- 对于一个事件,  \(X,Y\) 把它映射到的值是正相关的, 还是负相关的, 还是不相关的.
+ 对于一个事件,  \(X,Y\) 把它映射到的值是正相关的, 还是负相关的, 还是不相关的.\
+ (注意: 其值包含了这两个 random variables 的 scale, 因而不能直接用来比较不同 random variables
+  之间的 linear relationship 的强弱程度. 真正公平的 
+  linear relationship 还需要 normalize by norms, 即等下定义的 correlation.)
+
+
     Geometric intuition of covariance:
     考虑取这两个 random variables 的一些 sample points 并分别作为 \((x,y)\) 坐标.
     \begin{itemize}
@@ -801,51 +854,21 @@ By def, 容易验证.
 \end{center}
 \end{remark}
 
+不过为什么我们知道 covariance 是一个 linear relationship 的 measure 呢? 因为
+我们可以发现一件事情:
 
-
-\begin{proposition}{variance of two random variables}
-两个 random variables 的和的 variance 可分解成 variances 和 covariance:  
- \[\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X,Y)\]
-\end{proposition}
-\begin{proof}
- $$
-\operatorname{Var}(X+Y)=\mathbb{E}\left[(X+Y)^2\right]-(\mathbb{E}[X+Y])^2=\mathbb{E}\left[X^2\right]-(\mathbb{E}[X])^2+\mathbb{E}\left[Y^2\right]-(\mathbb{E}[Y])^2+2(\mathbb{E}[X Y]-\mathbb{E}[X] \mathbb{E}[Y])
-$$
-\end{proof}
-\begin{remark}
-
-\end{remark}
-
-
-\begin{theorem}{covariance as a positive semi-definite symmetric bilinear form}
+\begin{theorem}{covariance 是一个 a positive semi-definite symmetric bilinear form}
 \begin{itemize}
 \item covariance 是一个 \textbf{symmetric bilinear form }(并且 \textbf{translation-invariant}, 忽略 translation) 的 operator: 
     \[\text{Cov}(aX+b, cY+d) = ac \, \text{Cov}(X,Y) \]
     \[\text{Cov}(X,Y) = \text{Cov}(Y,X)\]
     \[\text{Cov}(X+Y, Z) = \text{Cov}(X, Z) + \text{Cov}(Y, Z)\]
-    \item covariance 满足 positive semi-definiteness: \(\text{Cov}(X,X) = \text{Var}(X) \geq 0\).
+    \item covariance 满足 positive definiteness: \(\text{Cov}(X,X) = \text{Var}(X) \geq 0\).
 \end{itemize}
 \end{theorem}
 \begin{proof}
 By def.
 \end{proof}
-
-
-
-最后我们会谈一谈\textbf{所有 square-integrable 的 random variables 
-组成的空间}: 
-$$
-\left\{X \in L^2(\Omega, \mathcal{F}, \mathbb{P}): \mathbb{E}[X]=0\right\} / \sim
-$$ 
-其中 \(\sim\) 表是 almost sure equality 的等价类, 即
-$$
-X \sim Y \Longleftrightarrow \mathbb{P}(\{\omega \in \Omega: X(\omega)=Y(\omega)\})=1
-$$
-这个空间是一个 Hilbert space, 也就是说, 它是一个 complete inner product space.
-在这个空间中, expectation 消失了, 而 covariance 作为这个空间上的 inner product, 
- standard deviation (square of variance) 
-作为这个空间的 norm.
-
 
 \begin{remark}
 covariance 捕捉 linear relationship, 即趋势是否呈直线,
@@ -931,7 +954,28 @@ $$其中等号取得条件是 \(Z_1 = a Z_2\) for some \(a \in \bR\). \(a\)
 
 
 
-好的. 
+
+
+\begin{proposition}{两个 random variables 之和的 variance }
+两个 random variables 的和的 variance 可分解成 variances 和 covariance:  
+ \[\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X,Y)\]
+\end{proposition}
+\begin{proof}
+ $$
+\operatorname{Var}(X+Y)=\mathbb{E}\left[(X+Y)^2\right]-(\mathbb{E}[X+Y])^2=\mathbb{E}\left[X^2\right]-(\mathbb{E}[X])^2+\mathbb{E}\left[Y^2\right]-(\mathbb{E}[Y])^2+2(\mathbb{E}[X Y]-\mathbb{E}[X] \mathbb{E}[Y])
+$$
+\end{proof}
+\begin{remark}
+
+\end{remark}
+
+
+
+
+
+
+
+
 
 
 \section{discrete random variables}
