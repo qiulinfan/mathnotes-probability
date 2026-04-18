@@ -1,0 +1,566 @@
+\chapter*{Homework 6}
+\section*{Problem 1}
+Let $X$ be a random variable such that 
+$\mathbb{E}\left[\left|X\right|\right]<\infty$, 
+that is $X \in L^1$. 
+Denote by $\phi_X(t):= \mathbb{E}\left[e^{i t X}\right], t \in \mathbb{R}$, 
+its characteristic function.
+\begin{itemize}
+\item[(a)]
+Show that $\phi_X$ is differentiable with 
+$\phi_X^{\prime}(t)=i \mathbb{E}\left[X e^{i t X}\right]$. (Hint: DCT)
+
+\item[(b)]
+If, in addition, $X$ has symmetric distribution(i.e. $X,-X$ have the same distribution),
+then show that $\phi_X(t) \in \mathbb{R}$ for any $t \in \mathbb{R}$.
+\end{itemize}
+\begin{proof}
+\begin{itemize}
+\item[(a)]
+Fix $t \in \mathbb{R}$. Consider the difference quotient
+\[
+\frac{\phi_X(t+h)-\phi_X(t)}{h}
+=
+\mathbb{E}\left[
+e^{itX}\frac{e^{ihX}-1}{h}
+\right]
+\]
+Notice we have (for a.e. $\omega$): 
+\[
+\lim_{h\to 0}\frac{e^{ihX}-1}{h}=iX
+\]
+Hence
+\[
+e^{itX}\frac{e^{ihX}-1}{h}
+\longrightarrow
+iXe^{itX}
+\quad \text{a.s.} \quad \text{as } h\to 0
+\]
+
+Using the mean value theorem for the function
+$u \mapsto e^{iuX}$, for $|h|\le 1$ we have
+\[
+\left|\frac{e^{ihX}-1}{h}\right|
+\le |X|
+\]
+Also, $|e^{itX}|=1$, so
+\[
+\left|
+e^{itX}\frac{e^{ihX}-1}{h}
+\right|
+=
+|e^{itX}|
+\left|\frac{e^{ihX}-1}{h}\right|
+\le |X|
+\]
+Since $X \in L^1$, we have $\mathbb{E}[|X|] < \infty$, therefore  $|X|$ 
+is a dominating integrable random variable for $e^{itX}\frac{e^{ihX}-1}{h}$.
+Then by DCT, 
+\[
+\lim_{h\to 0}\frac{\phi_X(t+h)-\phi_X(t)}{h}
+=
+\mathbb{E}\left[\lim_{h\to 0}
+e^{itX}\frac{e^{ihX}-1}{h}\right]
+=
+\mathbb{E}[iXe^{itX}]
+\]
+Thus $\phi_X$ is differentiable and
+\[
+\phi_X'(t)=i\mathbb{E}[Xe^{itX}]
+\]
+
+\item[(b)]
+Since random
+variables with the same distribution 
+have the same expectation under measurable functions for which the
+expectation exists, we get
+\[
+\phi_X(t)=\mathbb{E}[e^{itX}]=\mathbb{E}[e^{it(-X)}]=\mathbb{E}[e^{-itX}]
+=\phi_X(-t)
+\]
+On the other hand since 
+\(
+\phi_X(-t)=\overline{\phi_X(t)}
+\), we thus have
+\[
+\phi_X(t)=\overline{\phi_X(t)}
+\]
+A complex number equal to its own conjugate must be real. Therefore,
+\[
+\phi_X(t)\in \mathbb{R}, \qquad \forall t\in\mathbb{R}
+\]
+Writing
+\[
+\phi_X(t)=\mathbb{E}[\cos(tX)]+i\mathbb{E}[\sin(tX)]
+\]
+Since $X$ is symmetric, $\sin(tx)$ is odd, so
+\[
+\mathbb{E}[\sin(tX)]=0
+\]
+Therefore $\phi_X(t)=\mathbb{E}[\cos(tX)] \in \mathbb{R}$.
+\end{itemize}
+\end{proof}
+
+
+
+\section*{Problem 2}
+Let $X \sim \operatorname{Bin}(n, p)$, 
+where $n \in \mathbb{N}, p \in(0,1)$ and
+$Y \sim \operatorname{Pois}(\lambda)$, 
+where $\lambda>0$.
+\begin{itemize}
+\item[(a)] Compute the characteristic functions of $X, Y$.
+\item[(b)] 
+Let $\left(p_n\right)_{n \in \mathbb{N}}$ be a sequence in $(0,1)$
+such that $\lim _{n \rightarrow \infty} n p_n=\lambda$ 
+and $\left(X_n\right)_{n \in \mathbb{N}}$ be a sequence of random variables 
+ with $X_n \sim \operatorname{Bin}\left(n, p_n\right)$. 
+Show that $X_n \xrightarrow{d} Y$.
+\end{itemize}
+\begin{proof}
+\begin{itemize}
+\item[(a)]
+We have
+\[
+\mathbb{P}(X=k)=\binom{n}{k}p^k(1-p)^{n-k}, \quad k=0,1,\dots,n
+\]
+Therefore,
+\[
+\phi_X(t)
+=
+\mathbb{E}[e^{itX}]
+=
+\sum_{k=0}^n e^{itk}\binom{n}{k}p^k(1-p)^{n-k}
+\]
+We factor $e^{itk}$ into $(pe^{it})^k/p^k$ and obtain
+\[
+\phi_X(t)
+=
+\sum_{k=0}^n \binom{n}{k}(pe^{it})^k(1-p)^{n-k}
+\]
+By the binomial formula,
+\[
+\phi_X(t)=(1-p+pe^{it})^n
+\]
+
+Next for $Y \sim \operatorname{Pois}(\lambda)$ we have
+\[
+\mathbb{P}(Y=k)=e^{-\lambda}\frac{\lambda^k}{k!}, \quad k=0,1,2,\dots
+\]
+Hence
+\[
+\phi_Y(t)
+=
+\mathbb{E}[e^{itY}]
+=
+\sum_{k=0}^{\infty} e^{itk} e^{-\lambda}\frac{\lambda^k}{k!}
+\]
+Thus
+\[
+\phi_Y(t)
+=
+e^{-\lambda}\sum_{k=0}^{\infty}\frac{(\lambda e^{it})^k}{k!}
+=
+e^{-\lambda}e^{\lambda e^{it}}
+=
+e^{\lambda(e^{it}-1)}
+\]
+
+So the characteristic functions are
+\[
+\phi_X(t)=(1-p+pe^{it})^n,
+\quad
+\phi_Y(t)=e^{\lambda(e^{it}-1)}
+\]
+
+\item[(b)]
+By part (a),
+\[
+\phi_{X_n}(t)=(1-p_n+p_ne^{it})^n
+=
+\left(1+p_n(e^{it}-1)\right)^n
+\]
+We now compute the limit as $n \to \infty$.
+
+Set
+\[
+a_n:=p_n(e^{it}-1)
+\]
+Since $p_n \to 0$ (as $np_n \to \lambda < \infty$), 
+we have $a_n \to 0$. Therefore,
+\[
+\log(1+a_n)\to a_n,
+\quad n\to\infty
+\]
+Hence
+\[
+n\log(1+a_n)\to  na_n
+=
+np_n(e^{it}-1)
+\implies
+\lambda(e^{it}-1)
+\]
+Exponentiating, we get
+\[
+\phi_{X_n}(t)
+=
+\exp\bigl(n\log(1+a_n)\bigr)
+\longrightarrow
+\exp\bigl(\lambda(e^{it}-1)\bigr)
+\]
+But by part (a),
+\[
+\exp\bigl(\lambda(e^{it}-1)\bigr)=\phi_Y(t)
+\]
+Thus for every $t \in \mathbb{R}$,
+\[
+\phi_{X_n}(t)\longrightarrow \phi_Y(t)
+\]
+
+Since $\phi_Y$ is the characteristic function 
+of $Y \sim \operatorname{Pois}(\lambda)$, by the uniqueness theorem
+for characteristic functions, this implies
+\[
+X_n \xrightarrow{d} Y
+\]
+\end{itemize}
+\end{proof}
+
+
+
+\section*{Problem 3}
+Show that
+
+$$
+\lim _{n \rightarrow \infty} \int_0^{n / 2} 
+\frac{2^n}{(n-1)!} t^{n-1} e^{-2 t} dt
+=\frac{1}{2}
+$$
+Hint: Observe that the integral is the probability of an event 
+related to a Gamma distribution. Can we apply the central limit theorem?
+
+\begin{proof}
+Let
+\[
+I_n:=\int_0^{n/2}\frac{2^n}{(n-1)!}t^{n-1}e^{-2t}\,dt
+\]
+Then 
+\[
+f_n(t)=\frac{2^n}{(n-1)!}t^{n-1}e^{-2t}\mathbf{1}_{(0,\infty)}(t)
+\]
+is the density of a Gamma distribution with parameters $(n,2)$, that is,
+\(
+T_n\sim \Gamma(n,2)
+\). 
+Hence
+\[
+I_n=\mathbb{P}(T_n\le n/2)
+\] 
+
+Now let $X_1,X_2,\dots$ be i.i.d. random variables with
+\[
+X_i\sim \operatorname{Exp}(2)
+\]
+We know that 
+\[
+T_n=X_1+\cdots+X_n
+\]
+Also,
+\[
+\mu:=\mathbb{E}[X_1]=\frac12,
+\quad
+\sigma^2:=\operatorname{Var}(X_1)=\frac14
+\]
+
+Therefore,
+\[
+I_n=\mathbb{P}(X_1+\cdots+X_n\le n/2)
+=
+\mathbb{P}\!\left(\frac{T_n-n\mu}{\sigma\sqrt n}\le 0\right)
+\]
+Since $\mu=1/2$ and $\sigma=1/2$, this is
+\[
+I_n=\mathbb{P}\!\left(\frac{T_n-n/2}{\sqrt n/2}\le 0\right)
+\]
+
+By the Central Limit Theorem,
+\[
+\frac{T_n-n\mu}{\sigma\sqrt n}
+=
+\frac{T_n-n/2}{\sqrt n/2}
+\xrightarrow{d} Z,
+\quad Z\sim N(0,1)
+\]
+Hence, since the standard normal distribution function is continuous at $0$,
+\[
+\lim_{n\to\infty} I_n
+=
+\lim_{n\to\infty}
+\mathbb{P}\!\left(\frac{T_n-n/2}{\sqrt n/2}\le 0\right)
+=
+\mathbb{P}(Z\le 0)
+=
+\frac12
+\]
+Thus
+\[
+\lim _{n \rightarrow \infty} \int_0^{n / 2}
+\frac{2^n}{(n-1)!} t^{n-1} e^{-2 t} dt
+=\frac{1}{2}
+\]
+\end{proof}
+
+
+
+
+
+\section*{Problem 4}
+A casino offers the following random game: 
+A player rolls a fair die once. 
+If the outcome is 2 or 4, then the player wins 3 euros from the casino. 
+If the outcome is $1,3,5$, then the player loses 4 euros to the casino.
+If the outcome is 6 , then the player neither wins nor loses.
+If 90 players play the above game independently, 
+find approximately the probability that the casino wins 
+at least 30 euros in total.
+\begin{solution}
+Let $X_i$ be the gain of the casino from the $i$-th player, for $i=1,\dots,90$. Then the random variables
+$X_1,\dots,X_{90}$ are independent and identically distributed, with
+\[
+X_i=
+\begin{cases}
+-3, & \text{if the player wins 3 euros}\\
+4, & \text{if the player loses 4 euros}\\
+0, & \text{if the outcome is 6}
+\end{cases}
+\]
+Since the die is fair, we have
+\[
+\mathbb{P}(X_i=-3)=\frac{2}{6}=\frac13,\qquad
+\mathbb{P}(X_i=4)=\frac{3}{6}=\frac12,\qquad
+\mathbb{P}(X_i=0)=\frac{1}{6}
+\]
+
+Let
+\[
+S_{90}=X_1+\cdots+X_{90}
+\]
+be the total gain of the casino after 90 players. We want to approximate
+\[
+\mathbb{P}(S_{90}\ge 30)
+\]
+
+We first compute the mean and variance of $X_1$. The mean is
+\[
+\mu:=\mathbb{E}[X_1]
+=(-3)\cdot \frac13+4\cdot \frac12+0\cdot \frac16
+=-1+2=1
+\]
+Also,
+\[
+\mathbb{E}[X_1^2]
+=9\cdot \frac13+16\cdot \frac12+0
+=3+8=11
+\]
+Hence
+\[
+\sigma^2:=\operatorname{Var}(X_1)=\mathbb{E}[X_1^2]-\mu^2=11-1=10
+\]
+
+Therefore,
+\[
+\mathbb{E}[S_{90}]=90\mu=90,
+\quad
+\operatorname{Var}(S_{90})=90\sigma^2=900
+\]
+So the standard deviation of $S_{90}$ is
+\[
+\sqrt{900}=30
+\]
+
+By the Central Limit Theorem,
+\[
+\frac{S_{90}-90}{30}\approx N(0,1)
+\]
+Thus,
+\[
+\mathbb{P}(S_{90}\ge 30)
+=
+\mathbb{P}\left(\frac{S_{90}-90}{30}\ge \frac{30-90}{30}\right)
+\approx
+\mathbb{P}(Z\ge -2)
+\]
+where $Z\sim N(0,1)$. Since
+\[
+\mathbb{P}(Z\ge -2)=\mathbb{P}(Z\le 2)\approx 0.9772
+\]
+we conclude that
+\[
+\mathbb{P}(S_{90}\ge 30)\approx 0.9772
+\]
+Hence, the probability that the casino wins at least 30 euros in total is 
+approximately 0.9772.
+\end{solution}
+
+
+\section*{Problem 5}
+Assume that $\left(X_n\right)_{n \in \mathbb{N}}$ is an i.i.d. 
+sequence of random variables such that $\mathbb{E}\left[X_1\right]=0$ 
+and $\mathbb{E}\left[X_1^2\right]=1$. Show that
+$$
+\frac{\sum_{i=1}^n X_i}{\sqrt{\sum_{i=1}^n X_i^2}} 
+\xrightarrow{d} Z, \quad Z \sim N(0,1) 
+$$
+\begin{proof}
+Let
+\[
+S_n:=\sum_{i=1}^n X_i,
+\quad
+Q_n:=\sum_{i=1}^n X_i^2
+\]
+We want to show that
+\[
+\frac{S_n}{\sqrt{Q_n}} \xrightarrow{d} Z,
+\quad Z\sim N(0,1)
+\]
+
+First, since $(X_n)_{n\in\mathbb{N}}$ are i.i.d. with
+\(
+\mathbb{E}[X_1]=0,
+\) and \(
+\mathbb{E}[X_1^2]=1\), 
+we have $\operatorname{Var}(X_1)=1$. 
+And thus by the Central Limit Theorem,
+\[
+\frac{S_n}{\sqrt{n}} \xrightarrow{d} Z,
+\quad Z\sim N(0,1)
+\]
+And then, consider $Q_n$. 
+Since $(X_i^2)$ are i.i.d. and $\mathbb{E}[X_1^2]=1<\infty$, 
+by the Law of Large Numbers we have
+\[
+\frac{Q_n}{n} \xrightarrow{P} 1
+\]
+By continuity of the square root function,
+\[
+\sqrt{\frac{Q_n}{n}} \xrightarrow{P} 1
+\]
+
+Write
+\[
+\frac{S_n}{\sqrt{Q_n}}
+=
+\frac{S_n}{\sqrt{n}} \cdot \frac{1}{\sqrt{Q_n/n}}
+\]
+
+Define
+\[
+A_n:=\frac{S_n}{\sqrt{n}},
+\quad
+B_n:=\frac{1}{\sqrt{Q_n/n}}
+\]
+Then we have shown that
+ $A_n \xrightarrow{d} Z$ and $B_n \xrightarrow{P} 1$. 
+
+
+\textbf{Now we claim that: 
+$A_n B_n \xrightarrow{d} Z$.}
+
+It suffices to show that $\mathbb{E}[f(A_n B_n)] \to \mathbb{E}[f(Z)]$ 
+for every bounded continuous function $f:\mathbb{R}\to\mathbb{R}$.
+
+Let $f:\mathbb{R}\to\mathbb{R}$ be bounded and continuous.
+Then 
+\[
+\mathbb E[f(A_nB_n)]-\mathbb E[f(Z)]
+=
+\bigl(\mathbb E[f(A_nB_n)]-\mathbb E[f(A_n)]\bigr)
++
+\bigl(\mathbb E[f(A_n)]-\mathbb E[f(Z)]\bigr)
+\]
+
+Since $A_n\xrightarrow{d}Z$, the second term converges to $0$. 
+It remains to show that
+\(
+\mathbb E[f(A_nB_n)]-\mathbb E[f(A_n)]\to 0
+\).
+
+Observe
+\(
+A_nB_n-A_n=A_n(B_n-1)
+\). 
+Because $A_n\xrightarrow{d}Z$, the sequence $(A_n)$ is tight. 
+Also, since $B_n\xrightarrow{P}1$, we have
+\[
+B_n-1\xrightarrow{P}0
+\]
+It follows that
+\[
+A_n(B_n-1) = A_nB_n-A_n\xrightarrow{P}0
+\]
+
+We now show that
+\[
+f(A_nB_n)-f(A_n)\xrightarrow{P}0
+\]
+Fix $\varepsilon>0$. Since $(A_n)$ is tight, there exists $M>0$ such that
+\[
+\sup_{n\ge 1}\mathbb P(|A_n|>M)<\varepsilon
+\]
+Since $f$ is continuous on the compact interval $[-M-1,M+1]$, it is uniformly continuous there. Thus there
+exists $\delta>0$ such that whenever $x,y\in[-M-1,M+1]$ and $|x-y|<\delta$, 
+we have
+\[
+|f(x)-f(y)|<\varepsilon
+\]
+Now on the event
+\[
+\{|A_n|\le M,\ |A_nB_n-A_n|<\min(\delta,1)\}
+\]
+we also have $|A_nB_n|\le M+1$, so
+\[
+|f(A_nB_n)-f(A_n)|<\varepsilon
+\]
+Therefore,
+\[
+\mathbb P\bigl(|f(A_nB_n)-f(A_n)|>\varepsilon\bigr)
+\le
+\mathbb P(|A_n|>M)+\mathbb P(|A_nB_n-A_n|\ge \min(\delta,1))
+\]
+The first term is less than $\varepsilon$, 
+and the second term tends to $0$. Hence
+\[
+f(A_nB_n)-f(A_n)\xrightarrow{P}0
+\]
+
+Since $f$ is bounded, the random variables $f(A_nB_n)-f(A_n)$ are uniformly 
+bounded. Therefore,
+\[
+\mathbb E[f(A_nB_n)-f(A_n)]\to 0
+\]
+Combining this with
+\(
+\mathbb E[f(A_n)]\to \mathbb E[f(Z)]
+\), 
+we get
+\[
+\mathbb E[f(A_nB_n)]\to \mathbb E[f(Z)]
+\]
+Thus
+\[
+A_nB_n\xrightarrow{d}Z
+\]
+This finishes the proof that 
+\[
+\frac{S_n}{\sqrt{Q_n}}
+=
+A_nB_n
+\xrightarrow{d} Z
+\]
+That is,
+\[
+\frac{\sum_{i=1}^n X_i}{\sqrt{\sum_{i=1}^n X_i^2}}
+\xrightarrow{d} Z,
+\quad Z\sim N(0,1)
+\]
+\end{proof}

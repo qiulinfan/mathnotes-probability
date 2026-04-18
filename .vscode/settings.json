@@ -32,7 +32,7 @@
   "latex-workshop.latex.autoClean.run": "never",
   "latex-workshop.view.pdf.refresh.viewer": "auto",
   "latex-workshop.view.pdf.reload.transition": "none",
-  "files.autoSave": "afterDelay",
+  "files.autoSave": "off",
   "files.autoSaveDelay": 1200,
   "[latex]": {
     "editor.wordBasedSuggestions": "off",

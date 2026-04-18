@@ -732,11 +732,6 @@ By def, 容易验证.
 
 
 
-\subsection{inequalities for expectation and variance}
-
-
-
-
 
 
 \subsection{$L_0^2(\Omega, \mathcal{F}, \mathbb{P})$ 与 covariance and correlation as inner product and cosine}
@@ -792,6 +787,7 @@ $$
 \end{definition}
 
 
+
 并且, \textbf{我们可以通过把每个 $X$ center 为 $X-\bE[X]$ 的行为,
 把 $X$ 从 $L^2(\Omega, \mathcal{F}, \mathbb{P})$ 投影到
 $L^2_0(\Omega, \mathcal{F}, \mathbb{P})$ 这个 subspace 上. }\\
@@ -805,13 +801,6 @@ $L^2_0(\Omega, \mathcal{F}, \mathbb{P})$ 这个 subspace 上. }\\
 \]
 \end{definition}
 \begin{remark}
- Covariance 丈量两个 random variables 之间的 linear relationship: 
- 对于一个事件,  \(X,Y\) 把它映射到的值是正相关的, 还是负相关的, 还是不相关的.\
- (注意: 其值包含了这两个 random variables 的 scale, 因而不能直接用来比较不同 random variables
-  之间的 linear relationship 的强弱程度. 真正公平的 
-  linear relationship 还需要 normalize by norms, 即等下定义的 correlation.)
-
-
     Geometric intuition of covariance:
     考虑取这两个 random variables 的一些 sample points 并分别作为 \((x,y)\) 坐标.
     \begin{itemize}
@@ -852,26 +841,9 @@ $L^2_0(\Omega, \mathcal{F}, \mathbb{P})$ 这个 subspace 上. }\\
     \end{scope}
 \end{tikzpicture}
 \end{center}
-\end{remark}
-
-不过为什么我们知道 covariance 是一个 linear relationship 的 measure 呢? 因为
-我们可以发现一件事情:
-
-\begin{theorem}{covariance 是一个 a positive semi-definite symmetric bilinear form}
+但是注意:
 \begin{itemize}
-\item covariance 是一个 \textbf{symmetric bilinear form }(并且 \textbf{translation-invariant}, 忽略 translation) 的 operator: 
-    \[\text{Cov}(aX+b, cY+d) = ac \, \text{Cov}(X,Y) \]
-    \[\text{Cov}(X,Y) = \text{Cov}(Y,X)\]
-    \[\text{Cov}(X+Y, Z) = \text{Cov}(X, Z) + \text{Cov}(Y, Z)\]
-    \item covariance 满足 positive definiteness: \(\text{Cov}(X,X) = \text{Var}(X) \geq 0\).
-\end{itemize}
-\end{theorem}
-\begin{proof}
-By def.
-\end{proof}
-
-\begin{remark}
-covariance 捕捉 linear relationship, 即趋势是否呈直线,
+    \item covariance 只捕捉 linear relationship, 即趋势是否呈直线,
 不过不能捕捉 nonlinear relationship. 之后在学习 independence 的时候, 
 我们会知道即便 covariance 为 0, \(X\) 和 \(Y\) 仍然可能是 dependent 的.
 比如, 如果 \((X,Y)\) 的联合分布 as a graph 是个圆圈, 那么 covariance 
@@ -893,27 +865,47 @@ covariance 捕捉 linear relationship, 即趋势是否呈直线,
 \end{tikzpicture}
 \end{center}
 
-为什么我们可以准确地说这是一种线性关系, 
-因为本质上, 我们既然说明了 covariance 是
-(随机变量空间 $L^2(\Omega, \mathcal{F}, P)$ 上的)一个 symmetric bilinear form, 并且它显然满足 positive semi-definiteness:
-\[
-\text{Cov}(X,X) = \text{Var(X)} \geq 0
-\]
-那么它就是一个合法的 inner product on  $L^2(\Omega, \mathcal{F}, P)$. 
-更加准确而言, 这是一个 \textbf{inner product on the quotient space} $L^2(\Omega, \mathcal{F}, P) / \sim$, 
-其中 $\sim$ 是 equivalence relation: 所有只差一个 constant 的 random variables 
-都被认为是 equivalent 的, 被减去了它们自己的均值, 移动到了原点上. 
-(这个 space 还是 complete 的 since \(L^2\), 因而它其实是一个 Hilbert space. 原始的和 quotient 都是.)
+\item Covariance 的数值还包括了这两个 random variables 的 scale,
+  因而还不能直接用来比较不同 random variables
+  之间的 linear relationship 的强弱程度. 真正公平的 
+  linear relationship 还需要 normalize by norms,
+  把这个关系定位到 $[-1,1]$ 的区间上 即等下定义的 correlation.
+\end{itemize}
+ 
+\end{remark}
 
-原始 \(L^2\) space 的内积: \[\langle X, Y \rangle = \bE[XY]\]
-因而自然而言, 我们 work on 的 quotient space 的内积就应该是 covariance:
- \[\langle X, Y \rangle_{\text{Cov}} = \bE[(X-\bE[X])(Y-\bE[Y])] = \text{Cov}(X,Y)\]
 
-在这个空间上, 由 covariance 这个 inner product induce 出的 norm 即为一个
- random variable 的 standard deviation:
-$$\|X\| = \sqrt{\text{Var}(X)} = \sigma_X$$
+我们容易发现一件事情:
+\begin{theorem}{covariance 是一个 a positive semi-definite symmetric bilinear form}
+\begin{itemize}
+\item covariance 是一个 \textbf{symmetric bilinear form }(并且 \textbf{translation-invariant}, 忽略 translation) 的 operator: 
+    \[\text{Cov}(aX+b, cY+d) = ac \, \text{Cov}(X,Y) \]
+    \[\text{Cov}(X,Y) = \text{Cov}(Y,X)\]
+    \[\text{Cov}(X+Y, Z) = \text{Cov}(X, Z) + \text{Cov}(Y, Z)\]
+    \item covariance 满足 positive definiteness: \(\text{Cov}(X,X) = \text{Var}(X) \geq 0\).
+\end{itemize}
+\end{theorem}
+\begin{proof}
+By def.
+\end{proof}
 
-而两个 random variables \(X, Y\) 之间的夹角 \(\theta\) 的 cosine, 我们也专门做一个定义:
+而当我们把空间限定在 $L^2_0(\Omega, \mathcal{F}, \mathbb{P})$ 上时, 
+\begin{theorem}{$L^2_0(\Omega, \mathcal{F}, \mathbb{P})$ 为一个 Hilbert space, with covariance as an inner product}
+    $\big(L^2_0(\Omega, \mathcal{F}, \mathbb{P}), \langle \cdot, \cdot \rangle_{\text{Cov}} \big)$ 为一个 Hilbert space,
+    即: covariance 在其上是一个 inner product (positive definite symmetric bilinear form).
+\end{theorem}
+\begin{proof}
+很显然. 因为在 $L^2$ space 上, 一个 constant random variable 的
+variance 是 0, 但是它并不是一个零函数; 而在 $L^2_0$ space 上, 
+所有的 random variables 都是 zero-centered 的,
+因而 constant random variable 就是零函数了. 
+从而 covariance 在 $L^2_0$ space 上是 positive definite 的, 从而是 inner product.\\
+\end{proof}
+
+
+而在 $L^2_0(\Omega, \mathcal{F}, \mathbb{P})$ 上, 
+两个 random variables \(X, Y\) 之间的夹角 \(\theta\) 的 cosine, 就是它们
+真正的 linear relationship 的强弱程度, 因而我们把它叫做 correlation:
 \begin{definition}{correlation}\label{def:correlation}
 $$
 \rho(X, Y)=\frac{\operatorname{Cov}(\mathrm{X}, \mathrm{Y})}{\sqrt{\operatorname{Var}(X)} \sqrt{\operatorname{Var}(Y)}}
@@ -927,36 +919,44 @@ And we have: \[
 \text{Cov}(X,Y) =  \sigma_X \sigma_Y \rho(X,Y)
 \]
 从而有以下显然的结论: 
-\begin{itemize}
+\begin{proposition}{properties of correlation}
+    \begin{itemize}
     \item \(\rho(X,Y) \in [-1,1]\)
     \item 如果 \(\rho(X,Y) = 1\), 那么 \(Y = aX + b\) for some \(a > 0\) and \(b\); 如果
      \(\rho(X,Y) = -1\), 那么 \(Y = aX + b\) for some \(a < 0\) and \(b\).\
     \item By Cauchy-Schwarz inequality, \(|\text{Cov}(X,Y)| \leq \sigma_X \sigma_Y\).
 \end{itemize}
-\end{remark}
+\end{proposition}
 
-\begin{remark}
-我们刚才将 covariance 作为 inner product, 是在 quotient space 
-\(L^2(\Omega, \mathcal{F}, P) / \sim\) 上讨论; 而原始的 \(L^2\) space 
-上的 inner product 是 \(\bE[XY]\). 这个原始 space 上的 Cauchy-Swartz 也值得一提: 
+做一个总结: 
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{6pt}
+\small
+\begin{tabular}{|p{2.6cm}|p{5cm}|p{5cm}|}
+\hline
+& \textbf{$L^2$ space} & \textbf{$L_0^2$} \\
+\hline
+inner product $\langle X,Y\rangle$ & $\mathbb{E}[XY]$ & $\operatorname{Cov}(X,Y)$ (covariance) \\
+\hline
+norm $\|X\|$ & $\sqrt{\mathbb{E}[X^2]}$ & $\sqrt{\operatorname{Var}(X)}$ (standard deviation) \\
+\hline
+cosine similarity & $\frac{\mathbb{E}[XY]}{\sqrt{\mathbb{E}[X^2]} \sqrt{\mathbb{E}[Y^2]}}$ & $\frac{\operatorname{Cov}(X,Y)}{\sqrt{\operatorname{Var}(X)} \sqrt{\operatorname{Var}(Y)}}$ (correlation) \\
+\hline
+\end{tabular}
+\end{center}
+\textbf{求两个 random variables 之间的 correlation, 
+就是把它们都 center 到 zero-centered 的位置 (即投影到 $L_0^2$ space 上),
+然后计算它们在 $L_0^2$ space 上的 cosine similarity.}\\
 
-$$
-\mathbb{E}\left[Z_1^2\right] \mathbb{E}\left[Z_2^2\right] \geq\left(\mathbb{E}\left[Z_1 Z_2\right]\right)^2
-$$其中等号取得条件是 \(Z_1 = a Z_2\) for some \(a \in \bR\). \(a\) 
-可以计算得是$$a = \frac{\mathbb{E}\left[Z_1 Z_2\right]}{\mathbb{E}\left[Z_2^ 2\right]}$$ 
-
-
-\end{remark}
 
 
 
 
 
 
-
-
-
-\begin{proposition}{两个 random variables 之和的 variance }
+此时我们看到 decomposition of variance: 
+\begin{proposition}{两个 random variables 之和的 variance}
 两个 random variables 的和的 variance 可分解成 variances 和 covariance:  
  \[\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X,Y)\]
 \end{proposition}
@@ -967,9 +967,35 @@ $$
 \end{proof}
 \begin{remark}
 
+它其实这就是标准的 inner product space 上的向量平方公式:
+$$
+\|X+Y\|_{L_0^2}^2=\|X\|_{L_0^2}^2+\|Y\|_{L_0^2}^2+2\langle X, Y\rangle_{L_0^2}
+$$
 \end{remark}
 
 
+
+
+
+
+以上就是 pretty much of expectation, variance, covariance, correlation 
+的定义和 geometric interpretation 了.
+ 接下来我们会介绍一些基本的 inequalities, 应用它们来
+ 做一些关于概率的 bounding 与 estimation. 之后我们将进入本章简单的部分, 
+看看一些经典的 discrete random variables, 
+以及它们的 expectation 和 variance 的计算方法.
+
+\subsection{inequalities for expectation and variance}
+首先, 在 $L^2$ space 上, 由于它是一个 inner product space,
+我们有 Cauchy-Schwarz inequality:
+$$(\mathbb{E}[X Y])^2 \leq \mathbb{E}\left[X^2\right] \cdot \mathbb{E}\left[Y^2\right]
+$$
+这一 inequality 是非常重要的, 因为它是我们证明很多其他 inequalities 的基础. 
+比如, correlation $\rho \in [-1,1]$ 就是 Cauchy-Schwarz inequality 的一个直接 corollary.
+
+非常的基础, 这里就不展开了. 下面我们将先看到
+Markov's inequality 和 Chebyshev's inequality, 他们是
+用以 bouding 一个 random variable 的 tail probability 的两个非常重要的工具.
 
 
 
