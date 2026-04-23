@@ -978,48 +978,6 @@ $$
 
 
 
-\subsection{inequalities for expectation and variance}
-\begin{theorem}{Markov's inequality}
-对于一个 non-negative random variable \(X\) (即 \(X \geq 0\) a.s.), 
-任取 \(t > 0\), 都有
-\[
-\bP(X \geq t) \leq \frac{\bE[X]}{t}
-\]  
-\end{theorem}
-\begin{remark}
-这是一个很直观的 geometric intuition:
-如果 $t$ 是均值 $\mu$ 的 3 倍, 那么 $X$ 大于 $t$ 
-的测度就不应该超过均值 $\mu$ 的 1/3; 否则, $X$ 的均值
-就一定大于 $\mu$ 了 (即便其他地方的值都为 0).
-\end{remark}
-\begin{proof}
-    
-\end{proof}
-以上就是 pretty much of expectation, variance, covariance, correlation 
-的定义和 geometric interpretation 了.
- 接下来我们会介绍一些基本的 inequalities, 应用它们来
- 做一些关于概率的 bounding 与 estimation. 之后我们将进入本章简单的部分, 
-看看一些经典的 discrete random variables, 
-以及它们的 expectation 和 variance 的计算方法.
-
-\subsection{inequalities for expectation and variance}
-首先, 在 $L^2$ space 上, 由于它是一个 inner product space,
-我们有 Cauchy-Schwarz inequality:
-$$(\mathbb{E}[X Y])^2 \leq \mathbb{E}\left[X^2\right] \cdot \mathbb{E}\left[Y^2\right]
-$$
-这一 inequality 是非常重要的, 因为它是我们证明很多其他 inequalities 的基础. 
-比如, correlation $\rho \in [-1,1]$ 就是 Cauchy-Schwarz inequality 的一个直接 corollary.
-
-非常的基础, 这里就不展开了. 下面我们将先看到
-Markov's inequality 和 Chebyshev's inequality, 他们是
-用以 bouding 一个 random variable 的 tail probability 的两个非常重要的工具.
-
-
-
-
-
-
-
 
 \section{discrete random variables}
 Recall: discrete random variable 是指其 range a.s. 是 countable 的 random variable.
