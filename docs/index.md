@@ -2,9 +2,11 @@
 
 ## PDFs
 
-- [01-basic-combinatorics](01-basic-combinatorics.md)
-- [02-probability-space-intro](02-probability-space-intro.md)
-- [03-random-variables](03-random-variables.md)
+- [01-combinatorics&prob_space](01-combinatorics&prob_space.md)
+- [02-random-variables](02-random-variables.md)
+- [03-joint&conditional-distribution](03-joint&conditional-distribution.md)
+- [04-LLN](04-LLN.md)
+- [05-CLT](05-CLT.md)
 
 ---
 
